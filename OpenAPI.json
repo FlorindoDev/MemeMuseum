@@ -1,0 +1,111 @@
+{
+    "openapi": "3.0.3",
+    "info": {
+        "title": "Meme Museum",
+        "version": "1.0.0"
+    },
+    "servers": [
+        {
+            "url": "https://www.florindodev.site/v1"
+        }
+    ],
+    "paths": {
+        "/users": {
+            "get": {
+                "tags": [
+                    "User"
+                ],
+                "description": "This call returns `all users`",
+                "summary": "Lista di utenti",
+                "responses": {
+                    "200": {
+                        "description": "`Ok`: Lista di utenti",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/User"
+                                    }
+                                },
+                                "example": {
+                                    "users": [
+                                        {
+                                            "id": 1,
+                                            "name": "Florindo",
+                                            "email": "florindo@qualcosa.it",
+                                            "memesIds": [
+                                                1,
+                                                2
+                                            ]
+                                        }
+                                    ]
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "`Bad Request`: la richiesta è malformata",
+                        "content": {
+                            "application/json": {}
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "User"
+                ],
+                "summary": "Elimina un utente",
+                "responses": {
+                    "204": {
+                        "description": "`No Content`: Utente eliminato"
+                    }
+                }
+            }
+        }
+    },
+    "components": {
+        "parameters": {
+            "IdParam": {
+                "name": "id",
+                "in": "path",
+                "description": "ID numerico dell’utente",
+                "required": true,
+                "schema": {
+                    "type": "integer",
+                    "minimum": 1
+                }
+            }
+        },
+        "schemas": {
+            "User": {
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": "integer"
+                    },
+                    "name": {
+                        "type": "string"
+                    },
+                    "email": {
+                        "type": "string",
+                        "format": "email"
+                    },
+                    "memesIds": {
+                        "type": "array",
+                        "items": {
+                            "type": "integer"
+                        }
+                    }
+                },
+                "required": [
+                    "id",
+                    "name",
+                    "email",
+                    "memesIds"
+                ]
+            }
+        }
+    }
+}
