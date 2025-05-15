@@ -1,0 +1,49 @@
+import express from "express";
+import morgan from "morgan"; //popular logging middleware (http://expressjs.com/en/resources/middleware/morgan.html)
+import cors from "cors";
+import swaggerUI from "swagger-ui-express";
+import swaggerJSDoc from "swagger-jsdoc";
+
+
+
+const app = express();
+const PORT = 3000;
+
+
+// logger
+app.use(morgan('dev'));
+
+app.use(cors()); //API will be accessible from anywhere
+
+// Transforma ogni body in json
+app.use(express.json());
+
+//error handler
+app.use((err, req, res, next) => {
+  console.log(err.stack);
+  res.status(err.status || 500).json({
+    code: err.status || 500,
+    description: err.message || "An error occurred"
+  });
+});
+
+
+
+const swaggerSpec = swaggerJSDoc({
+  definition: {
+    openapi: '3.1.0',
+    info: {
+      title: 'Meme Museum',
+      version: '1.0.0',
+    },
+  },
+  apis: [/*'./routes/*Router.js'*/], // files containing annotations
+});
+
+app.use('/api-docs', swaggerUI.serve, swaggerUI.setup(swaggerSpec));
+
+//define routes
+
+
+
+app.listen(PORT);

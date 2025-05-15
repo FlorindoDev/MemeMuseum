@@ -1,0 +1,38 @@
+
+services:
+
+  node-app:
+    build: .
+    container_name: meme_node
+    working_dir: /app
+    volumes:
+      - .:/app
+    ports:
+      - "3000:3000"
+    depends_on:
+      - postgresql
+    networks:
+      - meme-museum
+    tty: true
+    stdin_open: true
+    
+  postgresql:
+    image: postgres:15
+    container_name: meme_db
+    environment:
+      POSTGRES_USER: db     
+      POSTGRES_PASSWORD: db  
+      POSTGRES_DB: meme_database             # contiene POSTGRES_USER, POSTGRES_PASSWORD, POSTGRES_DB
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    networks:
+      - meme-museum
+
+networks:
+  meme-museum:
+    driver: bridge
+
+volumes:
+  postgres_data:
