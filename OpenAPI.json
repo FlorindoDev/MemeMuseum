@@ -1,5 +1,5 @@
 {
-    "openapi": "3.0.3",
+    "openapi": "3.1.0",
     "info": {
         "title": "Meme Museum",
         "version": "1.0.0"
@@ -27,19 +27,6 @@
                                     "items": {
                                         "$ref": "#/components/schemas/User"
                                     }
-                                },
-                                "example": {
-                                    "users": [
-                                        {
-                                            "id": 1,
-                                            "name": "Florindo",
-                                            "email": "florindo@qualcosa.it",
-                                            "memesIds": [
-                                                1,
-                                                2
-                                            ]
-                                        }
-                                    ]
                                 }
                             }
                         }
@@ -47,7 +34,11 @@
                     "400": {
                         "description": "`Bad Request`: la richiesta è malformata",
                         "content": {
-                            "application/json": {}
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Error"
+                                }
+                            }
                         }
                     }
                 }
@@ -79,6 +70,14 @@
             }
         },
         "schemas": {
+            "Error": {
+                "type": "object",
+                "properties": {
+                    "message": {
+                        "type": "string"
+                    }
+                }
+            },
             "User": {
                 "type": "object",
                 "properties": {
