@@ -2,7 +2,7 @@
 services:
 
   node-app:
-    build: .
+    build: ./back_end
     container_name: meme_node
     working_dir: /app
     volumes:

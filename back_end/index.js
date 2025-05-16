@@ -3,7 +3,8 @@ import morgan from "morgan"; //popular logging middleware (http://expressjs.com/
 import cors from "cors";
 import swaggerUI from "swagger-ui-express";
 import swaggerJSDoc from "swagger-jsdoc";
-
+import { router as routeAuth } from "./routes/authRoute.js"
+import { database } from "./models/DataBase.js";
 
 
 const app = express();
@@ -36,14 +37,17 @@ const swaggerSpec = swaggerJSDoc({
       title: 'Meme Museum',
       version: '1.0.0',
     },
+    components: {
+      schemas: {}
+    }
   },
-  apis: [/*'./routes/*Router.js'*/], // files containing annotations
+  apis: ['./models/*.js'], // files containing annotations
 });
 
 app.use('/api-docs', swaggerUI.serve, swaggerUI.setup(swaggerSpec));
 
 //define routes
-
+app.use(routeAuth);
 
 
 app.listen(PORT);
