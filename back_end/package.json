@@ -31,6 +31,11 @@
     "swagger-jsdoc": "^6.2.8",
     "swagger-ui-express": "^5.0.1"
   },
+  "overrides": {
+    "glob": "^9.3.5",
+    "lodash.get": "^4.4.2",
+    "lodash.isequal": "^4.5.0"
+  },
   "devDependencies": {
     "nodemon": "3.1.10",
     "rimraf": "^4.4.1",
