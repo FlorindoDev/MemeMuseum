@@ -6,7 +6,7 @@ services:
     container_name: meme_node
     working_dir: /app
     volumes:
-      - .:/app
+      - ./back_end:/app
     ports:
       - "3000:3000"
     depends_on:

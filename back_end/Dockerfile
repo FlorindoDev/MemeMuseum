@@ -6,11 +6,12 @@ FROM node:20-alpine
 # Installa Git
 RUN apk update && apk add --no-cache git
 
-COPY . /app
-
 # Imposta la directory di lavoro
 WORKDIR /app
 
+COPY . .
+
 RUN npm install
+
 
 CMD ["npm","start"]
