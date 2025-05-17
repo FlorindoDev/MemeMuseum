@@ -7,7 +7,6 @@ export class AuthController {
 
         let user = new User(
             {
-                idUser: req.body.idUser,
                 nickName: req.body.nickName,
                 email: req.body.email,
                 profilePic: req.body.profilePic,

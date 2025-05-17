@@ -32,7 +32,7 @@ const swaggerSpec = swaggerJSDoc({
       schemas: {}
     }
   },
-  apis: ['./models/*.js', "./routes/*Route.js"], // files containing annotations
+  apis: ['./models/*.js', './utils/Error.js', , "./routes/*Route.js"], // files containing annotations
 });
 
 app.use('/api-docs', swaggerUI.serve, swaggerUI.setup(swaggerSpec));

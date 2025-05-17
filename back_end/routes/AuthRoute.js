@@ -8,68 +8,62 @@ export const router = express.Router();
 /**
  * @swagger
  *   "/signup": {
- *       "post": {
- *         "summary": "Register a new user",
- *         "description": "Crea un nuovo account utente se non è già presente",
- *         "tags": ["Authentication"],
- *         "requestBody": {
- *           "required": true,
+ *     "post": {
+ *       "summary": "Register a new user",
+ *       "description": "Crea un nuovo account utente se non è già presente",
+ *       "tags": ["Authentication"],
+ *       "requestBody": {
+ *         "required": true,
+ *         "content": {
+ *           "application/json": {
+ *             "schema": {
+ *               "$ref": "#/components/schemas/User"
+ *             }
+ *           }
+ *         }
+ *       },
+ *       "responses": {
+ *         "200": {
+ *           "description": "User successfully registered"
+ *         },
+ *         "409": {
+ *           "description": "User already exists",
  *           "content": {
  *             "application/json": {
  *               "schema": {
- *                 "$ref": "#/components/schemas/User"
+ *                 "$ref": "#/components/schemas/Error"
  *               }
  *             }
  *           }
  *         },
- *         "responses": {
- *           "200": {
- *             "description": "User successfully registered"
- *           },
- *           "409": {
- *             "description": "User already exists"
- *           },
- *           "503": {
- *             "description": "Service unavailable, signup temporarily disabled",
- *             "content": {
- *               "application/json": {
- *                 "schema": {
- *                   "type": "object",
- *                   "properties": {
- *                     "message": {
- *                       "type": "string",
- *                       "example": "Al momento il signup non è disponibile"
- *                     }
- *                   }
- *                 }
+ *         "503": {
+ *           "description": "Service unavailable, signup temporarily disabled",
+ *           "content": {
+ *             "application/json": {
+ *               "schema": {
+ *                 "$ref": "#/components/schemas/Error"
  *               }
  *             }
- *           },
- *           "default": {
- *             "description": "Unexpected error",
- *             "content": {
- *               "application/json": {
- *                 "schema": {
- *                   "type": "object",
- *                   "properties": {
- *                     "message": {
- *                       "type": "string",
- *                       "example": "Errore interno del server"
- *                     }
- *                   }
- *                 }
+ *           }
+ *         },
+ *         "default": {
+ *           "description": "Unexpected error",
+ *           "content": {
+ *             "application/json": {
+ *               "schema": {
+ *                 "$ref": "#/components/schemas/Error"
  *               }
  *             }
  *           }
  *         }
  *       }
  *     }
+ *   }
  */
-router.post('/signup', isUserPrsent, (req, res, next) => {
+router.post('/signup', isUserPrsent(new Error(409, "l'utente esiste già")), (req, res, next) => {
     AuthController.saveUser(req).then((result) => {
-        console.log(result);
         if (result) {
-            res.statusCode = 200
+            res.status(200);
             res.send();
         } else {
             next(new Error(503, "Al momento il signup non è disponibile"))
@@ -124,15 +118,7 @@ router.post('/signup', isUserPrsent, (req, res, next) => {
  *           "content": {
  *             "application/json": {
  *               "schema": {
- *                 "type": "object",
- *                 "properties": {
- *                   "error": {
- *                     "type": "string"
- *                   }
- *                 }
- *               },
- *               "example": {
- *                 "error": "Email o password non valide"
+ *                 "$ref": "#/components/schemas/Error"
  *               }
  *             }
  *           }
@@ -145,7 +131,6 @@ router.post('/signup', isUserPrsent, (req, res, next) => {
  */
 router.post('/auth', (req, res, next) => {
     AuthController.checkCredentials(req).then((result) => {
-        console.log(result);
         if (result) {
             res.json({ token: AuthController.issueToken(req.body.email) })
             res.send();
