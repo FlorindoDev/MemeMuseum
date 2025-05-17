@@ -3,7 +3,7 @@ import morgan from "morgan"; //popular logging middleware (http://expressjs.com/
 import cors from "cors";
 import swaggerUI from "swagger-ui-express";
 import swaggerJSDoc from "swagger-jsdoc";
-import { router as routeAuth } from "./routes/authRoute.js"
+import { router as routeAuth } from "./routes/AuthRoute.js"
 import { database } from "./models/DataBase.js";
 
 
@@ -41,7 +41,7 @@ const swaggerSpec = swaggerJSDoc({
       schemas: {}
     }
   },
-  apis: ['./models/*.js'], // files containing annotations
+  apis: ['./models/*.js', "./routes/*Route.js"], // files containing annotations
 });
 
 app.use('/api-docs', swaggerUI.serve, swaggerUI.setup(swaggerSpec));
