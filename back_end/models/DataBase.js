@@ -59,7 +59,7 @@ Tag.Memes = Tag.hasMany(Meme);
 
 
 //TODO: Controllare che sia il metodo giusto
-database.sync({ alter: true }).then(() => {
+database.sync(/*{ alter: true }*/).then(() => {
     console.log("Database synced correctly");
 }).catch(err => {
     console.err("Error with database synchronization: " + err.message);

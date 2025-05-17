@@ -8,7 +8,9 @@ export async function isUserPrsent(req, res, next) {
         },
     }
     );
+
     if (user !== null) {
         next(new Error(409, "l'utente esiste già"))
     }
+    next();
 }

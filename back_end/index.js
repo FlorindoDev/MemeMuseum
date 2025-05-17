@@ -19,16 +19,6 @@ app.use(cors()); //API will be accessible from anywhere
 // Transforma ogni body in json
 app.use(express.json());
 
-//error handler
-app.use((err, req, res, next) => {
-  console.log(err.stack);
-  res.status(err.status || 500).json({
-    code: err.status || 500,
-    description: err.message || "An error occurred"
-  });
-});
-
-
 
 const swaggerSpec = swaggerJSDoc({
   definition: {
@@ -48,6 +38,15 @@ app.use('/api-docs', swaggerUI.serve, swaggerUI.setup(swaggerSpec));
 
 //define routes
 app.use(routeAuth);
+
+//error handler
+app.use((err, req, res, next) => {
+  console.log(err.stack);
+  res.status(err.status || 500).json({
+    code: err.status || 500,
+    description: err.message || "An error occurred"
+  });
+});
 
 
 app.listen(PORT);

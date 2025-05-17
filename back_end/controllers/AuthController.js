@@ -18,16 +18,26 @@ export class AuthController {
     }
 
 
-    static async checkCredentials(req, res) {
-        let user = User.findOne({
+    static async checkCredentials(req) {
+
+        let user = new User({
+            email: req.body.email,
+            password: req.body.password
+        });
+
+        let found = await User.findOne({
             where: {
-                email: req.body.email,
-                password: req.body.password
+                email: user.email,
+                password: user.password
             },
         }
         );
 
-        return user !== null
+        return found !== null
+    }
+
+    static issueToken(username) {
+        return Jwt.sign({ user: username }, process.env.TOKEN_SECRET, { expiresIn: `1d` });
     }
 
 

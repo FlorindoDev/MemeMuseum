@@ -1,15 +1,16 @@
 import express from "express";
-import { isUserPrsent } from "../middleware/Validators.js";
+import { isUserPrsent } from "../middleware/UserValidators.js";
 import { AuthController } from "../controllers/AuthController.js";
 import { Error } from "../utils/Error.js";
 
 export const router = express.Router();
 
+
+
+
 /**
  * @swagger
- * {
- *   "paths": {
- *     "/signup": {
+ *   "/signup": {
  *       "post": {
  *         "summary": "Register a new user",
  *         "description": "Crea un nuovo account utente se non è già presente",
@@ -19,24 +20,7 @@ export const router = express.Router();
  *           "content": {
  *             "application/json": {
  *               "schema": {
- *                 "type": "object",
- *                 "required": ["name", "email", "password"],
- *                 "properties": {
- *                   "name": {
- *                     "type": "string",
- *                     "example": "Mario Rossi"
- *                   },
- *                   "email": {
- *                     "type": "string",
- *                     "format": "email",
- *                     "example": "mario.rossi@example.com"
- *                   },
- *                   "password": {
- *                     "type": "string",
- *                     "format": "password",
- *                     "example": "strongPassword123"
- *                   }
- *                 }
+ *                 "$ref": "#/components/schemas/User"
  *               }
  *             }
  *           }
@@ -83,17 +67,31 @@ export const router = express.Router();
  *         }
  *       }
  *     }
- *   }
- * }
  */
-router.post('/signup', isUserPrsent, (req, res) => {
-    AuthController.saveUser.then((result) => {
+router.post('/signup', isUserPrsent, (req, res, next) => {
+    AuthController.saveUser(req).then((result) => {
+        console.log(result);
         if (result) {
             res.statusCode = 200
             res.send();
         } else {
-            next(new Error(503), "Al momento il signup non è disponibile")
+            next(new Error(503, "Al momento il signup non è disponibile"))
         }
+    });
+
+});
+
+
+router.post('/auth', (req, res, next) => {
+    AuthController.checkCredentials(req).then((result) => {
+        console.log(result);
+        if (result) {
+            res.json({ token: AuthController.issueToken(req.body.email) })
+            res.send();
+        } else {
+            next(new Error(401, "Email o password sbagliate"))
+        }
+
     });
 
 });
