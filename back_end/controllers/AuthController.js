@@ -40,5 +40,9 @@ export class AuthController {
         return Jwt.sign({ user: username }, process.env.TOKEN_SECRET, { expiresIn: `1d` });
     }
 
+    static isTokenValid(token, callback) {
+        Jwt.verify(token, process.env.TOKEN_SECRET, callback);
+    }
+
 
 }

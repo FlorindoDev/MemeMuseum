@@ -5,9 +5,6 @@ import { Error } from "../utils/Error.js";
 
 export const router = express.Router();
 
-
-
-
 /**
  * @swagger
  *   "/signup": {

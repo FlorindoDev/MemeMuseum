@@ -4,6 +4,7 @@ import cors from "cors";
 import swaggerUI from "swagger-ui-express";
 import swaggerJSDoc from "swagger-jsdoc";
 import { router as routeAuth } from "./routes/AuthRoute.js"
+import { router as UsersRoute } from "./routes/UsersRoute.js"
 import { database } from "./models/DataBase.js";
 
 
@@ -38,6 +39,7 @@ app.use('/api-docs', swaggerUI.serve, swaggerUI.setup(swaggerSpec));
 
 //define routes
 app.use(routeAuth);
+app.use(UsersRoute);
 
 //error handler
 app.use((err, req, res, next) => {
