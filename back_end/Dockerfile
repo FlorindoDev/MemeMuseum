@@ -1,15 +1,13 @@
-
-FROM node:latest-alpine
+FROM node:current-alpine
 
 #TODO: toglilo alla fine
 RUN apk update && apk add --no-cache git
 
 WORKDIR /app
 
-COPY package*.json ./
-
-RUN npm ci
-
 COPY . .
+
+RUN npm install
+
 
 CMD ["npm", "start"]

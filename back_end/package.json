@@ -30,9 +30,7 @@
     "sequelize": "^6.37.7",
     "swagger-jsdoc": "^6.2.8",
     "swagger-ui-express": "^5.0.1",
-    "nodemon": "3.1.10",
-    "rimraf": "^4.4.1",
-    "sass": "^1.88.0"
+    "nodemon": "3.1.10"
   },
   "overrides": {
     "glob": "^9.3.5",
