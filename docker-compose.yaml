@@ -4,7 +4,6 @@ services:
   node-app:
     build: ./back_end
     container_name: meme_node
-    working_dir: /app
     ports:
       - "3000:3000"
     depends_on:
