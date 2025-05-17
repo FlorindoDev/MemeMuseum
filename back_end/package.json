@@ -39,6 +39,11 @@
     "lodash.get": "^4.4.2",
     "lodash.isequal": "^4.5.0"
   },
+  "devDependencies": {
+    "nodemon": "3.1.10",
+    "rimraf": "^4.4.1",
+    "sass": "^1.88.0"
+  },
   "scripts": {
     "start": "nodemon index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
