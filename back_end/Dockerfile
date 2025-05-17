@@ -1,17 +1,20 @@
 # Usa un'immagine Node.js ufficiale e leggera
 FROM node:20-alpine
 
-
-#TODO toglierlo quando finisci progetto
-# Installa Git
+#TODO: toglilo alla fine
 RUN apk update && apk add --no-cache git
 
-# Imposta la directory di lavoro
 WORKDIR /app
+COPY package*.json ./
 
-COPY . .
 
 RUN npm install
 
 
-CMD ["npm","start"]
+RUN npm install -g nodemon
+
+
+COPY . .
+
+
+CMD ["npm", "start"]
