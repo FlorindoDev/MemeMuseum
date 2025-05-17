@@ -81,7 +81,71 @@ router.post('/signup', isUserPrsent, (req, res, next) => {
 
 });
 
-
+/**
+ * @swagger
+ * {
+ *   "/auth": {
+ *     "post": {
+ *       "summary": "Autenticazione utente",
+ *       "description": "Verifica le credenziali e restituisce un token JWT",
+ *       "requestBody": {
+ *         "required": true,
+ *         "content": {
+ *           "application/json": {
+ *             "schema": {
+ *               "$ref": "#/components/schemas/User"
+ *             },
+ *             "example": {
+ *               "email": "mario.rossi@example.com",
+ *               "password": "P@ssw0rd!"
+ *             }
+ *           }
+ *         }
+ *       },
+ *       "responses": {
+ *         "200": {
+ *           "description": "Token rilasciato con successo",
+ *           "content": {
+ *             "application/json": {
+ *               "schema": {
+ *                 "type": "object",
+ *                 "properties": {
+ *                   "token": {
+ *                     "type": "string",
+ *                     "description": "JWT di autenticazione"
+ *                   }
+ *                 }
+ *               },
+ *               "example": {
+ *                 "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+ *               }
+ *             }
+ *           }
+ *         },
+ *         "401": {
+ *           "description": "Email o password sbagliate",
+ *           "content": {
+ *             "application/json": {
+ *               "schema": {
+ *                 "type": "object",
+ *                 "properties": {
+ *                   "error": {
+ *                     "type": "string"
+ *                   }
+ *                 }
+ *               },
+ *               "example": {
+ *                 "error": "Email o password non valide"
+ *               }
+ *             }
+ *           }
+ *         }
+ *       },
+ *       "tags": ["Authentication"]
+ *     }
+ *   }
+ * }
+ */
 router.post('/auth', (req, res, next) => {
     AuthController.checkCredentials(req).then((result) => {
         console.log(result);
