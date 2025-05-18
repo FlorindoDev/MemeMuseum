@@ -11,7 +11,7 @@ export function enforceAuthentication(req, res, next) {
     }
     AuthController.isTokenValid(token, (err, decodedToken) => {
         if (err) {
-            next(new Error(401, "Unauthorized"));
+            return next(new Error(401, "Unauthorized"));
         } else {
             req.username = decodedToken.user;
             next();

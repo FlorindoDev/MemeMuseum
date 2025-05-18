@@ -34,7 +34,16 @@ import { createHash } from "crypto";
  *           "password": {
  *             "type": "string",
  *             "description": "Password salvata come hash SHA-256"
- *           }
+ *           },
+ *          "createdAt": {
+ *              "type": "string",
+ *              "example": "2025-05-17T16:22:54.589Z"
+ *          },
+ * 
+ *          "updatedAt": {
+ *              "type": "string",
+ *              "example": "2025-05-17T16:22:54.589Z"
+ *          }
  *         },
  *         "required": ["nickName", "email", "password","idUser"],
  *         "example": {
@@ -42,7 +51,9 @@ import { createHash } from "crypto";
  *           "nickName": "johnDoe",
  *           "email": "john@example.com",
  *           "profilePic": null,
- *           "password": "5e884898da28047151d0e56f8dc6292773603d0d6aabbdd6"
+ *           "password": "5e884898da28047151d0e56f8dc6292773603d0d6aabbdd6",
+ *           "createdAt": "2025-05-17T16:18:36.773Z",
+ *           "updatedAt": "2025-05-17T16:18:36.773Z"
  *         }
  *       }
  *     }

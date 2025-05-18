@@ -1,13 +1,26 @@
 import express from "express";
 import { isUserPrsent } from "../middleware/UserValidators.js";
+import { isEmailPasswordPresent } from "../middleware/UserValidators.js";
 import { AuthController } from "../controllers/AuthController.js";
 import { Error } from "../utils/Error.js";
 
+
+
+/*
+//multer
+import multer from "multer";
+const storage = multer.memoryStorage();
+export const upload = multer({ storage });
+// upload.single('profilePic')
+*/
+
 export const router = express.Router();
+
+router.use(isEmailPasswordPresent);
 
 /**
  * @swagger
- *   "/signup": {
+ *   "/auth/signup": {
  *     "post": {
  *       "summary": "Register a new user",
  *       "description": "Crea un nuovo account utente se non è già presente",
@@ -18,7 +31,13 @@ export const router = express.Router();
  *           "application/json": {
  *             "schema": {
  *               "$ref": "#/components/schemas/User"
- *             }
+ *             },
+ *              "example": {
+ *                  "nickName": "johnDoe",
+ *                  "email": "john@example.com",
+ *                  "profilePic": null,
+ *                  "password": "5e884898da28047151d0e56f8dc6292773603d0d6aabbdd6"
+ *               }
  *           }
  *         }
  *       },
@@ -46,6 +65,16 @@ export const router = express.Router();
  *             }
  *           }
  *         },
+ *          "400": {
+ *           "description": "email or passoword missing in the body",
+ *           "content": {
+ *             "application/json": {
+ *               "schema": {
+ *                 "$ref": "#/components/schemas/Error"
+ *               }
+ *             }
+ *           }
+ *         },
  *         "default": {
  *           "description": "Unexpected error",
  *           "content": {
@@ -60,14 +89,16 @@ export const router = express.Router();
  *     }
  *   }
  */
-router.post('/signup', isUserPrsent(new Error(409, "l'utente esiste già")), (req, res, next) => {
+router.post('/signup', [isUserPrsent(new Error(409, "l'utente esiste già"))], (req, res, next) => {
     AuthController.saveUser(req).then((result) => {
         if (result) {
             res.status(200);
             res.send();
         } else {
-            next(new Error(503, "Al momento il signup non è disponibile"))
+            return next(new Error(503, "Al momento il signup non è disponibile"));
         }
+    }).catch((err) => {
+        next(err)
     });
 
 });
@@ -75,7 +106,7 @@ router.post('/signup', isUserPrsent(new Error(409, "l'utente esiste già")), (re
 /**
  * @swagger
  * {
- *   "/auth": {
+ *   "/auth/login": {
  *     "post": {
  *       "summary": "Autenticazione utente",
  *       "description": "Verifica le credenziali e restituisce un token JWT",
@@ -113,6 +144,16 @@ router.post('/signup', isUserPrsent(new Error(409, "l'utente esiste già")), (re
  *             }
  *           }
  *         },
+ *          "400": {
+ *           "description": "email or passoword missing in the body",
+ *           "content": {
+ *             "application/json": {
+ *               "schema": {
+ *                 "$ref": "#/components/schemas/Error"
+ *               }
+ *             }
+ *           }
+ *         },
  *         "401": {
  *           "description": "Email o password sbagliate",
  *           "content": {
@@ -129,15 +170,17 @@ router.post('/signup', isUserPrsent(new Error(409, "l'utente esiste già")), (re
  *   }
  * }
  */
-router.post('/auth', (req, res, next) => {
+router.post('/login', (req, res, next) => {
     AuthController.checkCredentials(req).then((result) => {
         if (result) {
+            res.status(200);
             res.json({ token: AuthController.issueToken(req.body.email) })
-            res.send();
         } else {
-            next(new Error(401, "Email o password sbagliate"))
+            return next(new Error(401, "Email o password sbagliate"));
         }
 
-    });
+    }).catch((err) => {
+        next(err)
+    });;
 
 });

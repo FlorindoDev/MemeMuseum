@@ -66,14 +66,17 @@ export function createModel(database) {
         upVoteNum: {
             type: DataTypes.INTEGER,
             allowNull: false,
+            defaultValue: 0
         },
         downVoteNum: {
             type: DataTypes.INTEGER,
             allowNull: false,
+            defaultValue: 0
         },
         commentNum: {
             type: DataTypes.INTEGER,
             allowNull: false,
+            defaultValue: 0
         },
         date: {
             type: DataTypes.DATE,
