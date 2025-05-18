@@ -33,16 +33,18 @@ import { createHash } from "crypto";
  *           },
  *           "password": {
  *             "type": "string",
- *             "description": "Password salvata come hash SHA-256"
+ *             "description": "Password"
  *           },
  *          "createdAt": {
  *              "type": "string",
- *              "example": "2025-05-17T16:22:54.589Z"
+ *              "example": "2025-05-17T16:22:54.589Z",
+ *              "description": "non neccessario anche se messo verrà ignorato"
  *          },
  * 
  *          "updatedAt": {
  *              "type": "string",
- *              "example": "2025-05-17T16:22:54.589Z"
+ *              "example": "2025-05-17T16:22:54.589Z",
+ *              "description": "non neccessario anche se messo verrà ignorato"
  *          }
  *         },
  *         "required": ["nickName", "email", "password","idUser"],
@@ -81,7 +83,7 @@ export function createModel(database) {
         },
 
         profilePic: {
-            type: DataTypes.BLOB,
+            type: DataTypes.BLOB("long"),
             allowNull: true,
         },
 

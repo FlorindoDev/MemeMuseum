@@ -9,7 +9,6 @@ export class AuthController {
             {
                 nickName: req.body.nickName,
                 email: req.body.email,
-                profilePic: req.body.profilePic,
                 password: req.body.password
             }
         );
