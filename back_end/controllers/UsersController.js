@@ -1,20 +1,35 @@
 import { User } from "../models/DataBase.js"
+import { UserNotFoundError, FailToUpdateUser } from "../utils/error/index.js";
 
 export class UsersController {
 
 
     static async getAllUsers(pageSize, page) {
-        return await User.findAll({
+        let result = await User.findAll({
             attributes: ['idUser', 'nickName', 'email', 'profilePic', 'createdAt', 'updatedAt'],
             limit: pageSize,
             offset: (page - 1) * pageSize,
         });
+
+        if (result.length === 0) {
+            return Promise.reject(new UserNotFoundError());
+        }
+
+        return result;
+
     }
 
     static async getUserFromId(id) {
-        return await User.findByPk(id, {
+        let result = await User.findByPk(id, {
             attributes: ['idUser', 'nickName', 'email', 'profilePic', 'createdAt', 'updatedAt'],
         });
+
+        if (result === null) {
+            return Promise.reject(new UserNotFoundError());
+        }
+
+        return result;
+
     }
 
     static checkPage(rawPageSize, rawPage) {
@@ -29,7 +44,7 @@ export class UsersController {
     }
 
     static async updateProfilePic(id, link) {
-        return await User.update(
+        let result = await User.update(
             {
                 profilePic: link
             },
@@ -39,6 +54,12 @@ export class UsersController {
                 }
             }
         );
+
+        if (result[0] == 0) {
+            return Promise.reject(new FailToUpdateUser());
+        }
+
+        return result;
     }
 
 }

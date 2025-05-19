@@ -1,5 +1,4 @@
 import express from "express";
-import { Error } from "../utils/Error.js";
 import { enforceAuthentication } from "../middleware/authorization.js"
 import { UsersController } from "../controllers/UsersController.js";
 import { upLoad as upLoadOnGoogle } from "../middleware/GoogleStorage.js"
@@ -68,7 +67,7 @@ export const router = express.Router();
  *             }
  *           }
  *         },
- *         "209": {
+ *         "404": {
  *           "description": "Nessun utente trovato",
  *           "content": {
  *             "application/json": {
@@ -90,12 +89,9 @@ router.get('/', (req, res, next) => {
     let query = UsersController.checkPage(rawPageSize, rawPage);
 
     UsersController.getAllUsers(query.size, query.pages).then((result) => {
-        if (result.length !== 0) {
-            res.status(200);
-            res.json(result);
-        } else {
-            return next(new Error(209, "non ci sono utenti"));
-        }
+
+        res.status(200);
+        res.json(result);
 
     }).catch((err) => {
         next(err)
@@ -171,12 +167,10 @@ router.get('/', (req, res, next) => {
 router.get('/:id', (req, res, next) => {
 
     UsersController.getUserFromId(req.params.id).then((result) => {
-        if (result !== null) {
-            res.status(200);
-            res.json(result);
-        } else {
-            return next(new Error(209, "non ci sono utenti"));
-        }
+
+        res.status(200);
+        res.json(result);
+
     }).catch((err) => {
         next(err)
     });
@@ -237,6 +231,9 @@ router.get('/:id', (req, res, next) => {
  *         "200": {
  *           "description": "Profile picture updated successfully"
  *         },
+ *         "401": {
+ *           "description": "Unauthorized , il profilo non è tuo"
+ *         },
  *         "500": {
  *           "description": "Something went wrong, please try again later"
  *         }
@@ -246,13 +243,11 @@ router.get('/:id', (req, res, next) => {
  * }
  */
 router.post('/:id/upload-profile-pic', [enforceAuthentication, isOwnProfile, imageParser, upLoadOnGoogle], (req, res, next) => {
-    UsersController.updateProfilePic(req.params.id, req.profilepicUrl).then((result) => {
-        if (result[0] == 1) {
-            res.status(200);
-            res.send();
-            return;
-        }
-        return next(500, 'qualcosa è andato storto, riprova più tardi');
+    UsersController.updateProfilePic(req.params.id, req.profilepicUrl).then(() => {
+
+        res.status(200);
+        res.send();
+        return;
 
     }).catch((err) => {
         next(err)

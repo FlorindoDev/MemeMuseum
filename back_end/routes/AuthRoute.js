@@ -3,13 +3,13 @@ import { isUserPrsent } from "../middleware/UserValidators.js";
 import { isEmailPasswordPresent } from "../middleware/UserValidators.js";
 import { isNickNamePresent } from "../middleware/UserValidators.js";
 import { AuthController } from "../controllers/AuthController.js";
-import { Error } from "../utils/Error.js";
+import { UserAlreadyExistsError } from "../utils/error/index.js";
 
 export const router = express.Router();
 
 router.use(isEmailPasswordPresent);
 
-const ErrorUserAbsenct = new Error(409, "l'utente esiste già");
+const ErrorUserAbsenct = new UserAlreadyExistsError();
 
 /**
  * @swagger
@@ -74,13 +74,11 @@ const ErrorUserAbsenct = new Error(409, "l'utente esiste già");
  *   }
  */
 router.post('/signup', [isNickNamePresent, isUserPrsent(ErrorUserAbsenct)], (req, res, next) => {
-    AuthController.saveUser(req).then((result) => {
-        if (result) {
-            res.status(200);
-            res.send();
-        } else {
-            return next(new Error(503, "Al momento il signup non è disponibile"));
-        }
+    AuthController.saveUser(req).then(() => {
+
+        res.status(200);
+        res.send();
+
     }).catch((err) => {
         next(err)
     });
@@ -155,13 +153,11 @@ router.post('/signup', [isNickNamePresent, isUserPrsent(ErrorUserAbsenct)], (req
  * }
  */
 router.post('/login', (req, res, next) => {
-    AuthController.checkCredentials(req).then((result) => {
-        if (result) {
-            res.status(200);
-            res.json({ token: AuthController.issueToken(req.body.email) })
-        } else {
-            return next(new Error(401, "Email o password sbagliate"));
-        }
+    AuthController.checkCredentials(req).then(() => {
+
+        res.status(200);
+        res.json({ token: AuthController.issueToken(req.body.email) })
+
 
     }).catch((err) => {
         next(err)

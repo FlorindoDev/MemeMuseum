@@ -1,6 +1,6 @@
 import { Storage } from '@google-cloud/storage';
-import { Error } from '../utils/Error.js'
 import { nanoid } from 'nanoid';
+import { MissingFile, FailToUploadFile } from '../utils/error/index.js';
 import 'dotenv/config.js';
 
 //google storage
@@ -12,7 +12,7 @@ export function upLoad(req, res, next) {
     try {
 
         if (!req.files) {
-            return next(new Error(400, 'Nessun file caricato.'))
+            return next(new MissingFile())
         }
 
         const file = req.files['image'][0]
@@ -27,7 +27,7 @@ export function upLoad(req, res, next) {
 
         blobStream.on('error', err => {
             console.log(err);
-            return next(new Error(500, 'Errore durante l’upload'));
+            return next(new FailToUploadFile());
         });
 
         blobStream.on('finish', () => {
@@ -42,7 +42,7 @@ export function upLoad(req, res, next) {
 
     } catch (err) {
         console.error('Internal error:', err);
-        return next(new Error(500, 'Errore durante l’upload'));
+        return next(new FailToUploadFile());
     }
 
 }

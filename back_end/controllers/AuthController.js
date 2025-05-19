@@ -1,5 +1,6 @@
 import { User } from "../models/DataBase.js";
 import Jwt from "jsonwebtoken";
+import { SignUpError, CredentialError } from "../utils/error/index.js";
 
 export class AuthController {
 
@@ -12,7 +13,14 @@ export class AuthController {
                 password: req.body.password
             }
         );
-        return user.save();
+        let result = await user.save();
+
+        if (!result) {
+            return Promise.reject(new SignUpError());
+        }
+
+        return result;
+
     }
 
 
@@ -31,7 +39,11 @@ export class AuthController {
         }
         );
 
-        return found !== null
+        if (found === null) {
+            return Promise.reject(new CredentialError());
+        }
+
+        return found !== null;
     }
 
     static issueToken(email) {

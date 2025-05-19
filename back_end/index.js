@@ -34,7 +34,7 @@ const swaggerSpec = swaggerJSDoc({
       schemas: {}
     }
   },
-  apis: ['./models/*.js', './utils/Error.js', , "./routes/*Route.js"], // files containing annotations
+  apis: ['./models/*.js', './utils/AppError.js', , "./routes/*Route.js"], // files containing annotations
 });
 
 
@@ -54,7 +54,8 @@ app.use('/memes', MemsRoute);
 app.use((err, req, res, next) => {
   //console.log(err.stack);
   res.status(err.status || 500).json({
-    code: err.status || 500,
+    status: err.status || 500,
+    code: err.code,
     description: err.message || "An error occurred"
   });
 });
