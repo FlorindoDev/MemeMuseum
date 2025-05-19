@@ -1,12 +1,15 @@
 import express from "express";
 import { isUserPrsent } from "../middleware/UserValidators.js";
 import { isEmailPasswordPresent } from "../middleware/UserValidators.js";
+import { isNickNamePresent } from "../middleware/UserValidators.js";
 import { AuthController } from "../controllers/AuthController.js";
 import { Error } from "../utils/Error.js";
 
 export const router = express.Router();
 
 router.use(isEmailPasswordPresent);
+
+const ErrorUserAbsenct = new Error(409, "l'utente esiste già");
 
 /**
  * @swagger
@@ -70,7 +73,7 @@ router.use(isEmailPasswordPresent);
  *     }
  *   }
  */
-router.post('/signup', isUserPrsent(new Error(409, "l'utente esiste già")), (req, res, next) => {
+router.post('/signup', [isNickNamePresent, isUserPrsent(ErrorUserAbsenct)], (req, res, next) => {
     AuthController.saveUser(req).then((result) => {
         if (result) {
             res.status(200);

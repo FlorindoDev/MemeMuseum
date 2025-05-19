@@ -48,7 +48,7 @@ app.use('/users', UsersRoute);
 app.use('/memes', MemsRoute);
 
 
-
+//TODO: Gestire meglio gli errori, fare una gerarchia 
 
 //error handler
 app.use((err, req, res, next) => {

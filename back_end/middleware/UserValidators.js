@@ -25,6 +25,11 @@ export function isEmailPasswordPresent(req, res, next) {
         return next(new Error(400, "campo password mancante"))
     }
 
+    next();
+}
+
+export function isNickNamePresent(req, res, next) {
+
     if (!req.body.nickName) {
         return next(new Error(400, "campo nickName mancante"))
     }
