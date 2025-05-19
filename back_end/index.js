@@ -22,7 +22,7 @@ app.use(cors());
 
 app.use(express.json());
 
-//TODO: fare un endpoint per upload delle immagini su google , quindi modficare signup
+
 const swaggerSpec = swaggerJSDoc({
   definition: {
     openapi: '3.1.0',
@@ -47,8 +47,6 @@ app.use('/auth', routeAuth);
 app.use('/users', UsersRoute);
 app.use('/memes', MemsRoute);
 
-
-//TODO: Gestire meglio gli errori, fare una gerarchia 
 
 //error handler
 app.use((err, req, res, next) => {
