@@ -17,15 +17,15 @@ export let isUserPrsent = (err) => async (req, res, next) => {
 
 export function isEmailPasswordPresent(req, res, next) {
 
-    if (req.body.email === undefined) {
+    if (!req.body.email) {
         return next(new Error(400, "campo email mancante"))
     }
 
-    if (req.body.password === undefined) {
+    if (!req.body.password) {
         return next(new Error(400, "campo password mancante"))
     }
 
-    if (req.body.nickName === undefined) {
+    if (!req.body.nickName) {
         return next(new Error(400, "campo nickName mancante"))
     }
 

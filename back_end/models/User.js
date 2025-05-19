@@ -28,8 +28,7 @@ import { createHash } from "crypto";
  *           },
  *           "profilePic": {
  *             "type": "string",
- *             "format": "binary",
- *             "description": "Immagine profilo in formato blob"
+ *             "description": "URL dell’immagine"
  *           },
  *           "password": {
  *             "type": "string",
@@ -83,7 +82,7 @@ export function createModel(database) {
         },
 
         profilePic: {
-            type: DataTypes.BLOB("long"),
+            type: DataTypes.STRING,
             allowNull: true,
         },
 

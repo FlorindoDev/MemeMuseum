@@ -1,4 +1,6 @@
 import { AuthController } from "../controllers/AuthController.js";
+import { UsersController } from "../controllers/UsersController.js";
+import { User } from "../models/DataBase.js";
 import { Error } from "../utils/Error.js";
 
 
@@ -13,8 +15,21 @@ export function enforceAuthentication(req, res, next) {
         if (err) {
             return next(new Error(401, "Unauthorized"));
         } else {
-            req.username = decodedToken.user;
+            req.email_in_token = decodedToken.user;
             next();
         }
     });
+}
+
+export async function isOwnProfile(req, res, next) {
+    await UsersController.getUserFromId(req.params.id).then((result) => {
+        if (result === null) {
+            return next(new Error(401, "Unauthorized"));
+        }
+
+        if (result.dataValues.email != req.email_in_token) return next(new Error(401, "Unauthorized"));
+
+        next();
+    });
+
 }

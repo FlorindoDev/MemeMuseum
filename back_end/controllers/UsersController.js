@@ -28,4 +28,17 @@ export class UsersController {
         return { pages: page, size: pageSize };
     }
 
+    static async updateProfilePic(id, link) {
+        return await User.update(
+            {
+                profilePic: link
+            },
+            {
+                where: {
+                    idUser: id
+                }
+            }
+        );
+    }
+
 }

@@ -4,11 +4,6 @@ import { isEmailPasswordPresent } from "../middleware/UserValidators.js";
 import { AuthController } from "../controllers/AuthController.js";
 import { Error } from "../utils/Error.js";
 
-//multer
-import multer from "multer";
-const storage = multer.memoryStorage();
-export const upload = multer({ storage });
-
 export const router = express.Router();
 
 router.use(isEmailPasswordPresent);
@@ -167,6 +162,6 @@ router.post('/login', (req, res, next) => {
 
     }).catch((err) => {
         next(err)
-    });;
+    });
 
 });

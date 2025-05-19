@@ -2,13 +2,17 @@ import express from "express";
 import { Error } from "../utils/Error.js";
 import { enforceAuthentication } from "../middleware/authorization.js"
 import { UsersController } from "../controllers/UsersController.js";
+import { upLoad as upLoadOnGoogle } from "../middleware/GoogleStorage.js"
+import { isOwnProfile } from "../middleware/authorization.js"
+
+
+//multer
+import multer from "multer";
+const upload = multer({ storage: multer.memoryStorage() });
+const imageParser = upload.fields([{ name: 'image', maxCount: 1 }])
 
 
 export const router = express.Router();
-
-
-//TODO: levare era di prova
-//router.use(enforceAuthentication);
 
 
 /**
@@ -176,6 +180,84 @@ router.get('/:id', (req, res, next) => {
     }).catch((err) => {
         next(err)
     });
+});
+
+
+//TODO: se qulcuno  carica una foto fare in modo che la vecchi si cancelli
+/**
+ * @swagger
+ * {
+ *   "components": {
+ *     "securitySchemes": {
+ *       "bearerAuth": {
+ *         "type": "http",
+ *         "scheme": "bearer",
+ *         "bearerFormat": "JWT",
+ *         "description": "Inserisci il token JWT nel formato `Bearer <token>`"
+ *       }
+ *     }
+ *   },
+ *   "/users/{id}/upload-profile-pic": {
+ *     "post": {
+ *       "tags": ["Users"],
+ *       "summary": "Upload user profile picture",
+ *       "security": [
+ *         {
+ *           "bearerAuth": []
+ *         }
+ *       ],
+ *       "parameters": [
+ *         {
+ *           "name": "id",
+ *           "in": "path",
+ *           "required": true,
+ *           "schema": { "type": "string" },
+ *           "description": "Deve essere id del tuo profilo"
+ *         }
+ *       ],
+ *       "requestBody": {
+ *         "required": true,
+ *         "content": {
+ *           "multipart/form-data": {
+ *             "schema": {
+ *               "type": "object",
+ *               "properties": {
+ *                 "image": {
+ *                   "type": "string",
+ *                   "format": "binary",
+ *                   "description": "Image file to set as the user's profile picture"
+ *                 }
+ *               },
+ *               "required": ["image"]
+ *             }
+ *           }
+ *         }
+ *       },
+ *       "responses": {
+ *         "200": {
+ *           "description": "Profile picture updated successfully"
+ *         },
+ *         "500": {
+ *           "description": "Something went wrong, please try again later"
+ *         }
+ *       }
+ *     }
+ *   }
+ * }
+ */
+router.post('/:id/upload-profile-pic', [enforceAuthentication, isOwnProfile, imageParser, upLoadOnGoogle], (req, res, next) => {
+    UsersController.updateProfilePic(req.params.id, req.profilepicUrl).then((result) => {
+        if (result[0] == 1) {
+            res.status(200);
+            res.send();
+            return;
+        }
+        return next(500, 'qualcosa è andato storto, riprova più tardi');
+
+    }).catch((err) => {
+        next(err)
+    });
+
 });
 
 

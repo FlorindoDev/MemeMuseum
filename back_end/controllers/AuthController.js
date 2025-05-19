@@ -34,8 +34,8 @@ export class AuthController {
         return found !== null
     }
 
-    static issueToken(username) {
-        return Jwt.sign({ user: username }, process.env.TOKEN_SECRET, { expiresIn: `1d` });
+    static issueToken(email) {
+        return Jwt.sign({ user: email }, process.env.TOKEN_SECRET, { expiresIn: `1d` });
     }
 
     static isTokenValid(token, callback) {

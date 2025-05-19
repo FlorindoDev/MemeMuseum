@@ -16,8 +16,7 @@ import { DataTypes } from "sequelize";
  *           },
  *           "image": {
  *             "type": "string",
- *             "format": "binary",
- *             "description": "Contenuto binario dell’immagine"
+ *             "description": "URL dell’immagine"
  *           },
  *           "description": {
  *             "type": "string",
@@ -56,7 +55,7 @@ export function createModel(database) {
             primaryKey: true
         },
         image: {
-            type: DataTypes.BLOB,
+            type: DataTypes.STRING,
             allowNull: false,
         },
         description: {
