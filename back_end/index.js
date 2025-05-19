@@ -9,6 +9,8 @@ import { router as UsersRoute } from "./routes/UsersRoute.js"
 import { router as MemsRoute } from "./routes/MemesRoute.js"
 
 
+//TODO: RICORDA DI DARE AL PROF .env gia fatto e passare il json per google storage
+
 const app = express();
 const PORT = 3000;
 
