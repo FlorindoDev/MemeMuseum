@@ -38,13 +38,13 @@ services:
       POSTGRES_PASSWORD: db  
       POSTGRES_DB: meme_database             # contiene POSTGRES_USER, POSTGRES_PASSWORD, POSTGRES_DB
     volumes:
-      - ./postgres_data:/var/lib/postgresql/data
+      - postgres_data:/var/lib/postgresql/data
     ports:
       - "5432:5432"
     networks:
       - meme-museum
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready --username admin --dbname meme_database"]
+      test: ["CMD-SHELL", "pg_isready --username db --dbname meme_database"]
       interval: 10s
       timeout: 10s
       retries: 20
@@ -55,4 +55,5 @@ networks:
 
 volumes:
   pgadmin_data:
+  postgres_data:
 
