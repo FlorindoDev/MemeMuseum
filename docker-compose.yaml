@@ -38,7 +38,7 @@ services:
       POSTGRES_PASSWORD: db  
       POSTGRES_DB: meme_database             # contiene POSTGRES_USER, POSTGRES_PASSWORD, POSTGRES_DB
     volumes:
-      - postgres_data:/var/lib/postgresql/data
+      - ./postgres_data:/var/lib/postgresql/data
     ports:
       - "5432:5432"
     networks:
@@ -54,6 +54,5 @@ networks:
     driver: bridge
 
 volumes:
-  postgres_data:
   pgadmin_data:
 
