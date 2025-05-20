@@ -33,11 +33,6 @@ import { DataTypes } from "sequelize";
  *           "commentNum": {
  *             "type": "integer",
  *             "description": "Numero di commenti"
- *           },
- *           "date": {
- *             "type": "string",
- *             "format": "date-time",
- *             "description": "Data di creazione del meme"
  *           }
  *         },
  *         "required": ["image", "upVoteNum", "downVoteNum", "commentNum","idMeme"]
@@ -76,12 +71,7 @@ export function createModel(database) {
             type: DataTypes.INTEGER,
             allowNull: false,
             defaultValue: 0
-        },
-        date: {
-            type: DataTypes.DATE,
-            allowNull: false,
-            defaultValue: DataTypes.NOW
-        },
+        }
     }
     );
 }

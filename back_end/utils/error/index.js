@@ -44,6 +44,12 @@ export class UserNotFoundError extends AppErrorHttp {
     }
 }
 
+export class MemeNotFoundError extends AppErrorHttp {
+    constructor() {
+        super(NOT_FOUND, "non ci sono memes", "MEME_NOT_EXISTS");
+    }
+}
+
 /* ****************************************************************** */
 
 //Codici 500
@@ -62,5 +68,11 @@ export class FailToUploadFile extends AppErrorHttp {
 export class SignUpError extends AppErrorHttp {
     constructor() {
         super(SERVICE_UNAVAILABLE, "Al momento il signup non è disponibile", "SIGNUP_ERROR");
+    }
+}
+
+export class MemeUploadError extends AppErrorHttp {
+    constructor() {
+        super(SERVICE_UNAVAILABLE, "Al momento upload di meme non è disponibile", "MEME_UPLOAD_ERROR");
     }
 }

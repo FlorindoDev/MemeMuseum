@@ -88,6 +88,16 @@ router.post('/signup', [isNickNamePresent, isUserPrsent(ErrorUserAbsenct)], (req
 /**
  * @swagger
  * {
+ *  "components": {
+ *     "securitySchemes": {
+ *       "bearerAuth": {
+ *         "type": "http",
+ *         "scheme": "bearer",
+ *         "bearerFormat": "JWT",
+ *         "description": "Inserisci il token JWT nel formato `Bearer <token>`"
+ *       }
+ *     }
+ *   },
  *   "/auth/login": {
  *     "post": {
  *       "summary": "Autenticazione utente",
@@ -156,7 +166,7 @@ router.post('/login', (req, res, next) => {
     AuthController.checkCredentials(req).then(() => {
 
         res.status(200);
-        res.json({ token: AuthController.issueToken(req.body.email) })
+        res.json({ token: AuthController.issueToken(req.body.email, req.idUser) })
 
 
     }).catch((err) => {

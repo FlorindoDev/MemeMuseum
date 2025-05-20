@@ -1,8 +1,7 @@
 import express from "express";
-import { enforceAuthentication } from "../middleware/authorization.js"
+import { enforceAuthentication, isOwnProfile } from "../middleware/authorization.js"
 import { UsersController } from "../controllers/UsersController.js";
 import { upLoad as upLoadOnGoogle } from "../middleware/GoogleStorage.js"
-import { isOwnProfile } from "../middleware/authorization.js"
 
 
 //multer
@@ -148,7 +147,7 @@ router.get('/', (req, res, next) => {
  *           },
  *           "examples": {
  *             "application/json": {
- *               "code": 209,
+ *               "code": 404,
  *               "message": "non ci sono utenti"
  *             }
  *           }
@@ -181,16 +180,7 @@ router.get('/:id', (req, res, next) => {
 /**
  * @swagger
  * {
- *   "components": {
- *     "securitySchemes": {
- *       "bearerAuth": {
- *         "type": "http",
- *         "scheme": "bearer",
- *         "bearerFormat": "JWT",
- *         "description": "Inserisci il token JWT nel formato `Bearer <token>`"
- *       }
- *     }
- *   },
+ *   
  *   "/users/{id}/upload-profile-pic": {
  *     "post": {
  *       "tags": ["Users"],
@@ -233,6 +223,9 @@ router.get('/:id', (req, res, next) => {
  *         },
  *         "401": {
  *           "description": "Unauthorized , il profilo non è tuo"
+ *         },
+ *          "404": {
+ *           "description": "utente non esiste"
  *         },
  *         "500": {
  *           "description": "Something went wrong, please try again later"

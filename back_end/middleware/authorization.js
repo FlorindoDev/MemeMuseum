@@ -15,21 +15,16 @@ export function enforceAuthentication(req, res, next) {
             return next(new UnauthorizedError());
         } else {
             req.email_in_token = decodedToken.user;
+            req.idUser = decodedToken.idUser;
             next();
         }
     });
 }
 
-export async function isOwnProfile(req, res, next) {
-    await UsersController.getUserFromId(req.params.id).then((result) => {
+export function isOwnProfile(req, res, next) {
 
-        if (result === null) {
-            return next(new UnauthorizedError());
-        }
+    if (req.idUser != req.params.id) return next(new UnauthorizedError());
 
-        if (result.dataValues.email != req.email_in_token) return next(new UnauthorizedError());
-
-        next();
-    });
+    next();
 
 }

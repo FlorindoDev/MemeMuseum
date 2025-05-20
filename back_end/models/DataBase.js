@@ -36,7 +36,7 @@ User.Comments = User.hasMany(Comment);
 // Associazioni Meme
 Meme.MemeVotes = Meme.hasMany(MemeVote);
 Meme.Comments = Meme.hasMany(Comment);
-Meme.Tags = Meme.hasMany(Tag);
+Meme.belongsToMany(Tag, { through: 'MemeTag' });
 Meme.User = Meme.belongsTo(User);
 
 // Associazioni MemeVote
@@ -53,13 +53,13 @@ Comment.User = Comment.belongsTo(User);
 Comment.Meme = Comment.belongsTo(Meme);
 
 // Associazioni Tag
-Tag.Memes = Tag.hasMany(Meme);
+Tag.belongsToMany(Meme, { through: 'MemeTag' });
 
 
 
 
 //TODO: Controllare che sia il metodo giusto
-database.sync(/*{ alter: true }*/).then(() => {
+database.sync({ /*alter: true*/ }).then(() => {
     console.log("Database synced correctly");
 }).catch(err => {
     console.err("Error with database synchronization: " + err.message);

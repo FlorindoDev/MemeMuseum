@@ -43,11 +43,13 @@ export class AuthController {
             return Promise.reject(new CredentialError());
         }
 
+        req.idUser = found.dataValues.idUser;
+
         return found !== null;
     }
 
-    static issueToken(email) {
-        return Jwt.sign({ user: email }, process.env.TOKEN_SECRET, { expiresIn: `1d` });
+    static issueToken(email, id) {
+        return Jwt.sign({ user: email, idUser: id }, process.env.TOKEN_SECRET, { expiresIn: `1d` });
     }
 
     static isTokenValid(token, callback) {
