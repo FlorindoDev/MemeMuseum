@@ -1,5 +1,5 @@
 import { AuthController } from "../controllers/AuthController.js";
-import { UsersController } from "../controllers/UsersController.js";
+import { MemesController } from "../controllers/MemesController.js";
 import { UnauthorizedError } from "../utils/error/index.js";
 
 
@@ -26,5 +26,19 @@ export function isOwnProfile(req, res, next) {
     if (req.idUser != req.params.id) return next(new UnauthorizedError());
 
     next();
+
+}
+
+export function isOwnMeme(req, res, next) {
+
+    MemesController.getMemeFromId(req.params.id).then((result) => {
+
+        if (result.dataValues.UserIdUser !== req.idUser) {
+            return next(new UnauthorizedError());
+        }
+        return next();
+    }).catch((err) => {
+        return next(err);
+    })
 
 }

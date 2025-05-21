@@ -1,6 +1,6 @@
 import express from "express"
 import { upLoad as upLoadOnGoogle } from "../middleware/GoogleStorage.js"
-import { enforceAuthentication, isOwnProfile } from "../middleware/authorization.js"
+import { enforceAuthentication, isOwnMeme } from "../middleware/authorization.js"
 import { MemesController } from "../controllers/MemesController.js";
 
 import multer from "multer";
@@ -244,6 +244,109 @@ router.get('/:id', (req, res, next) => {
 
         res.status(200);
         res.json(result);
+
+    }).catch((err) => {
+        next(err)
+    });
+
+});
+
+
+/**
+ * @swagger
+ * {
+ *   "/memes/{id}/tags": {
+ *     "post": {
+ *       "tags": ["Memes"],
+ *       "summary": "Aggiunge tag a un meme",
+ *       "security": [
+ *           {
+ *             "bearerAuth": []
+ *           }
+ *         ],
+ *       "description": "Aggiunge una lista di tag a un meme specificato tramite ID",
+ *       "operationId": "addTagsToMeme",
+ *       "parameters": [
+ *         {
+ *           "name": "id",
+ *           "in": "path",
+ *           "description": "ID del meme",
+ *           "required": true,
+ *           "schema": {
+ *             "type": "string"
+ *           }
+ *         }
+ *       ],
+ *       "requestBody": {
+ *         "required": true,
+ *         "content": {
+ *           "application/json": {
+ *             "schema": {
+ *               "type": "array",
+ *               "items": {
+ *                 "$ref": "#/components/schemas/Tag"
+ *               },
+ *              "example": [{"name": "Video giochi"}]  
+ *             }
+ *           }
+ *         }
+ *       },
+ *       "responses": {
+ *         "200": {
+ *           "description": "Tag aggiunti con successo",
+ *           "content": {
+ *             "application/json": {
+ *               "schema": {
+ *                 "type": "object",
+ *                 "properties": {
+ *                   "success": {
+ *                     "type": "boolean"
+ *                   },
+ *                   "memeId": {
+ *                     "type": "string"
+ *                   },
+ *                   "addedTags": {
+ *                     "type": "array",
+ *                     "items": {
+ *                       "$ref": "#/components/schemas/Tag"
+ *                     }
+ *                   }
+ *                 }
+ *               }
+ *             }
+ *           }
+ *         },
+ *         "404": {
+ *           "description": "Meme non trovato",
+ *           "content": {
+ *             "application/json": {
+ *               "schema": {
+ *                 "$ref": "#/components/schemas/Error"
+ *               }
+ *             }
+ *           }
+ *         },
+ *         "500": {
+ *           "description": "Errore del server",
+ *           "content": {
+ *             "application/json": {
+ *               "schema": {
+ *                 "$ref": "#/components/schemas/Error"
+ *               }
+ *             }
+ *           }
+ *         }
+ *       }
+ *     }
+ *   }
+ * }
+ */
+router.post('/:id/tags', [enforceAuthentication, isOwnMeme], (req, res, next) => {
+
+    MemesController.saveTags(req.params.id, req).then(() => {
+
+        res.status(200);
+        res.send();
 
     }).catch((err) => {
         next(err)

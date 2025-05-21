@@ -1,5 +1,6 @@
-import { Meme } from '../models/DataBase.js'
-import { MemeNotFoundError, MemeUploadError } from '../utils/error/index.js';
+import { Meme, Tag, database } from '../models/DataBase.js'
+
+import { MemeNotFoundError, MemeUploadError, FailToSaveTags } from '../utils/error/index.js';
 
 
 export class MemesController {
@@ -8,9 +9,10 @@ export class MemesController {
 
         const isPageSizeCorrect = rawPageSize > 0 && rawPageSize <= 10;
 
-
         let pageSize = (rawPageSize !== undefined && isPageSizeCorrect) ? rawPageSize : 10;
+
         let page = (rawPage !== undefined && rawPage > 0) ? rawPage : 1;
+
         let idUser = (rawidUser >= 1) ? rawidUser : null;
 
         return { pages: page, size: pageSize, iduser: idUser };
@@ -71,6 +73,37 @@ export class MemesController {
 
         return result;
 
+    }
+
+    //TODO: se un tag eseite non lancare eccezione ma assegnalo al meme
+    static async saveTags(idMeme, req) {
+
+        let tags = [];
+
+        let meme = await MemesController.getMemeFromId(idMeme);
+
+        req.body.forEach(element => {
+            tags.push(
+                new Tag({
+                    name: element.name
+                })
+            );
+        });
+
+        const transaction = await database.transaction();
+
+
+        const savedTags = await Promise.all(
+            tags.map(tag => tag.save({ transaction }))      //map funzione di ordine superire 
+        ).catch((err) => {
+            //console.log(err);
+            transaction.rollback();
+            return Promise.reject(new FailToSaveTags());
+        });
+
+        transaction.commit();
+
+        return await meme.addTag(savedTags);
     }
 
 }

@@ -55,7 +55,13 @@ export class MemeNotFoundError extends AppErrorHttp {
 //Codici 500
 export class FailToUpdateUser extends AppErrorHttp {
     constructor() {
-        super(INTERNAL_SERVER_ERROR, "errore in aspetato riprova più tardi", "PROCESSING_USER_UPDATE_ERROR");
+        super(INTERNAL_SERVER_ERROR, "errore in aspetato durate Update user, riprova più tardi", "PROCESSING_USER_UPDATE_ERROR");
+    }
+}
+
+export class FailToSaveTags extends AppErrorHttp {
+    constructor() {
+        super(INTERNAL_SERVER_ERROR, "errore in aspetato durante save tags riprova più tardi", "PROCESSING_TAGS,SAVE_ERROR");
     }
 }
 
