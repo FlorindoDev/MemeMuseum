@@ -86,7 +86,7 @@ router.post('/', [enforceAuthentication, imageParser, upLoadOnGoogle], (req, res
  *     "get": {
  *       "tags": ["Memes"],
  *       "summary": "Recupera la lista dei memes",
- *       "description": "Restituisce una paginazione di memes; i parametri `pagesize` e `page` sono opzionali.",
+ *       "description": "Restituisce una paginazione di memes; i parametri `pagesize`,`page` e `iduser` sono opzionali.",
  *       "parameters": [
  *         {
  *           "name": "pagesize",
@@ -110,7 +110,17 @@ router.post('/', [enforceAuthentication, imageParser, upLoadOnGoogle], (req, res
  *             "minimum": 1,
  *             "default": 1
  *           }
- *         }
+ *         },
+ *          {
+ *           "name": "iduser",
+ *           "in": "query",
+ *           "description": "Id del utente di cui si vuole vedere i memes (>= 1)",
+ *           "required": false,
+ *           "schema": {
+ *             "type": "integer",
+ *             "minimum": 1
+ *           }
+ *          }
  *       ],
  *       "responses": {
  *         "200": {
@@ -151,11 +161,86 @@ router.get('/', (req, res, next) => {
 
     const rawPageSize = req.query.pagesize;
     const rawPage = req.query.page;
+    const rawidUser = req.query.iduser;
 
 
-    let query = MemesController.checkPage(rawPageSize, rawPage);
+    let query = MemesController.checkPageAndIdUser(rawPageSize, rawPage, rawidUser);
 
-    MemesController.getAllMemes(query.size, query.pages).then((result) => {
+    MemesController.getAllMemes(query.size, query.pages, query.iduser).then((result) => {
+
+        res.status(200);
+        res.json(result);
+
+    }).catch((err) => {
+        next(err)
+    });
+
+});
+
+
+/**
+ * @swagger
+ * {
+ *   "/memes/{id}": {
+ *     "get": {
+ *       "tags": ["Memes"],
+ *       "summary": "Recupera un meme tramite ID",
+ *       "description": "Restituisce le informazioni dettagliate di un meme in base all'ID specificato",
+ *       "operationId": "getMemeById",
+ *       "parameters": [
+ *         {
+ *           "name": "id",
+ *           "in": "path",
+ *           "description": "ID dell'meme da recuperare",
+ *           "required": true,
+ *           "schema": {
+ *             "type": "string"
+ *           }
+ *         }
+ *       ],
+ *       "produces": ["application/json"],
+ *       "responses": {
+ *         "200": {
+ *           "description": "meme trovato",
+ *           "content": {
+ *             "application/json": {
+ *               "schema": {
+ *                 "type": "object",
+ *                 "items": { "$ref": "#/components/schemas/Meme" }
+ *               },
+ *                "example": {
+ *                      "idMeme": 1,
+ *                      "image": "meme/url/image.png",
+ *                      "description": "un gatto",
+ *                      "upVoteNum": "1",
+ *                      "downVoteNum": "0",
+ *                      "commentNum": "2",
+ *                      "createdAt": "2025-05-17T16:18:36.773Z",
+ *                      "updatedAt": "2025-05-17T16:18:36.773Z"
+ *               }
+ *             }
+ *           }
+ *         },
+ *         "404": {
+ *           "description": "Utente non trovato",
+ *           "schema": {
+ *             "$ref": "#/components/schemas/Error"
+ *           }
+ *         },
+ *         "500": {
+ *           "description": "Errore del server",
+ *           "schema": {
+ *             "$ref": "#/components/schemas/Error"
+ *           }
+ *         }
+ *       }
+ *     }
+ *   }
+ * }
+ */
+router.get('/:id', (req, res, next) => {
+
+    MemesController.getMemeFromId(req.params.id).then((result) => {
 
         res.status(200);
         res.json(result);

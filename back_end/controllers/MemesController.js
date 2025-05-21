@@ -4,22 +4,29 @@ import { MemeNotFoundError, MemeUploadError } from '../utils/error/index.js';
 
 export class MemesController {
 
-    static checkPage(rawPageSize, rawPage) {
+    static checkPageAndIdUser(rawPageSize, rawPage, rawidUser) {
 
         const isPageSizeCorrect = rawPageSize > 0 && rawPageSize <= 10;
 
 
         let pageSize = (rawPageSize !== undefined && isPageSizeCorrect) ? rawPageSize : 10;
         let page = (rawPage !== undefined && rawPage > 0) ? rawPage : 1;
+        let idUser = (rawidUser >= 1) ? rawidUser : null;
 
-        return { pages: page, size: pageSize };
+        return { pages: page, size: pageSize, iduser: idUser };
     }
 
-    static async getAllMemes(pageSize, page) {
-        let result = await Meme.findAll({
+    static async getAllMemes(pageSize, page, idUser) {
+
+        let objectRequest = {
             limit: pageSize,
             offset: (page - 1) * pageSize,
-        });
+        };
+
+        if (idUser !== null) objectRequest.where = { UserIdUser: idUser };
+
+
+        let result = await Meme.findAll(objectRequest);
 
         if (result.length === 0) {
             return Promise.reject(new MemeNotFoundError());
@@ -49,6 +56,17 @@ export class MemesController {
 
         if (!result) {
             return Promise.reject(new MemeUploadError());
+        }
+
+        return result;
+
+    }
+
+    static async getMemeFromId(id) {
+        let result = await Meme.findByPk(id);
+
+        if (result === null) {
+            return Promise.reject(new MemeNotFoundError());
         }
 
         return result;
