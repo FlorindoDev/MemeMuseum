@@ -75,6 +75,8 @@ export class MemesController {
 
     }
 
+
+    //TODO: Fare che se un tag non viene inserito si fa il rollback
     static async saveTags(idMeme, req) {
 
         let tags = [];
