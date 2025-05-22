@@ -52,7 +52,7 @@ app.use('/memes', MemsRoute);
 
 //error handler
 app.use((err, req, res, next) => {
-  //console.log(err.stack);
+  console.log(err.stack);
   res.status(err.status || 500).json({
     status: err.status || 500,
     code: err.code,

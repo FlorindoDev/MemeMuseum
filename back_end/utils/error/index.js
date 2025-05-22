@@ -50,6 +50,12 @@ export class MemeNotFoundError extends AppErrorHttp {
     }
 }
 
+export class TagsNotFoundError extends AppErrorHttp {
+    constructor() {
+        super(NOT_FOUND, "non ci sono tags per questo meme", "TAGS_NOT_EXISTS");
+    }
+}
+
 /* ****************************************************************** */
 
 //Codici 500

@@ -1,6 +1,6 @@
-import { Meme, Tag, database } from '../models/DataBase.js'
+import { Meme, Tag } from '../models/DataBase.js'
 
-import { MemeNotFoundError, MemeUploadError, FailToSaveTags } from '../utils/error/index.js';
+import { MemeNotFoundError, MemeUploadError, FailToSaveTags, TagsNotFoundError } from '../utils/error/index.js';
 
 
 export class MemesController {
@@ -75,7 +75,6 @@ export class MemesController {
 
     }
 
-    //TODO: se un tag eseite non lancare eccezione ma assegnalo al meme
     static async saveTags(idMeme, req) {
 
         let tags = [];
@@ -90,20 +89,54 @@ export class MemesController {
             );
         });
 
-        const transaction = await database.transaction();
 
 
-        const savedTags = await Promise.all(
-            tags.map(tag => tag.save({ transaction }))      //map funzione di ordine superire 
-        ).catch((err) => {
-            //console.log(err);
-            transaction.rollback();
+        const existingTags = await Promise.all(
+            tags.map(tag => Tag.findOne({ where: { name: tag.name } }))
+        ).catch(() => {
             return Promise.reject(new FailToSaveTags());
         });
 
-        transaction.commit();
 
-        return await meme.addTag(savedTags);
+        let NonPrsentTags = tags.filter(tag => {
+
+            for (let i = 0; i < existingTags.length; i++) {
+                if (existingTags[i] != null && tag.name === existingTags[i].dataValues.name) return false;
+
+            }
+            return true;
+
+        });
+
+
+        let savedTags = await Promise.all(
+            NonPrsentTags.map(tag => tag.save())      //map funzione di ordine superire 
+        ).catch(() => {
+            return Promise.reject(new FailToSaveTags());
+        });
+
+        let addedTags = savedTags.concat(existingTags);
+
+
+        addedTags = addedTags.filter(tag => {
+            if (tag === null) return false;
+            return true
+        })
+
+        await meme.addTags(addedTags);
+        return addedTags;
+    }
+
+    static async getMemeTags(idMeme) {
+
+        let meme = await MemesController.getMemeFromId(idMeme);
+
+        let result = await meme.getTags();
+
+        if (result.length === 0) return Promise.reject(new TagsNotFoundError());
+
+        return result;
+
     }
 
 }

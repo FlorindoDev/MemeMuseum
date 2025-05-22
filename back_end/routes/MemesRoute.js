@@ -260,10 +260,10 @@ router.get('/:id', (req, res, next) => {
  *       "tags": ["Memes"],
  *       "summary": "Aggiunge tag a un meme",
  *       "security": [
- *           {
- *             "bearerAuth": []
- *           }
- *         ],
+ *         {
+ *           "bearerAuth": []
+ *         }
+ *       ],
  *       "description": "Aggiunge una lista di tag a un meme specificato tramite ID",
  *       "operationId": "addTagsToMeme",
  *       "parameters": [
@@ -285,9 +285,11 @@ router.get('/:id', (req, res, next) => {
  *               "type": "array",
  *               "items": {
  *                 "$ref": "#/components/schemas/Tag"
- *               },
- *              "example": [{"name": "Video giochi"}]  
- *             }
+ *               }
+ *             },
+ *             "example": [
+ *               { "name": "Video giochi" }
+ *             ]
  *           }
  *         }
  *       },
@@ -297,22 +299,19 @@ router.get('/:id', (req, res, next) => {
  *           "content": {
  *             "application/json": {
  *               "schema": {
- *                 "type": "object",
- *                 "properties": {
- *                   "success": {
- *                     "type": "boolean"
- *                   },
- *                   "memeId": {
- *                     "type": "string"
- *                   },
- *                   "addedTags": {
- *                     "type": "array",
- *                     "items": {
- *                       "$ref": "#/components/schemas/Tag"
- *                     }
- *                   }
+ *                 "type": "array",
+ *                 "items": {
+ *                   "$ref": "#/components/schemas/Tag"
  *                 }
- *               }
+ *               },
+ *               "example": [
+ *                 {
+ *                   "idTag": 22,
+ *                   "name": "Video giochi",
+ *                   "createdAt": "2025-05-22T17:10:16.022Z",
+ *                   "updatedAt": "2025-05-22T17:10:16.022Z"
+ *                 }
+ *               ]
  *             }
  *           }
  *         },
@@ -343,10 +342,91 @@ router.get('/:id', (req, res, next) => {
  */
 router.post('/:id/tags', [enforceAuthentication, isOwnMeme], (req, res, next) => {
 
-    MemesController.saveTags(req.params.id, req).then(() => {
+    MemesController.saveTags(req.params.id, req).then((result) => {
 
         res.status(200);
+        res.json(result);
         res.send();
+
+    }).catch((err) => {
+        next(err)
+    });
+
+});
+
+/**
+ * @swagger
+ * {
+ *   "/memes/{id}/tags": {
+ *     "get": {
+ *       "tags": ["Memes"],
+ *       "summary": "Ritorna tags di un meme",
+ *       "description": "Ritorna tags di un meme dato ID del meme",
+ *       "operationId": "getTagsToMeme",
+ *       "parameters": [
+ *         {
+ *           "name": "id",
+ *           "in": "path",
+ *           "description": "ID del meme",
+ *           "required": true,
+ *           "schema": {
+ *             "type": "string"
+ *           }
+ *         }
+ *       ],
+ *       "responses": {
+ *         "200": {
+ *           "description": "Tag Restituiti con successo",
+ *           "content": {
+ *             "application/json": {
+ *               "schema": {
+ *                 "type": "array",
+ *                 "items": {
+ *                   "$ref": "#/components/schemas/Tag"
+ *                 }
+ *               },
+ *               "example": [
+ *                 {
+ *                   "idTag": 22,
+ *                   "name": "Video giochi",
+ *                   "createdAt": "2025-05-22T17:10:16.022Z",
+ *                   "updatedAt": "2025-05-22T17:10:16.022Z"
+ *                 }
+ *               ]
+ *             }
+ *           }
+ *         },
+ *         "404": {
+ *           "description": "Meme non trovato",
+ *           "content": {
+ *             "application/json": {
+ *               "schema": {
+ *                 "$ref": "#/components/schemas/Error"
+ *               }
+ *             }
+ *           }
+ *         },
+ *         "500": {
+ *           "description": "Errore del server",
+ *           "content": {
+ *             "application/json": {
+ *               "schema": {
+ *                 "$ref": "#/components/schemas/Error"
+ *               }
+ *             }
+ *           }
+ *         }
+ *       }
+ *     }
+ *   }
+ * }
+ */
+router.get('/:id/tags', (req, res, next) => {
+
+    MemesController.getMemeTags(req.params.id).then((result) => {
+
+        res.status(200);
+        res.json(result);
 
     }).catch((err) => {
         next(err)
