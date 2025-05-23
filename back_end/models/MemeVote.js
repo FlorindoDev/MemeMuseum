@@ -17,11 +17,6 @@ import { DataTypes } from "sequelize";
  *           "upVote": {
  *             "type": "boolean",
  *             "description": "true = upvote, false = downvote"
- *           },
- *           "date": {
- *             "type": "string",
- *             "format": "date-time",
- *             "description": "Data e ora del voto"
  *           }
  *         },
  *         "required": ["upVote","idVote"]

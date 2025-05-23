@@ -27,6 +27,12 @@ export class UserAlreadyExistsError extends AppErrorHttp {
     }
 }
 
+export class VoteAlreadyExistsError extends AppErrorHttp {
+    constructor() {
+        super(CONFLICT, "Voto gia esistente", "VOTE_EXISTS");
+    }
+}
+
 export class UnauthorizedError extends AppErrorHttp {
     constructor() {
         super(UNAUTHORIZED, "Non autorizzato", "UNAUTHORIZED");
@@ -42,6 +48,12 @@ export class CredentialError extends AppErrorHttp {
 export class UserNotFoundError extends AppErrorHttp {
     constructor() {
         super(NOT_FOUND, "non ci sono utenti", "USER_NOT_EXISTS");
+    }
+}
+
+export class VoteNotFoundError extends AppErrorHttp {
+    constructor() {
+        super(NOT_FOUND, "non ci sono voti", "VOTE_NOT_EXISTS");
     }
 }
 
@@ -81,6 +93,12 @@ export class FailToSaveTags extends AppErrorHttp {
 export class FailToUploadFile extends AppErrorHttp {
     constructor() {
         super(INTERNAL_SERVER_ERROR, "Errore durante l’upload", "PROCESSING_UPLOAD_FILE_ERROR");
+    }
+}
+
+export class FailToSaveVote extends AppErrorHttp {
+    constructor() {
+        super(INTERNAL_SERVER_ERROR, "Errore durante upload del voto", "PROCESSING_UPLOAD_VOTE_ERROR");
     }
 }
 

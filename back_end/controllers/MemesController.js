@@ -1,6 +1,6 @@
-import { Meme, Tag } from '../models/DataBase.js'
+import { Meme, Tag, MemeVote } from '../models/DataBase.js'
 
-import { MemeNotFoundError, MemeUploadError, FailToSaveTags, TagsNotFoundError } from '../utils/error/index.js';
+import { MemeNotFoundError, MemeUploadError, FailToSaveTags, TagsNotFoundError, FailToSaveVote } from '../utils/error/index.js';
 
 
 export class MemesController {
@@ -51,7 +51,7 @@ export class MemesController {
             );
 
         } else {
-            meme = new Meme({ image: req.profilepicUrl });
+            meme = new Meme({ image: req.profilepicUrl, UserIdUser: req.idUser });
         }
 
         let result = await meme.save();
@@ -74,7 +74,6 @@ export class MemesController {
         return result;
 
     }
-
 
     static async saveTags(idMeme, req) {
 
@@ -145,6 +144,36 @@ export class MemesController {
             if (tag.dataValues.name === list[i]) flag = true;
         }
         return flag;
+    }
+
+    static async saveVote(req) {
+
+        let vote = new MemeVote({
+            upVote: req.body.upVote,
+            UserIdUser: req.idUser,
+            MemeIdMeme: req.params.id
+        })
+
+        let result = await vote.save();
+
+        if (!result) {
+            return Promise.reject(new FailToSaveVote());
+        }
+
+        return result;
+
+
+    }
+
+    static async getMemeVotes(filters = {}) {
+
+        return await MemeVote.findAll(filters);
+
+
+    }
+
+    static async updateMemeVotes(what, where) {
+        return await MemeVote.update(what, where);
     }
 
 }

@@ -2,7 +2,7 @@ import express from "express"
 import { upLoad as upLoadOnGoogle } from "../middleware/GoogleStorage.js"
 import { enforceAuthentication, isOwnMeme } from "../middleware/authorization.js"
 import { MemesController } from "../controllers/MemesController.js";
-import { isMaxTagsReach } from "../middleware/MemeMiddlewares.js";
+import { isMaxTagsReach, isUserAlreadyVote } from "../middleware/MemeMiddlewares.js";
 import { queryParamsToList } from "../middleware/Middlewares.js";
 
 import multer from "multer";
@@ -253,7 +253,7 @@ router.get('/:id', (req, res, next) => {
 
 });
 
-
+//TODO: Far in modo che posso agiornare e canellare dei tags
 /**
  * @swagger
  * {
@@ -356,15 +356,18 @@ router.post('/:id/tags', [enforceAuthentication, isOwnMeme, isMaxTagsReach], (re
 
     MemesController.saveTags(req.params.id, req).then((result) => {
 
-        res.status(200);
-        res.json(result);
-        res.send();
+        if (!req.returned) {
+            res.status(200);
+            res.json(result);
+        }
+
 
     }).catch((err) => {
-        next(err)
+        return next(err);
     });
 
 });
+
 
 /**
  * @swagger
@@ -458,21 +461,93 @@ router.get('/:id/tags', queryParamsToList(['nametags']), (req, res, next) => {
         res.json(result);
 
     }).catch((err) => {
-        next(err)
+        next(err);
     });
 
 });
 
+//TODO: fai modo che possa cancellare dei vote
+/**
+ * @swagger
+ * {
+ *   "paths": {
+ *     "/memes/{id}/votes": {
+ *       "post": {
+ *         "summary": "Vote for a meme",
+ *          "security": [
+ *              {
+ *                  "bearerAuth": []
+ *              }
+ *          ],
+ *         "description": "Registers a user's vote for a specific meme by ID.",
+ *         "tags": ["Memes"],
+ *         "parameters": [
+ *           {
+ *             "name": "id",
+ *             "in": "path",
+ *             "required": true,
+ *             "description": "ID of the meme to vote for",
+ *             "schema": {
+ *               "type": "string"
+ *             }
+ *           }
+ *         ],
+ *         "requestBody": {
+ *           "required": true,
+ *           "content": {
+ *             "application/json": {
+ *               "schema": {
+ *                 "$ref": "#/components/schemas/MemeVote"
+ *               }
+ *             }
+ *           }
+ *         },
+ *         "responses": {
+ *           "200": {
+ *             "description": "Vote successfully recorded"
+ *           },
+ *           "400": {
+ *             "description": "Invalid request"
+ *           },
+ *           "500": {
+ *             "description": "Internal server error"
+ *           }
+ *         }
+ *       }
+ *     }
+ *   }
+ * }
+ */
+router.post('/:id/votes', [enforceAuthentication, isUserAlreadyVote], (req, res, next) => {
 
-router.post('/:id/votes', (req, res, next) => {
 
-    MemesController.getMemeFromId(req.params.id).then((result) => {
+    if (req.isVotePresent) {
 
-        res.status(200);
-        res.json(result);
+        let what = { upVote: req.body.upVote }
 
-    }).catch((err) => {
-        next(err)
-    });
+        let where = {
+            where: {
+                UserIdUser: req.idUser,
+                MemeIdMeme: req.params.id
+            }
+        }
 
+        MemesController.updateMemeVotes(what, where).then(() => {
+            res.status(200);
+            res.send();
+
+
+        }).catch(err => {
+            next(err);
+        });
+
+    } else {
+
+        MemesController.saveVote(req).then(() => {
+            res.status(200);
+            res.send();
+        }).catch((err) => {
+            next(err)
+        });
+    }
 });
