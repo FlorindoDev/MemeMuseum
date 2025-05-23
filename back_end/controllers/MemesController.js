@@ -76,7 +76,6 @@ export class MemesController {
     }
 
 
-    //TODO: Fare che se un tag non viene inserito si fa il rollback
     static async saveTags(idMeme, req) {
 
         let tags = [];
@@ -86,11 +85,10 @@ export class MemesController {
         req.body.forEach(element => {
             tags.push(
                 new Tag({
-                    name: element.name
+                    name: element.name.toLowerCase()
                 })
             );
         });
-
 
 
         const existingTags = await Promise.all(
@@ -129,16 +127,24 @@ export class MemesController {
         return addedTags;
     }
 
-    static async getMemeTags(idMeme) {
+    static async getMemeTags(idMeme, filters = {}) {
 
         let meme = await MemesController.getMemeFromId(idMeme);
 
-        let result = await meme.getTags();
+        let result = await meme.getTags(filters);
 
         if (result.length === 0) return Promise.reject(new TagsNotFoundError());
 
         return result;
 
+    }
+
+    static isTagInList(tag, list) {
+        let flag = false;
+        for (let i = 0; i < list.length; i++) {
+            if (tag.dataValues.name === list[i]) flag = true;
+        }
+        return flag;
     }
 
 }

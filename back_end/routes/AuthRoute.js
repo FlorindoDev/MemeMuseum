@@ -1,7 +1,5 @@
 import express from "express";
-import { isUserPrsent } from "../middleware/UserValidators.js";
-import { isEmailPasswordPresent } from "../middleware/UserValidators.js";
-import { isNickNamePresent } from "../middleware/UserValidators.js";
+import { isUserPrsent, isEmailPasswordPresent, isNickNamePresent } from "../middleware/UserMiddlewares.js";
 import { AuthController } from "../controllers/AuthController.js";
 import { UserAlreadyExistsError } from "../utils/error/index.js";
 

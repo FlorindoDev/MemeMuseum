@@ -41,12 +41,7 @@ export function createModel(database) {
         upVote: {
             type: DataTypes.BOOLEAN,
             allowNull: false,
-        },
-        date: {
-            type: DataTypes.DATE,
-            allowNull: false,
-            defaultValue: DataTypes.NOW
-        },
+        }
     }
     );
 }

@@ -2,6 +2,8 @@ import express from "express"
 import { upLoad as upLoadOnGoogle } from "../middleware/GoogleStorage.js"
 import { enforceAuthentication, isOwnMeme } from "../middleware/authorization.js"
 import { MemesController } from "../controllers/MemesController.js";
+import { isMaxTagsReach } from "../middleware/MemeMiddlewares.js";
+import { queryParamsToList } from "../middleware/Middlewares.js";
 
 import multer from "multer";
 const upload = multer({ storage: multer.memoryStorage() });
@@ -264,7 +266,7 @@ router.get('/:id', (req, res, next) => {
  *           "bearerAuth": []
  *         }
  *       ],
- *       "description": "Aggiunge una lista di tag a un meme specificato tramite ID",
+ *       "description": "Aggiunge una lista di tag a un meme specificato tramite ID, Messimo 5 tags per meme",
  *       "operationId": "addTagsToMeme",
  *       "parameters": [
  *         {
@@ -325,6 +327,16 @@ router.get('/:id', (req, res, next) => {
  *             }
  *           }
  *         },
+ *          "403": {
+ *           "description": "Hai superato il limite di tags per questo meme",
+ *           "content": {
+ *             "application/json": {
+ *               "schema": {
+ *                 "$ref": "#/components/schemas/Error"
+ *               }
+ *             }
+ *           }
+ *         },
  *         "500": {
  *           "description": "Errore del server",
  *           "content": {
@@ -340,7 +352,7 @@ router.get('/:id', (req, res, next) => {
  *   }
  * }
  */
-router.post('/:id/tags', [enforceAuthentication, isOwnMeme], (req, res, next) => {
+router.post('/:id/tags', [enforceAuthentication, isOwnMeme, isMaxTagsReach], (req, res, next) => {
 
     MemesController.saveTags(req.params.id, req).then((result) => {
 
@@ -361,7 +373,7 @@ router.post('/:id/tags', [enforceAuthentication, isOwnMeme], (req, res, next) =>
  *     "get": {
  *       "tags": ["Memes"],
  *       "summary": "Ritorna tags di un meme",
- *       "description": "Ritorna tags di un meme dato ID del meme",
+ *       "description": "Ritorna tags di un meme dato ID del meme. È possibile filtrare i tag passando un parametro opzionale 'nametags' con una lista di nomi separati da virgola.",
  *       "operationId": "getTagsToMeme",
  *       "parameters": [
  *         {
@@ -369,6 +381,15 @@ router.post('/:id/tags', [enforceAuthentication, isOwnMeme], (req, res, next) =>
  *           "in": "path",
  *           "description": "ID del meme",
  *           "required": true,
+ *           "schema": {
+ *             "type": "string"
+ *           }
+ *         },
+ *         {
+ *           "name": "nametags",
+ *           "in": "query",
+ *           "description": "Lista di nomi dei tag da filtrare, separati da virgola (es. name1,name2)",
+ *           "required": false,
  *           "schema": {
  *             "type": "string"
  *           }
@@ -421,9 +442,31 @@ router.post('/:id/tags', [enforceAuthentication, isOwnMeme], (req, res, next) =>
  *   }
  * }
  */
-router.get('/:id/tags', (req, res, next) => {
+router.get('/:id/tags', queryParamsToList(['nametags']), (req, res, next) => {
 
     MemesController.getMemeTags(req.params.id).then((result) => {
+
+        if (req.nametags !== undefined) {
+
+            result = result.filter(tag => {
+                return MemesController.isTagInList(tag, req.nametags);
+            });
+
+        }
+
+        res.status(200);
+        res.json(result);
+
+    }).catch((err) => {
+        next(err)
+    });
+
+});
+
+
+router.post('/:id/votes', (req, res, next) => {
+
+    MemesController.getMemeFromId(req.params.id).then((result) => {
 
         res.status(200);
         res.json(result);

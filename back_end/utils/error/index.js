@@ -6,6 +6,7 @@ const UNAUTHORIZED = 401;
 const NOT_FOUND = 404;
 const INTERNAL_SERVER_ERROR = 500;
 const SERVICE_UNAVAILABLE = 503
+const FORBIDDEN = 403
 
 //Codici 400
 export class MissingFieldError extends AppErrorHttp {
@@ -53,6 +54,12 @@ export class MemeNotFoundError extends AppErrorHttp {
 export class TagsNotFoundError extends AppErrorHttp {
     constructor() {
         super(NOT_FOUND, "non ci sono tags per questo meme", "TAGS_NOT_EXISTS");
+    }
+}
+
+export class toManyTags extends AppErrorHttp {
+    constructor() {
+        super(FORBIDDEN, "puoi mettere massimo 5 tags", "TO_MANY_TAGS");
     }
 }
 
