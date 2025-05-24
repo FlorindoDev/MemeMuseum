@@ -554,3 +554,59 @@ router.post('/:id/votes', [enforceAuthentication, isUserAlreadyVote], (req, res,
         });
     }
 });
+
+
+
+//TODO: mettere un query per prendere solo il numero di upvote è downvote
+/**
+ * @swagger
+ * {
+ *   "paths": {
+ *     "/memes/{id}/votes": {
+ *       "get": {
+ *         "summary": "get Vote of a meme",
+ *         "description": "da i voti di un meme",
+ *         "tags": ["Memes"],
+ *         "parameters": [
+ *           {
+ *             "name": "id",
+ *             "in": "path",
+ *             "required": true,
+ *             "description": "ID of the meme to vote for",
+ *             "schema": {
+ *               "type": "string"
+ *             }
+ *           }
+ *         ],
+ *         "responses": {
+ *           "200": {
+ *             "description": "Vote successfully recorded"
+ *           },
+ *           "400": {
+ *             "description": "Invalid request"
+ *           },
+ *           "500": {
+ *             "description": "Internal server error"
+ *           }
+ *         }
+ *       }
+ *     }
+ *   }
+ * }
+ */
+router.get('/:id/votes', (req, res, next) => {
+
+    let filters = {
+        where: {
+            MemeIdMeme: req.params.id
+        }
+    }
+
+    MemesController.getMemeVotes(filters).then((result) => {
+        res.status(200);
+        res.json(result);
+    }).catch(err => {
+        next(err);
+    });
+
+});
