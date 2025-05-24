@@ -83,7 +83,7 @@ router.post('/', [enforceAuthentication, imageParser, upLoadOnGoogle], (req, res
 
 });
 
-
+//TODO fare i modo che possoa ricercare per tags
 /**
  * @swagger
  * {
