@@ -4,6 +4,8 @@ import { enforceAuthentication, isOwnMeme } from "../middleware/authorization.js
 import { MemesController } from "../controllers/MemesController.js";
 import { isMaxTagsReach, isUserAlreadyVote } from "../middleware/MemeMiddlewares.js";
 import { queryParamsToList } from "../middleware/Middlewares.js";
+import { TagController } from "../controllers/TagController.js";
+import { VoteController } from "../controllers/VoteController.js";
 
 import multer from "multer";
 const upload = multer({ storage: multer.memoryStorage() });
@@ -354,7 +356,7 @@ router.get('/:id', (req, res, next) => {
  */
 router.post('/:id/tags', [enforceAuthentication, isOwnMeme, isMaxTagsReach], (req, res, next) => {
 
-    MemesController.saveTags(req.params.id, req).then((result) => {
+    TagController.saveTags(req.params.id, req).then((result) => {
 
         if (!req.returned) {
             res.status(200);
@@ -447,12 +449,12 @@ router.post('/:id/tags', [enforceAuthentication, isOwnMeme, isMaxTagsReach], (re
  */
 router.get('/:id/tags', queryParamsToList(['nametags']), (req, res, next) => {
 
-    MemesController.getMemeTags(req.params.id).then((result) => {
+    TagController.getMemeTags(req.params.id).then((result) => {
 
         if (req.nametags !== undefined) {
 
             result = result.filter(tag => {
-                return MemesController.isTagInList(tag, req.nametags);
+                return TagController.isTagInList(tag, req.nametags);
             });
 
         }
@@ -535,7 +537,7 @@ router.post('/:id/votes', [enforceAuthentication, isUserAlreadyVote], (req, res,
             }
         }
 
-        MemesController.updateMemeVotes(what, where).then(() => {
+        VoteController.updateMemeVotes(what, where).then(() => {
             res.status(200);
             res.send();
 
@@ -546,7 +548,7 @@ router.post('/:id/votes', [enforceAuthentication, isUserAlreadyVote], (req, res,
 
     } else {
 
-        MemesController.saveVote(req).then(() => {
+        VoteController.saveVote(req).then(() => {
             res.status(200);
             res.send();
         }).catch((err) => {
@@ -557,7 +559,6 @@ router.post('/:id/votes', [enforceAuthentication, isUserAlreadyVote], (req, res,
 
 
 
-//TODO: mettere un query per prendere solo il numero di upvote è downvote
 /**
  * @swagger
  * {
@@ -576,11 +577,21 @@ router.post('/:id/votes', [enforceAuthentication, isUserAlreadyVote], (req, res,
  *             "schema": {
  *               "type": "string"
  *             }
+ *           },
+ *           {
+ *              "name": "count",
+ *              "in": "query",
+ *              "description": "Ti da il numero di upvote e downvote",
+ *              "required": false,
+ *              "schema": {
+ *                  "type": "boolean",
+ *                  "default": false
+ *              }
  *           }
  *         ],
  *         "responses": {
  *           "200": {
- *             "description": "Vote successfully recorded"
+ *             "description": "Vote successfully getted"
  *           },
  *           "400": {
  *             "description": "Invalid request"
@@ -602,11 +613,86 @@ router.get('/:id/votes', (req, res, next) => {
         }
     }
 
-    MemesController.getMemeVotes(filters).then((result) => {
+    req.query.count = req.query.count === undefined ? false : true;
+
+    VoteController.getMemeVotes(filters).then((result) => {
+
+        if (req.query.count) {
+            let upVote = result.filter(vote => {
+                if (vote.dataValues.upVote) return true;
+                return false;
+            });
+
+            let downvote = result.length - upVote.length;
+
+            result = { upVote: upVote.length, downvote: downvote };
+        }
+
         res.status(200);
         res.json(result);
     }).catch(err => {
         next(err);
     });
+
+});
+
+
+/**
+ * @swagger
+ * {
+ *   "paths": {
+ *     "/memes/{id}/votes": {
+ *       "delete": {
+ *         "summary": "Remove a user's vote on a meme",
+ *         "description": "Permette a un utente autenticato di rimuovere il proprio voto da un meme.",
+ *         "tags": ["Memes"],
+ *         "parameters": [
+ *           {
+ *             "name": "id",
+ *             "in": "path",
+ *             "required": true,
+ *             "description": "ID del meme dal quale rimuovere il voto",
+ *             "schema": {
+ *               "type": "string"
+ *             }
+ *           }
+ *         ],
+ *         "responses": {
+ *           "200": {
+ *             "description": "Voto rimosso con successo"
+ *           },
+ *           "401": {
+ *             "description": "Utente non autenticato"
+ *           },
+ *           "500": {
+ *             "description": "Errore interno del server"
+ *           }
+ *         },
+ *         "security": [
+ *           {
+ *             "bearerAuth": []
+ *           }
+ *         ]
+ *       }
+ *     }
+ *   }
+ * }
+ */
+router.delete('/:id/votes', enforceAuthentication, (req, res, next) => {
+
+    let filter = {
+        where: {
+            UserIdUser: req.idUser,
+            MemeIdMeme: req.params.id
+        }
+    }
+    VoteController.deleteMemeVote(filter).then((result) => {
+
+        res.status(200);
+        res.json({ numDeleted: result })
+    }).catch(err => {
+        next(err);
+    })
+
 
 });
