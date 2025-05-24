@@ -11,6 +11,7 @@ import multer from "multer";
 const upload = multer({ storage: multer.memoryStorage() });
 const imageParser = upload.fields([{ name: 'image', maxCount: 1 }])
 
+//TODO: Spostare alcuni path in altri controller
 
 export const router = express.Router();
 
@@ -468,7 +469,7 @@ router.get('/:id/tags', queryParamsToList(['nametags']), (req, res, next) => {
 
 });
 
-//TODO: fai modo che possa cancellare dei vote
+
 /**
  * @swagger
  * {
