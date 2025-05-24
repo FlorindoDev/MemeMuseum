@@ -23,7 +23,6 @@ export class AuthController {
 
     }
 
-
     static async checkCredentials(req) {
 
         let user = new User({

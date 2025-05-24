@@ -498,7 +498,10 @@ router.get('/:id/tags', queryParamsToList(['nametags']), (req, res, next) => {
  *             "application/json": {
  *               "schema": {
  *                 "$ref": "#/components/schemas/MemeVote"
- *               }
+ *               },
+ *              "example": {
+ *                   "upVote": true
+ *                 }
  *             }
  *           }
  *         },

@@ -1,6 +1,6 @@
 import { Meme, Tag, MemeVote } from '../models/DataBase.js'
 
-import { MemeNotFoundError, MemeUploadError, FailToSaveTags, TagsNotFoundError, FailToSaveVote } from '../utils/error/index.js';
+import { MemeNotFoundError, MemeUploadError, FailToSaveTags, TagsNotFoundError, FailToSaveVote, VoteNotFoundError } from '../utils/error/index.js';
 
 
 export class MemesController {
@@ -18,7 +18,7 @@ export class MemesController {
         return { pages: page, size: pageSize, iduser: idUser };
     }
 
-    static async getAllMemes(pageSize, page, idUser) {
+    static async getAllMemes(pageSize, page, idUser, emptyCheck = true) {
 
         let objectRequest = {
             limit: pageSize,
@@ -30,7 +30,7 @@ export class MemesController {
 
         let result = await Meme.findAll(objectRequest);
 
-        if (result.length === 0) {
+        if (emptyCheck && result.length === 0) {
             return Promise.reject(new MemeNotFoundError());
         }
 
@@ -64,10 +64,10 @@ export class MemesController {
 
     }
 
-    static async getMemeFromId(id) {
+    static async getMemeFromId(id, emptyCheck = true) {
         let result = await Meme.findByPk(id);
 
-        if (result === null) {
+        if (emptyCheck && result === null) {
             return Promise.reject(new MemeNotFoundError());
         }
 
@@ -126,13 +126,13 @@ export class MemesController {
         return addedTags;
     }
 
-    static async getMemeTags(idMeme, filters = {}) {
+    static async getMemeTags(idMeme, filters = {}, emptyCheck = true) {
 
         let meme = await MemesController.getMemeFromId(idMeme);
 
         let result = await meme.getTags(filters);
 
-        if (result.length === 0) return Promise.reject(new TagsNotFoundError());
+        if (emptyCheck && result.length === 0) return Promise.reject(new TagsNotFoundError());
 
         return result;
 
@@ -165,10 +165,13 @@ export class MemesController {
 
     }
 
-    static async getMemeVotes(filters = {}) {
+    static async getMemeVotes(filters = {}, emptyCheck = true) {
 
-        return await MemeVote.findAll(filters);
+        let result = await MemeVote.findAll(filters);
 
+        if (emptyCheck && result.length === 0) return Promise.reject(new VoteNotFoundError());
+
+        return result;
 
     }
 

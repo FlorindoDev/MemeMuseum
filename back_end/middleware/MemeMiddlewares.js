@@ -27,7 +27,7 @@ export function isUserAlreadyVote(req, res, next) {
         }
     };
 
-    MemesController.getMemeVotes(filters).then((result) => {
+    MemesController.getMemeVotes(filters, false).then((result) => {
 
         if (result.length === 0) {
             req.isVotePresent = false;

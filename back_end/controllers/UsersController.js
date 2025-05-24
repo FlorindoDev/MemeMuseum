@@ -4,14 +4,14 @@ import { UserNotFoundError, FailToUpdateUser } from "../utils/error/index.js";
 export class UsersController {
 
 
-    static async getAllUsers(pageSize, page) {
+    static async getAllUsers(pageSize, page, emptyCheck = true) {
         let result = await User.findAll({
             attributes: ['idUser', 'nickName', 'email', 'profilePic', 'createdAt', 'updatedAt'],
             limit: pageSize,
             offset: (page - 1) * pageSize,
         });
 
-        if (result.length === 0) {
+        if (emptyCheck && result.length === 0) {
             return Promise.reject(new UserNotFoundError());
         }
 
@@ -19,12 +19,12 @@ export class UsersController {
 
     }
 
-    static async getUserFromId(id) {
+    static async getUserFromId(id, emptyCheck = true) {
         let result = await User.findByPk(id, {
             attributes: ['idUser', 'nickName', 'email', 'profilePic', 'createdAt', 'updatedAt'],
         });
 
-        if (result === null) {
+        if (emptyCheck && result === null) {
             return Promise.reject(new UserNotFoundError());
         }
 
