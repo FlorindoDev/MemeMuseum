@@ -22,20 +22,8 @@ import { DataTypes } from "sequelize";
  *             "type": "string",
  *             "description": "Testo descrittivo (facoltativo)"
  *           },
- *           "upVoteNum": {
- *             "type": "integer",
- *             "description": "Numero di voti positivi"
- *           },
- *           "downVoteNum": {
- *             "type": "integer",
- *             "description": "Numero di voti negativi"
- *           },
- *           "commentNum": {
- *             "type": "integer",
- *             "description": "Numero di commenti"
- *           }
  *         },
- *         "required": ["image", "upVoteNum", "downVoteNum", "commentNum","idMeme"]
+ *         "required": ["image","idMeme"]
  *       }
  *     }
  *   }
@@ -56,21 +44,6 @@ export function createModel(database) {
         description: {
             type: DataTypes.TEXT,
             allowNull: true,
-        },
-        upVoteNum: {
-            type: DataTypes.INTEGER,
-            allowNull: false,
-            defaultValue: 0
-        },
-        downVoteNum: {
-            type: DataTypes.INTEGER,
-            allowNull: false,
-            defaultValue: 0
-        },
-        commentNum: {
-            type: DataTypes.INTEGER,
-            allowNull: false,
-            defaultValue: 0
         }
     }
     );

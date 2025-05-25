@@ -83,7 +83,7 @@ router.post('/', [enforceAuthentication, imageParser, upLoadOnGoogle], (req, res
 
 });
 
-//TODO fare i modo che possoa ricercare per tags
+
 /**
  * @swagger
  * {
@@ -125,7 +125,16 @@ router.post('/', [enforceAuthentication, imageParser, upLoadOnGoogle], (req, res
  *             "type": "integer",
  *             "minimum": 1
  *           }
- *          }
+ *          },
+ *          {
+ *           "name": "nametags",
+ *           "in": "query",
+ *           "description": "Lista di nomi dei tag da filtrare, separati da virgola (es. name1,name2)",
+ *           "required": false,
+ *           "schema": {
+ *             "type": "string"
+ *           }
+ *         }
  *       ],
  *       "responses": {
  *         "200": {
@@ -140,9 +149,6 @@ router.post('/', [enforceAuthentication, imageParser, upLoadOnGoogle], (req, res
  *                      "idMeme": 1,
  *                      "image": "meme/url/image.png",
  *                      "description": "un gatto",
- *                      "upVoteNum": "1",
- *                      "downVoteNum": "0",
- *                      "commentNum": "2",
  *                      "createdAt": "2025-05-17T16:18:36.773Z",
  *                      "updatedAt": "2025-05-17T16:18:36.773Z"
  *               }
@@ -162,16 +168,17 @@ router.post('/', [enforceAuthentication, imageParser, upLoadOnGoogle], (req, res
  *   }
  * }
  */
-router.get('/', (req, res, next) => {
+router.get('/', queryParamsToList(['nametags']), (req, res, next) => {
 
     const rawPageSize = req.query.pagesize;
     const rawPage = req.query.page;
     const rawidUser = req.query.iduser;
 
-
     let query = MemesController.checkPageAndIdUser(rawPageSize, rawPage, rawidUser);
 
-    MemesController.getAllMemes(query.size, query.pages, query.iduser).then((result) => {
+    let filters = MemesController.createFilterForGetMeme(query, req.nametags);
+
+    MemesController.getAllMemes(filters).then((result) => {
 
         res.status(200);
         res.json(result);
@@ -256,7 +263,7 @@ router.get('/:id', (req, res, next) => {
 
 });
 
-//TODO: Far in modo che posso agiornare e canellare dei tags
+//TODO: Far in modo che posso agiornare e cancellare dei tags
 /**
  * @swagger
  * {

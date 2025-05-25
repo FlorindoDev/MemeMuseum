@@ -1,5 +1,5 @@
-import { Meme } from '../models/DataBase.js'
-
+import { Meme, Tag } from '../models/DataBase.js'
+import { Op } from "sequelize";
 import { MemeNotFoundError, MemeUploadError } from '../utils/error/index.js';
 
 
@@ -18,17 +18,10 @@ export class MemesController {
         return { pages: page, size: pageSize, iduser: idUser };
     }
 
-    static async getAllMemes(pageSize, page, idUser, emptyCheck = true) {
-
-        let objectRequest = {
-            limit: pageSize,
-            offset: (page - 1) * pageSize,
-        };
-
-        if (idUser !== null) objectRequest.where = { UserIdUser: idUser };
+    static async getAllMemes(filters = {}, emptyCheck = true) {
 
 
-        let result = await Meme.findAll(objectRequest);
+        let result = await Meme.findAll(filters);
 
         if (emptyCheck && result.length === 0) {
             return Promise.reject(new MemeNotFoundError());
@@ -73,6 +66,39 @@ export class MemesController {
 
         return result;
 
+    }
+
+    static createFilterForGetMeme(query, nametags) {
+
+        let objectRequest = {
+            limit: query.size,
+            offset: (query.pages - 1) * query.size,
+        };
+
+        if (nametags !== undefined) {
+            objectRequest.include = {
+                model: Tag,
+                required: true,         //forza innerjoin
+                duplicating: false,     //evita che più volte lo stesso meme venga preso, se fosse true per ogni tags associato verrà stampato il meme(es 2 tag 2 volte stesso meme) e Impedisce l'uso di sottoquery
+                attributes: []
+            }
+            objectRequest.where = {
+                '$Tags.name$': {
+                    [Op.in]: nametags
+                }
+            }
+        }
+
+        if (query.iduser !== null) {
+            if (objectRequest.where === undefined) {
+                objectRequest.where = { UserIdUser: query.iduser }
+            } else {
+                objectRequest.where.UserIdUser = query.iduser;
+            }
+
+        };
+
+        return objectRequest;
     }
 
 }
