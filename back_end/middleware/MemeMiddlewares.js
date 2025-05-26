@@ -1,8 +1,6 @@
-import { MemesController } from "../controllers/MemesController.js";
-import { toManyTags } from "../utils/error/index.js";
-import { VoteAlreadyExistsError, VoteNotFoundError } from "../utils/error/index.js";
+import { MissingFieldError, toManyTags } from "../utils/error/index.js";
 import { TagController } from "../controllers/TagController.js";
-import { VoteController } from "../controllers/VoteController.js";
+
 
 export function isMaxTagsReach(req, res, next) {
 
@@ -19,34 +17,11 @@ export function isMaxTagsReach(req, res, next) {
 
 }
 
-export function isUserAlreadyVote(req, res, next) {
+export function isTagsBodyCorrect(req, res, next) {
 
-    let filters = {
-        where: {
-            UserIdUser: req.idUser,
-            MemeIdMeme: req.params.id
-        }
-    };
-
-    VoteController.getMemeVotes(filters, false).then((result) => {
-
-        if (result.length === 0) {
-            req.isVotePresent = false;
-            return next();
-        }
-
-
-        if (result[0].dataValues.upVote === req.body.upVote) {
-            return next(new VoteAlreadyExistsError());
-        }
-
-        req.isVotePresent = true;
-        return next();
-    }).catch(() => {
-
-        return next(new VoteNotFoundError());
+    if (!Array.isArray(req.body)) return next(new MissingFieldError("tags"));
+    req.body.map(tag => {
+        if (tag.name === undefined) return next(new MissingFieldError("name"));
     });
-
-
-
+    next();
 }

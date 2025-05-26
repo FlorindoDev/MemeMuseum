@@ -1,6 +1,6 @@
 import { Tag } from '../models/DataBase.js'
 import { MemesController } from './MemesController.js';
-import { FailToSaveTags, TagsNotFoundError } from '../utils/error/index.js';
+import { FailToSaveTags, TagsNotFoundError, FailToDeleteTags } from '../utils/error/index.js';
 
 
 export class TagController {
@@ -68,12 +68,36 @@ export class TagController {
 
     }
 
+    static async getTags(filters = {}, emptyCheck = true) {
+
+        let result = await Tag.findAll(filters);
+
+        if (emptyCheck && result === 0) return Promise.reject(new TagsNotFoundError());
+
+        return result;
+    }
+
     static isTagInList(tag, list) {
         let flag = false;
         for (let i = 0; i < list.length; i++) {
             if (tag.dataValues.name === list[i]) flag = true;
         }
         return flag;
+    }
+
+    static async deleteTagsFromMeme(idMeme, list) {
+
+        list = await TagController.getTags({ where: { name: list } });
+
+
+        let meme = await MemesController.getMemeFromId(idMeme);
+
+        list = await Promise.all(
+            list.map(tag => meme.removeTag(tag))
+        );
+
+
+        return list;
     }
 
 }

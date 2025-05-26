@@ -6,7 +6,8 @@ import swaggerJSDoc from "swagger-jsdoc";
 import { database } from "./models/DataBase.js";
 import { router as routeAuth } from "./routes/AuthRoute.js"
 import { router as UsersRoute } from "./routes/UsersRoute.js"
-import { router as MemsRoute } from "./routes/MemesRoute.js"
+import { router as MemesRoute } from "./routes/MemesRoute.js"
+import { router as VotesRoute } from "./routes/VotesRoute.js";
 
 
 //TODO: RICORDA DI DARE AL PROF .env gia fatto e passare il json per google storage
@@ -47,7 +48,8 @@ app.use('/api-docs', swaggerUI.serve, swaggerUI.setup(swaggerSpec));
 //define routes
 app.use('/auth', routeAuth);
 app.use('/users', UsersRoute);
-app.use('/memes', MemsRoute);
+app.use('/memes', MemesRoute);
+app.use('/votes', VotesRoute);
 
 
 //error handler

@@ -86,7 +86,13 @@ export class FailToUpdateUser extends AppErrorHttp {
 
 export class FailToSaveTags extends AppErrorHttp {
     constructor() {
-        super(INTERNAL_SERVER_ERROR, "errore in aspetato durante save tags riprova più tardi", "PROCESSING_TAGS,SAVE_ERROR");
+        super(INTERNAL_SERVER_ERROR, "errore in aspetato durante save tags riprova più tardi", "PROCESSING_TAGS_SAVE_ERROR");
+    }
+}
+
+export class FailToDeleteTags extends AppErrorHttp {
+    constructor() {
+        super(INTERNAL_SERVER_ERROR, "errore in aspetato durante Delete tags riprova più tardi", "PROCESSING_TAGS_DELETE_ERROR");
     }
 }
 

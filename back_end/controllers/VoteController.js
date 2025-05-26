@@ -9,7 +9,7 @@ export class VoteController {
         let vote = new MemeVote({
             upVote: req.body.upVote,
             UserIdUser: req.idUser,
-            MemeIdMeme: req.params.id
+            MemeIdMeme: req.query.id
         })
 
         let result = await vote.save();

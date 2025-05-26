@@ -2,16 +2,15 @@ import express from "express"
 import { upLoad as upLoadOnGoogle } from "../middleware/GoogleStorage.js"
 import { enforceAuthentication, isOwnMeme } from "../middleware/authorization.js"
 import { MemesController } from "../controllers/MemesController.js";
-import { isMaxTagsReach, isUserAlreadyVote } from "../middleware/MemeMiddlewares.js";
-import { queryParamsToList } from "../middleware/Middlewares.js";
+import { isMaxTagsReach, isTagsBodyCorrect } from "../middleware/MemeMiddlewares.js";
+import { queryParamsToList, isIdPresent } from "../middleware/Middlewares.js";
 import { TagController } from "../controllers/TagController.js";
-import { VoteController } from "../controllers/VoteController.js";
 
 import multer from "multer";
 const upload = multer({ storage: multer.memoryStorage() });
 const imageParser = upload.fields([{ name: 'image', maxCount: 1 }])
 
-//TODO: Spostare alcuni path in altri controller
+
 
 export const router = express.Router();
 
@@ -250,7 +249,7 @@ router.get('/', queryParamsToList(['nametags']), (req, res, next) => {
  *   }
  * }
  */
-router.get('/:id', (req, res, next) => {
+router.get('/:id', isIdPresent("params"), (req, res, next) => {
 
     MemesController.getMemeFromId(req.params.id).then((result) => {
 
@@ -263,7 +262,7 @@ router.get('/:id', (req, res, next) => {
 
 });
 
-//TODO: Far in modo che posso agiornare e cancellare dei tags
+
 /**
  * @swagger
  * {
@@ -362,7 +361,7 @@ router.get('/:id', (req, res, next) => {
  *   }
  * }
  */
-router.post('/:id/tags', [enforceAuthentication, isOwnMeme, isMaxTagsReach], (req, res, next) => {
+router.post('/:id/tags', [isIdPresent("params"), isTagsBodyCorrect, enforceAuthentication, isOwnMeme, isMaxTagsReach], (req, res, next) => {
 
     TagController.saveTags(req.params.id, req).then((result) => {
 
@@ -455,7 +454,7 @@ router.post('/:id/tags', [enforceAuthentication, isOwnMeme, isMaxTagsReach], (re
  *   }
  * }
  */
-router.get('/:id/tags', queryParamsToList(['nametags']), (req, res, next) => {
+router.get('/:id/tags', [isIdPresent("params"), queryParamsToList(['nametags'])], (req, res, next) => {
 
     TagController.getMemeTags(req.params.id).then((result) => {
 
@@ -476,136 +475,81 @@ router.get('/:id/tags', queryParamsToList(['nametags']), (req, res, next) => {
 
 });
 
-//TODO spostare votes su una rotta a parte
+
 /**
  * @swagger
  * {
- *   "paths": {
- *     "/memes/{id}/votes": {
- *       "post": {
- *         "summary": "Vote for a meme",
- *          "security": [
- *              {
- *                  "bearerAuth": []
- *              }
- *          ],
- *         "description": "Registers a user's vote for a specific meme by ID.",
- *         "tags": ["Memes"],
- *         "parameters": [
- *           {
- *             "name": "id",
- *             "in": "path",
- *             "required": true,
- *             "description": "ID of the meme to vote for",
- *             "schema": {
- *               "type": "string"
- *             }
- *           }
- *         ],
- *         "requestBody": {
+ *   "/memes/{id}/tags": {
+ *     "delete": {
+ *       "tags": ["Memes"],
+ *       "summary": "Cancella tag associati a un meme",
+ *       "security": [
+ *         {
+ *           "bearerAuth": []
+ *         }
+ *       ],
+ *       "description": "Cancella tags di un meme dato ID del meme e specificando i tag in 'nametags' con una lista di nomi separati da virgola.",
+ *       "operationId": "deleteTagsToMeme",
+ *       "parameters": [
+ *         {
+ *           "name": "id",
+ *           "in": "path",
+ *           "description": "ID del meme",
  *           "required": true,
+ *           "schema": {
+ *             "type": "string"
+ *           }
+ *         },
+ *         {
+ *           "name": "nametags",
+ *           "in": "query",
+ *           "description": "Lista di nomi dei tag da filtrare, separati da virgola (es. name1,name2)",
+ *           "required": true,
+ *           "schema": {
+ *             "type": "string"
+ *           }
+ *         }
+ *       ],
+ *       "responses": {
+ *         "200": {
+ *           "description": "Tag Cancellati con successo",
  *           "content": {
  *             "application/json": {
  *               "schema": {
- *                 "$ref": "#/components/schemas/MemeVote"
- *               },
- *              "example": {
- *                   "upVote": true
+ *                 "type": "array",
+ *                 "items": {
+ *                   "$ref": "#/components/schemas/Tag"
  *                 }
+ *               },
+ *               "example": [
+ *                 {
+ *                   "idTag": 22,
+ *                   "name": "Video giochi",
+ *                   "createdAt": "2025-05-22T17:10:16.022Z",
+ *                   "updatedAt": "2025-05-22T17:10:16.022Z"
+ *                 }
+ *               ]
  *             }
  *           }
  *         },
- *         "responses": {
- *           "200": {
- *             "description": "Vote successfully recorded"
- *           },
- *           "400": {
- *             "description": "Invalid request"
- *           },
- *           "500": {
- *             "description": "Internal server error"
- *           }
- *         }
- *       }
- *     }
- *   }
- * }
- */
-router.post('/:id/votes', [enforceAuthentication, isUserAlreadyVote], (req, res, next) => {
-
-
-    if (req.isVotePresent) {
-
-        let what = { upVote: req.body.upVote }
-
-        let where = {
-            where: {
-                UserIdUser: req.idUser,
-                MemeIdMeme: req.params.id
-            }
-        }
-
-        VoteController.updateMemeVotes(what, where).then(() => {
-            res.status(200);
-            res.send();
-
-
-        }).catch(err => {
-            next(err);
-        });
-
-    } else {
-
-        VoteController.saveVote(req).then(() => {
-            res.status(200);
-            res.send();
-        }).catch((err) => {
-            next(err)
-        });
-    }
-});
-
-
-
-/**
- * @swagger
- * {
- *   "paths": {
- *     "/memes/{id}/votes": {
- *       "get": {
- *         "summary": "get Vote of a meme",
- *         "description": "da i voti di un meme",
- *         "tags": ["Memes"],
- *         "parameters": [
- *           {
- *             "name": "id",
- *             "in": "path",
- *             "required": true,
- *             "description": "ID of the meme to vote for",
- *             "schema": {
- *               "type": "string"
+ *         "404": {
+ *           "description": "Meme non trovato",
+ *           "content": {
+ *             "application/json": {
+ *               "schema": {
+ *                 "$ref": "#/components/schemas/Error"
+ *               }
  *             }
- *           },
- *           {
- *              "name": "count",
- *              "in": "query",
- *              "description": "Ti da il numero di upvote e downvote",
- *              "required": false,
- *              "schema": {
- *                  "type": "boolean",
- *                  "default": false
- *              }
  *           }
- *         ],
- *         "responses": {
- *           "200": {
- *             "description": "Vote successfully getted"
- *           },
- *           "400": {
- *             "description": "Invalid request"
- *           },
- *           "500": {
- *             "description": "Internal server error"
+ *         },
+ *         "500": {
+ *           "description": "Errore del server",
+ *           "content": {
+ *             "application/json": {
+ *               "schema": {
+ *                 "$ref": "#/components/schemas/Error"
+ *               }
+ *             }
  *           }
  *         }
  *       }
@@ -613,94 +557,17 @@ router.post('/:id/votes', [enforceAuthentication, isUserAlreadyVote], (req, res,
  *   }
  * }
  */
-router.get('/:id/votes', (req, res, next) => {
+router.delete('/:id/tags', [isIdPresent("params"), enforceAuthentication, isOwnMeme, queryParamsToList(['nametags'], true)], (req, res, next) => {
 
-    let filters = {
-        where: {
-            MemeIdMeme: req.params.id
-        }
-    }
-
-    req.query.count = req.query.count === undefined ? false : true;
-
-    VoteController.getMemeVotes(filters).then((result) => {
-
-        if (req.query.count) {
-            let upVote = result.filter(vote => {
-                if (vote.dataValues.upVote) return true;
-                return false;
-            });
-
-            let downvote = result.length - upVote.length;
-
-            result = { upVote: upVote.length, downvote: downvote };
-        }
+    TagController.deleteTagsFromMeme(req.params.id, req.nametags).then((result) => {
 
         res.status(200);
-        res.json(result);
-    }).catch(err => {
+        res.json({ deletedtags: result });
+
+    }).catch((err) => {
         next(err);
     });
 
 });
 
 
-/**
- * @swagger
- * {
- *   "paths": {
- *     "/memes/{id}/votes": {
- *       "delete": {
- *         "summary": "Remove a user's vote on a meme",
- *         "description": "Permette a un utente autenticato di rimuovere il proprio voto da un meme.",
- *         "tags": ["Memes"],
- *         "parameters": [
- *           {
- *             "name": "id",
- *             "in": "path",
- *             "required": true,
- *             "description": "ID del meme dal quale rimuovere il voto",
- *             "schema": {
- *               "type": "string"
- *             }
- *           }
- *         ],
- *         "responses": {
- *           "200": {
- *             "description": "Voto rimosso con successo"
- *           },
- *           "401": {
- *             "description": "Utente non autenticato"
- *           },
- *           "500": {
- *             "description": "Errore interno del server"
- *           }
- *         },
- *         "security": [
- *           {
- *             "bearerAuth": []
- *           }
- *         ]
- *       }
- *     }
- *   }
- * }
- */
-router.delete('/:id/votes', enforceAuthentication, (req, res, next) => {
-
-    let filter = {
-        where: {
-            UserIdUser: req.idUser,
-            MemeIdMeme: req.params.id
-        }
-    }
-    VoteController.deleteMemeVote(filter).then((result) => {
-
-        res.status(200);
-        res.json({ numDeleted: result })
-    }).catch(err => {
-        next(err);
-    })
-
-
-});
