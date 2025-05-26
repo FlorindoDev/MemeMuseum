@@ -91,7 +91,7 @@ router.post('/', [enforceAuthentication, imageParser, upLoadOnGoogle], (req, res
  *     "get": {
  *       "tags": ["Memes"],
  *       "summary": "Recupera la lista dei memes",
- *       "description": "Restituisce una paginazione di memes; i parametri `pagesize`,`page` e `iduser` sono opzionali.",
+ *       "description": "Restituisce una paginazione di memes; i parametri `pagesize`,`page`, `iduser` e `nametags` sono opzionali.",
  *       "parameters": [
  *         {
  *           "name": "pagesize",
@@ -476,7 +476,7 @@ router.get('/:id/tags', queryParamsToList(['nametags']), (req, res, next) => {
 
 });
 
-
+//TODO spostare votes su una rotta a parte
 /**
  * @swagger
  * {
