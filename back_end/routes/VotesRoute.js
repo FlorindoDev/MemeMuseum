@@ -2,6 +2,9 @@ import express from "express"
 import { enforceAuthentication } from "../middleware/authorization.js"
 import { isUserAlreadyVote, isBodyVoteCorrect } from "../middleware/VoteMiddlewares.js";
 import { VoteController } from "../controllers/VoteController.js";
+import { isMemeExists } from "../middleware/MemeMiddlewares.js";
+import { isIdPresent, isFieldsPresent } from "../middleware/Middlewares.js";
+
 
 export const router = express.Router();
 
@@ -60,7 +63,7 @@ export const router = express.Router();
  *   }
  * }
  */
-router.post('/', [isBodyVoteCorrect, enforceAuthentication, isUserAlreadyVote], (req, res, next) => {
+router.post('/', [isBodyVoteCorrect, enforceAuthentication, isIdPresent("query"), isMemeExists("query", "id"), isUserAlreadyVote], (req, res, next) => {
 
 
     if (req.isVotePresent) {
@@ -95,22 +98,30 @@ router.post('/', [isBodyVoteCorrect, enforceAuthentication, isUserAlreadyVote], 
 });
 
 
-
 /**
  * @swagger
  * {
  *   "paths": {
  *     "/votes": {
  *       "get": {
- *         "summary": "get Vote of a meme",
- *         "description": "da i voti di un meme",
+ *         "summary": "voti di un meme o voti fatti da un utente",
+ *         "description": "da i voti di un meme o i voti fatti da un utente ",
  *         "tags": ["Votes"],
  *         "parameters": [
  *           {
- *             "name": "id",
+ *             "name": "idmeme",
  *             "in": "query",
- *             "required": true,
- *             "description": "ID of the meme to vote for",
+ *             "required": false,
+ *             "description": "ID of the meme",
+ *             "schema": {
+ *               "type": "string"
+ *             }
+ *           },
+ *           {
+ *             "name": "iduser",
+ *             "in": "query",
+ *             "required": false,
+ *             "description": "ID del utente",
  *             "schema": {
  *               "type": "string"
  *             }
@@ -142,13 +153,9 @@ router.post('/', [isBodyVoteCorrect, enforceAuthentication, isUserAlreadyVote], 
  *   }
  * }
  */
-router.get('/', (req, res, next) => {
+router.get('/', isFieldsPresent("query", ["idmeme", "iduser"]), (req, res, next) => {
 
-    let filters = {
-        where: {
-            MemeIdMeme: req.query.id
-        }
-    }
+    let filters = VoteController.createFilterGetVote(req.query.idmeme, req.query.iduser);
 
     req.query.count = req.query.count === undefined ? "false" : "true";
 
@@ -215,7 +222,7 @@ router.get('/', (req, res, next) => {
  *   }
  * }
  */
-router.delete('/', enforceAuthentication, (req, res, next) => {
+router.delete('/', enforceAuthentication, isIdPresent("query"), (req, res, next) => {
 
     let filter = {
         where: {

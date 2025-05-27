@@ -1,8 +1,8 @@
 import { MissingFieldError } from "../utils/error/index.js";
 
-export let isIdPresent = (campo) => (req, res, next) => {
+export let isIdPresent = (reqCampo, campo = "id") => (req, res, next) => {
 
-    if (req[campo].id === undefined || isNaN(Number(req[campo].id))) return next(new MissingFieldError("id"));
+    if (req[reqCampo][campo] === undefined || isNaN(Number(req[reqCampo][campo]))) return next(new MissingFieldError(`${campo}`));
     next();
 }
 
@@ -21,4 +21,25 @@ export let queryParamsToList = (listParams = [], required = false) => (req, res,
     })
     next();
 
-} 
+}
+
+export let isFieldsPresent = (where, list = [], leastOne = true) => (req, res, next) => {
+
+    let resultList = list.map(field => {
+        if (req[where][field] === undefined) return false;
+        return true;
+    });
+
+    if (leastOne) {
+        for (let i = 0; i < resultList.length; i++) {
+            if (resultList[i]) return next();
+        }
+        return next(new MissingFieldError(`${list}`));
+    }
+
+    for (let i = 0; i < resultList.length; i++) {
+        if (resultList[i]) return next(new MissingFieldError(`${list}`));
+    }
+    return next();
+
+}

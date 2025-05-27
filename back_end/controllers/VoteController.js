@@ -42,4 +42,19 @@ export class VoteController {
         return await MemeVote.destroy(filter);
 
     }
+
+    static createFilterGetVote(idmeme, iduser) {
+
+        let filters = { where: {} }
+
+        if (idmeme !== undefined) {
+            filters.where.MemeIdMeme = idmeme;
+        }
+
+        if (iduser !== undefined) {
+            filters.where.UserIdUser = iduser;
+        }
+
+        return filters;
+    }
 }

@@ -16,12 +16,8 @@ import { DataTypes } from "sequelize";
  *           "upVote": {
  *             "type": "boolean",
  *             "description": "true = upvote, false = downvote"
- *           },
- *           "date": {
- *             "type": "string",
- *             "format": "date-time",
- *             "description": "Data e ora del voto"
  *           }
+ *      
  *         },
  *         "required": ["upVote", "idVote"]
  *       }
@@ -40,12 +36,7 @@ export function createModel(database) {
         upVote: {
             type: DataTypes.BOOLEAN,
             allowNull: false,
-        },
-        date: {
-            type: DataTypes.DATE,
-            allowNull: false,
-            defaultValue: DataTypes.NOW
-        },
+        }
     }
     );
 }

@@ -8,6 +8,7 @@ import { router as routeAuth } from "./routes/AuthRoute.js"
 import { router as UsersRoute } from "./routes/UsersRoute.js"
 import { router as MemesRoute } from "./routes/MemesRoute.js"
 import { router as VotesRoute } from "./routes/VotesRoute.js";
+import { router as CommentRoute } from "./routes/CommentRoute.js";
 
 
 //TODO: RICORDA DI DARE AL PROF .env gia fatto e passare il json per google storage
@@ -50,6 +51,7 @@ app.use('/auth', routeAuth);
 app.use('/users', UsersRoute);
 app.use('/memes', MemesRoute);
 app.use('/votes', VotesRoute);
+app.use('/comments', CommentRoute);
 
 
 //error handler

@@ -18,11 +18,7 @@ import { DataTypes } from "sequelize";
  *             "type": "string",
  *             "description": "Testo del commento"
  *           },
- *           "date": {
- *             "type": "string",
- *             "format": "date-time",
- *             "description": "Data di pubblicazione del commento"
- *           }
+ *           
  *         },
  *         "required": ["content","idComment"]
  *       }
@@ -41,12 +37,7 @@ export function createModel(database) {
         content: {
             type: DataTypes.TEXT,
             allowNull: false,
-        },
-        date: {
-            type: DataTypes.DATE,
-            allowNull: false,
-            defaultValue: DataTypes.NOW
-        },
+        }
     }
 
 

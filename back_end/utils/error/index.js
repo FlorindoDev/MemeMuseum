@@ -63,6 +63,12 @@ export class MemeNotFoundError extends AppErrorHttp {
     }
 }
 
+export class CommentNotFoundError extends AppErrorHttp {
+    constructor() {
+        super(NOT_FOUND, "non ci sono comment", "COMMENT_NOT_EXISTS");
+    }
+}
+
 export class TagsNotFoundError extends AppErrorHttp {
     constructor() {
         super(NOT_FOUND, "non ci sono tags per questo meme", "TAGS_NOT_EXISTS");
@@ -105,6 +111,12 @@ export class FailToUploadFile extends AppErrorHttp {
 export class FailToSaveVote extends AppErrorHttp {
     constructor() {
         super(INTERNAL_SERVER_ERROR, "Errore durante upload del voto", "PROCESSING_UPLOAD_VOTE_ERROR");
+    }
+}
+
+export class FailToSaveComment extends AppErrorHttp {
+    constructor() {
+        super(INTERNAL_SERVER_ERROR, "Errore durante upload del Comment", "PROCESSING_UPLOAD_COMMENT_ERROR");
     }
 }
 
