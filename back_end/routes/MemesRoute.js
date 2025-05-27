@@ -488,7 +488,7 @@ router.get('/:id/tags', [isIdPresent("params"), queryParamsToList(['nametags'])]
  *           "bearerAuth": []
  *         }
  *       ],
- *       "description": "Cancella tags di un meme dato ID del meme e specificando i tag in 'nametags' con una lista di nomi separati da virgola.",
+ *       "description": "Cancella tags di un meme dato ID del meme e specificando i tag in `nametags` con una lista di nomi separati da virgola.",
  *       "operationId": "deleteTagsToMeme",
  *       "parameters": [
  *         {

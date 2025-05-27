@@ -240,3 +240,5 @@ router.delete('/', enforceAuthentication, isIdPresent("query"), (req, res, next)
 
 
 });
+
+//TODO aggiungi get vote per id
