@@ -10,7 +10,7 @@ import multer from "multer";
 const upload = multer({ storage: multer.memoryStorage() });
 const imageParser = upload.fields([{ name: 'image', maxCount: 1 }])
 
-
+//TODO aggiungere possibilità di eliminare meme (aggiungi i delete on cascade)
 
 export const router = express.Router();
 

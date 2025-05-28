@@ -241,4 +241,50 @@ router.delete('/', enforceAuthentication, isIdPresent("query"), (req, res, next)
 
 });
 
-//TODO aggiungi get vote per id
+
+/**
+ * @swagger
+ * {
+ *   "paths": {
+ *     "/votes/{id}": {
+ *       "get": {
+ *         "summary": "restiuisce un voto dato id",
+ *         "description": "restiuisce un voto dato `id`",
+ *         "tags": ["Votes"],
+ *         "parameters": [
+ *           {
+ *             "name": "id",
+ *             "in": "path",
+ *             "required": false,
+ *             "description": "ID of the meme",
+ *             "schema": {
+ *               "type": "string"
+ *             }
+ *           }
+ *         ],
+ *         "responses": {
+ *           "200": {
+ *             "description": "Vote successfully getted"
+ *           },
+ *           "400": {
+ *             "description": "Invalid request"
+ *           },
+ *           "500": {
+ *             "description": "Internal server error"
+ *           }
+ *         }
+ *       }
+ *     }
+ *   }
+ * }
+ */
+router.get('/:id', isIdPresent("params"), (req, res, next) => {
+
+    VoteController.getMemeVotes({ where: { idVote: req.params.id } }).then((result) => {
+        res.status(200);
+        res.json(result[0]);
+    }).catch(err => {
+        next(err);
+    });
+
+});

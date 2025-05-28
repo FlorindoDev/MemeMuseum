@@ -27,6 +27,8 @@ export const {
     Tag
 } = database.models;
 
+//TODO aggiungere i delete on canscade del caso
+
 // Associazioni User
 User.Memes = User.hasMany(Meme);
 User.MemeVotes = User.hasMany(MemeVote);
@@ -45,7 +47,7 @@ MemeVote.Meme = MemeVote.belongsTo(Meme);
 
 // Associazioni CommentVote
 CommentVote.User = CommentVote.belongsTo(User);
-CommentVote.Comment = CommentVote.belongsTo(Comment);
+CommentVote.Comment = CommentVote.belongsTo(Comment, { onDelete: 'CASCADE' });
 
 // Associazioni Comment
 Comment.CommentVotes = Comment.hasMany(CommentVote);
@@ -59,7 +61,7 @@ Tag.belongsToMany(Meme, { through: 'MemeTag' });
 
 
 //TODO: Controllare che sia il metodo giusto
-database.sync({ /*alter: true*/ }).then(() => {
+database.sync({ alter: true }).then(() => {
     console.log("Database synced correctly");
 }).catch(err => {
     console.log("Error with database synchronization: " + err.message);

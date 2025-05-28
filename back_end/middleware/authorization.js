@@ -1,4 +1,5 @@
 import { AuthController } from "../controllers/AuthController.js";
+import { CommentController } from "../controllers/CommentController.js";
 import { MemesController } from "../controllers/MemesController.js";
 import { UnauthorizedError } from "../utils/error/index.js";
 
@@ -41,4 +42,17 @@ export function isOwnMeme(req, res, next) {
         return next(err);
     })
 
+}
+
+export function isOwnComment(req, res, next) {
+
+    CommentController.getCommentMeme({ where: { idComment: req.params.id } }).then((result) => {
+
+        if (result[0].dataValues.UserIdUser !== req.idUser) {
+            return next(new UnauthorizedError());
+        }
+        return next();
+    }).catch((err) => {
+        return next(err);
+    })
 }

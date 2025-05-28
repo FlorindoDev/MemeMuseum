@@ -1,8 +1,13 @@
 import express from "express";
-import { enforceAuthentication } from "../middleware/authorization.js";
+import { enforceAuthentication, isOwnComment } from "../middleware/authorization.js";
 import { CommentController } from "../controllers/CommentController.js";
 import { isIdPresent, isFieldsPresent } from "../middleware/Middlewares.js";
 import { isMemeExists } from "../middleware/MemeMiddlewares.js";
+import { isCommentVoteAlreadyExists } from "../middleware/CommentVoteMiddlewares.js";
+import { CommentVoteController } from "../controllers/CommentVoteController.js";
+import { isBodyVoteCorrect } from "../middleware/VoteMiddlewares.js";
+import { isCommentExists } from "../middleware/CommentMiddlewares.js";
+
 
 export const router = express.Router();
 
@@ -113,7 +118,7 @@ router.post('/', [enforceAuthentication, isIdPresent("query", "idmeme"), isMemeE
  *         ],
  *         "responses": {
  *           "200": {
- *             "description": "Vote successfully getted"
+ *             "description": "Comments successfully getted"
  *           },
  *           "400": {
  *             "description": "Invalid request"
@@ -148,5 +153,334 @@ router.get('/', isFieldsPresent("query", ["idmeme", "iduser"]), (req, res, next)
 
 });
 
-//TODO aggiungu cancellazione commenti
 
+/**
+ * @swagger
+ * {
+ *   "paths": {
+ *     "/comments/{id}": {
+ *       "get": {
+ *         "summary": "commento restiuito tramite id",
+ *         "description": "commento restiuito tramite id ",
+ *         "tags": ["Comments"],
+ *         "parameters": [
+ *           {
+ *             "name": "id",
+ *             "in": "path",
+ *             "required": true,
+ *             "description": "ID of the comment",
+ *             "schema": {
+ *               "type": "string"
+ *             }
+ *           }
+ *         ],
+ *         "responses": {
+ *           "200": {
+ *             "description": "Comment successfully getted"
+ *           },
+ *           "400": {
+ *             "description": "Invalid request"
+ *           },
+ *           "500": {
+ *             "description": "Internal server error"
+ *           }
+ *         }
+ *       }
+ *     }
+ *   }
+ * }
+ */
+router.get('/:id', isIdPresent("params"), (req, res, next) => {
+
+
+    CommentController.getCommentMeme({ where: { idComment: req.params.id } }).then((result) => {
+
+        res.status(200);
+        res.json(result);
+
+    }).catch(err => {
+        next(err);
+    });
+
+});
+
+
+/**
+ * @swagger
+ * {
+ *   "paths": {
+ *     "/comments/{id}": {
+ *       "delete": {
+ *         "summary": "cancellazione comment tramite id",
+ *         "description": "cancella un commento in base al `id`  ",
+ *          "security": [
+ *              {
+ *                  "bearerAuth": []
+ *              }
+ *          ],
+ *         "tags": ["Comments"],
+ *         "parameters": [
+ *           {
+ *             "name": "id",
+ *             "in": "path",
+ *             "required": true,
+ *             "description": "ID of the comment",
+ *             "schema": {
+ *               "type": "string"
+ *             }
+ *           }
+ *         ],
+ *         "responses": {
+ *           "200": {
+ *             "description": "Comment successfully deleted"
+ *           },
+ *           "400": {
+ *             "description": "Invalid request"
+ *           },
+ *           "500": {
+ *             "description": "Internal server error"
+ *           }
+ *         }
+ *       }
+ *     }
+ *   }
+ * }
+ */
+router.delete('/:id', enforceAuthentication, isOwnComment, isIdPresent("params"), (req, res, next) => {
+
+
+    CommentController.deleteComment(req.params.id).then((result) => {
+
+        res.status(200);
+        res.send();
+
+    }).catch(err => {
+        next(err);
+    });
+
+});
+
+/**
+ * @swagger
+ * {
+ *   "paths": {
+ *     "/comments/{id}/comments-votes": {
+ *       "post": {
+ *         "summary": "Vote for a Comment",
+ *          "security": [
+ *              {
+ *                  "bearerAuth": []
+ *              }
+ *          ],
+ *         "description": "Registers a user's vote for a specific comment by ID.",
+ *         "tags": ["Comments"],
+ *         "parameters": [
+ *           {
+ *             "name": "id",
+ *             "in": "path",
+ *             "required": true,
+ *             "description": "ID of the meme to vote for",
+ *             "schema": {
+ *               "type": "string"
+ *             }
+ *           }
+ *         ],
+ *         "requestBody": {
+ *           "required": true,
+ *           "content": {
+ *             "application/json": {
+ *               "schema": {
+ *                 "$ref": "#/components/schemas/CommentVote"
+ *               },
+ *              "example": {
+ *                   "upVote": true
+ *                 }
+ *             }
+ *           }
+ *         },
+ *         "responses": {
+ *           "200": {
+ *             "description": "Vote successfully recorded"
+ *           },
+ *           "400": {
+ *             "description": "Invalid request"
+ *           },
+ *           "500": {
+ *             "description": "Internal server error"
+ *           }
+ *         }
+ *       }
+ *     }
+ *   }
+ * }
+ */
+router.post('/:id/comments-votes', [isBodyVoteCorrect, enforceAuthentication, isIdPresent("params"), isCommentExists, isCommentVoteAlreadyExists], (req, res, next) => {
+
+
+    if (req.isVotePresent) {
+
+        let what = { upVote: req.body.upVote }
+
+        let where = {
+            where: {
+                UserIdUser: req.idUser,
+                CommentIdComment: req.params.id
+            }
+        }
+
+        CommentVoteController.updateMemeVotes(what, where).then(() => {
+            res.status(200);
+            res.send();
+
+
+        }).catch(err => {
+            next(err);
+        });
+
+    } else {
+
+        CommentVoteController.saveVote(req).then(() => {
+            res.status(200);
+            res.send();
+        }).catch((err) => {
+            next(err)
+        });
+    }
+});
+
+
+/**
+ * @swagger
+ * {
+ *   "paths": {
+ *     "/comments/{id}/comments-votes": {
+ *       "get": {
+ *         "summary": "voti di un Comment ",
+ *         "description": "da i voti di un comment dato `id`",
+ *         "tags": ["Comments"],
+ *         "parameters": [
+ *           {
+ *             "name": "id",
+ *             "in": "path",
+ *             "required": false,
+ *             "description": "ID of the meme",
+ *             "schema": {
+ *               "type": "string"
+ *             }
+ *           },
+ *           {
+ *              "name": "count",
+ *              "in": "query",
+ *              "description": "Ti da il numero di upvote e downvote",
+ *              "required": false,
+ *              "schema": {
+ *                  "type": "boolean",
+ *                  "default": false
+ *              }
+ *           }
+ *         ],
+ *         "responses": {
+ *           "200": {
+ *             "description": "Votes successfully getted"
+ *           },
+ *           "400": {
+ *             "description": "Invalid request"
+ *           },
+ *           "500": {
+ *             "description": "Internal server error"
+ *           }
+ *         }
+ *       }
+ *     }
+ *   }
+ * }
+ */
+router.get('/:id/comments-votes', isIdPresent("params"), (req, res, next) => {
+
+    let filters = { where: { CommentIdComment: req.params.id } }
+
+    req.query.count = req.query.count === undefined ? "false" : "true";
+
+    CommentVoteController.getCommentVote(filters).then((result) => {
+
+        if (req.query.count === "true") {
+            let upVote = result.filter(vote => {
+                if (vote.dataValues.upVote) return true;
+                return false;
+            });
+
+            let downvote = result.length - upVote.length;
+
+            result = { upVote: upVote.length, downvote: downvote };
+        }
+
+        res.status(200);
+        res.json(result);
+    }).catch(err => {
+        next(err);
+    });
+
+});
+
+
+/**
+ * @swagger
+ * {
+ *   "paths": {
+ *     "/comments/{id}/comments-votes": {
+ *       "delete": {
+ *         "summary": "Remove a user's vote on a Comment",
+ *         "description": "Permette a un utente autenticato di rimuovere il proprio voto da un commento.",
+ *         "tags": ["Comments"],
+ *         "parameters": [
+ *           {
+ *             "name": "id",
+ *             "in": "path",
+ *             "required": true,
+ *             "description": "ID del comment dal quale rimuovere il voto",
+ *             "schema": {
+ *               "type": "string"
+ *             }
+ *           }
+ *         ],
+ *         "responses": {
+ *           "200": {
+ *             "description": "Voto rimosso con successo"
+ *           },
+ *           "401": {
+ *             "description": "Utente non autenticato"
+ *           },
+ *           "500": {
+ *             "description": "Errore interno del server"
+ *           }
+ *         },
+ *         "security": [
+ *           {
+ *             "bearerAuth": []
+ *           }
+ *         ]
+ *       }
+ *     }
+ *   }
+ * }
+ */
+router.delete('/:id/comments-votes', enforceAuthentication, isIdPresent("params"), (req, res, next) => {
+
+    let filter = {
+        where: {
+            UserIdUser: req.idUser,
+            CommentIdComment: req.params.id
+        }
+    }
+
+    CommentVoteController.deleteCommentVote(filter).then(() => {
+
+        res.status(200);
+        res.send();
+
+    }).catch(err => {
+        next(err);
+    })
+
+
+});

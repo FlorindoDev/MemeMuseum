@@ -7,7 +7,7 @@ export class CommentController {
 
         let comment = new Comment({
             content: req.body.content,
-            MemeIdMeme: req.query.idMeme,
+            MemeIdMeme: req.query.idmeme,
             UserIdUser: req.idUser
         })
 
@@ -47,4 +47,11 @@ export class CommentController {
         return filters;
     }
 
+    static async deleteComment(idcomment) {
+
+        let result = await CommentController.getCommentMeme({ where: { idComment: idcomment } });
+
+        return result[0].destroy();
+
+    }
 }
