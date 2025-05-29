@@ -1,7 +1,9 @@
 FROM node:current-alpine
 
-#TODO: toglilo alla fine
+#TODO: togliere questo selve solo durante lo sviluppo
+RUN npm install -g @angular/cli
 RUN apk update && apk add --no-cache git
+
 
 WORKDIR /app
 
