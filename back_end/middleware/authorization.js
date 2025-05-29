@@ -1,7 +1,7 @@
 import { AuthController } from "../controllers/AuthController.js";
 import { CommentController } from "../controllers/CommentController.js";
 import { MemesController } from "../controllers/MemesController.js";
-import { UnauthorizedError } from "../utils/error/index.js";
+import { UnauthorizedError, ForbbidenError } from "../utils/error/index.js";
 
 
 export function enforceAuthentication(req, res, next) {
@@ -24,7 +24,7 @@ export function enforceAuthentication(req, res, next) {
 
 export function isOwnProfile(req, res, next) {
 
-    if (req.idUser != req.params.id) return next(new UnauthorizedError());
+    if (req.idUser != req.params.id) return next(new ForbbidenError());
 
     next();
 
@@ -35,7 +35,7 @@ export function isOwnMeme(req, res, next) {
     MemesController.getMemeFromId(req.params.id).then((result) => {
 
         if (result.dataValues.UserIdUser !== req.idUser) {
-            return next(new UnauthorizedError());
+            return next(new ForbbidenError());
         }
         return next();
     }).catch((err) => {
@@ -49,7 +49,7 @@ export function isOwnComment(req, res, next) {
     CommentController.getCommentMeme({ where: { idComment: req.params.id } }).then((result) => {
 
         if (result[0].dataValues.UserIdUser !== req.idUser) {
-            return next(new UnauthorizedError());
+            return next(new ForbbidenError());
         }
         return next();
     }).catch((err) => {

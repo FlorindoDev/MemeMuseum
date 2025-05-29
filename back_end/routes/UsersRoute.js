@@ -13,6 +13,8 @@ const imageParser = upload.fields([{ name: 'image', maxCount: 1 }])
 export const router = express.Router();
 
 
+//TODO fare in modo che un utente possa aggiornare il proprio profilo 
+
 /**
  * @swagger
  * {

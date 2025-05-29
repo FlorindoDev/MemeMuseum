@@ -39,6 +39,12 @@ export class UnauthorizedError extends AppErrorHttp {
     }
 }
 
+export class ForbbidenError extends AppErrorHttp {
+    constructor() {
+        super(FORBIDDEN, "Non sei autorizzato ad accedere a questa risorsa", "FORBIDDEN");
+    }
+}
+
 export class CredentialError extends AppErrorHttp {
     constructor() {
         super(UNAUTHORIZED, "Email o password sbagliate", "UNAUTHORIZED");
