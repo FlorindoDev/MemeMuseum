@@ -7,7 +7,22 @@
 @custom-variant dark (&:where(.dark, .dark *));
 
 
+@theme {
+    --color-text: #0c0b09;
+    --color-bg: #ebebeb;
+    --color-primary: #b98046;
+    --color-secondary: #e4bf9a;
+    --color-accent: #e39c54;
+}
 
 .dark {
-    --color-mint-500: oklch(0.72 0.11 178);
+    --color-text: #f6f5f3;
+    --color-bg: #141414;
+    --color-primary: #b98046;
+    --color-secondary: #65401b;
+    --color-accent: #ab631c;
+}
+
+@theme {
+    --breakpoint-sm: 44rem;
 }
