@@ -279,7 +279,7 @@ router.delete('/:id', enforceAuthentication, isOwnComment, isIdPresent("params")
  *             "name": "id",
  *             "in": "path",
  *             "required": true,
- *             "description": "ID of the meme to vote for",
+ *             "description": "ID of the comment to vote for",
  *             "schema": {
  *               "type": "string"
  *             }
@@ -363,7 +363,7 @@ router.post('/:id/comments-votes', [isBodyVoteCorrect, enforceAuthentication, is
  *             "name": "id",
  *             "in": "path",
  *             "required": false,
- *             "description": "ID of the meme",
+ *             "description": "ID of the comment",
  *             "schema": {
  *               "type": "string"
  *             }
