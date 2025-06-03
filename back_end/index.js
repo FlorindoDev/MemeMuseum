@@ -13,6 +13,9 @@ import { router as CommentRoute } from "./routes/CommentRoute.js";
 
 //TODO: RICORDA DI DARE AL PROF .env gia fatto e passare il json per google storage
 
+//TODO: Aggiungere il controllo al contenuto dei body
+//TODO: Aggiungere protezioni alle vuberabilità
+
 const app = express();
 const PORT = 3000;
 
