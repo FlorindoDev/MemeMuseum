@@ -2,12 +2,18 @@ import express from "express";
 import { isUserPrsent, isEmailPasswordPresent, isNickNamePresent } from "../middleware/UserMiddlewares.js";
 import { AuthController } from "../controllers/AuthController.js";
 import { UserAlreadyExistsError } from "../utils/error/index.js";
+import { EmailRequired, PasswordRequired } from "../schemas/user.schema.js";
+import { unionChecks } from "../schemas/utils.schema.js";
+import { validate } from "../middleware/Middlewares.js";
 
 export const router = express.Router();
 
 router.use(isEmailPasswordPresent);
 
 const ErrorUserAbsenct = new UserAlreadyExistsError();
+
+//TODO: continurare controllo body
+const schemaLogin = unionChecks([EmailRequired, PasswordRequired]);
 
 /**
  * @swagger
@@ -160,7 +166,7 @@ router.post('/signup', [isNickNamePresent, isUserPrsent(ErrorUserAbsenct)], (req
  *   }
  * }
  */
-router.post('/login', (req, res, next) => {
+router.post('/login', validate(schemaLogin), (req, res, next) => {
     AuthController.checkCredentials(req).then(() => {
 
         res.status(200);

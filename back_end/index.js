@@ -23,7 +23,7 @@ const PORT = 3000;
 // logger
 app.use(morgan('dev'));
 
-
+//Accetta tutte le origini 
 app.use(cors());
 
 
@@ -60,11 +60,16 @@ app.use('/comments', CommentRoute);
 //error handler
 app.use((err, req, res, next) => {
   console.log(err.stack);
-  res.status(err.status || 500).json({
+
+  let body = {
     status: err.status || 500,
     code: err.code,
-    description: err.message || "An error occurred"
-  });
+    description: err.message || "An error occurred",
+  }
+
+  if (err.errors) body.errorsfield = err.errors;
+
+  res.status(err.status || 500).json(body);
 });
 
 

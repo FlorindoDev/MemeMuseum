@@ -15,6 +15,13 @@ export class MissingFieldError extends AppErrorHttp {
     }
 }
 
+export class FieldError extends AppErrorHttp {
+
+    constructor(errors) {
+        super(BED_REQUEST, "Campo mancante o contenuto non valido", "ERROR_FIELD", errors);
+    }
+}
+
 export class MissingFile extends AppErrorHttp {
     constructor() {
         super(BED_REQUEST, "Nessun file caricato", "MISSING_FILE");
