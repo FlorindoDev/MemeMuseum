@@ -7,7 +7,7 @@ export function isUserAlreadyVote(req, res, next) {
     let filters = {
         where: {
             UserIdUser: req.idUser,
-            MemeIdMeme: req.query.id
+            MemeIdMeme: req.query.idmeme
         }
     };
 

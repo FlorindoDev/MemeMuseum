@@ -1,10 +1,19 @@
 import express from "express"
 import { enforceAuthentication } from "../middleware/authorization.js"
-import { isUserAlreadyVote, isBodyVoteCorrect } from "../middleware/VoteMiddlewares.js";
+import { isUserAlreadyVote } from "../middleware/VoteMiddlewares.js";
 import { VoteController } from "../controllers/VoteController.js";
 import { isMemeExists } from "../middleware/MemeMiddlewares.js";
-import { isIdPresent, isFieldsPresent } from "../middleware/Middlewares.js";
+import { validate } from "../middleware/Middlewares.js";
+import { countNotRequiredQuery } from "../schemas/comments.schema.js";
+import { idUserRequiredQuery } from "../schemas/user.schema.js";
+import { unionChecks, orUnionChecks } from "../schemas/utils.schema.js";
+import { idMemeRequiredQuery } from "../schemas/meme.schema.js";
+import { upVoteRequiredBody, idVoteRequiredParams } from "../schemas/vote.schema.js";
 
+let schemaCommentsGet = orUnionChecks([idMemeRequiredQuery, idUserRequiredQuery]);
+schemaCommentsGet = unionChecks([countNotRequiredQuery, schemaCommentsGet]);
+
+const schemaVotePost = unionChecks([upVoteRequiredBody, idMemeRequiredQuery])
 
 export const router = express.Router();
 
@@ -25,7 +34,7 @@ export const router = express.Router();
  *         "tags": ["Votes"],
  *         "parameters": [
  *           {
- *             "name": "id",
+ *             "name": "idmeme",
  *             "in": "query",
  *             "required": true,
  *             "description": "ID of the meme to vote for",
@@ -63,7 +72,7 @@ export const router = express.Router();
  *   }
  * }
  */
-router.post('/', [isBodyVoteCorrect, enforceAuthentication, isIdPresent("query"), isMemeExists("query", "id"), isUserAlreadyVote], (req, res, next) => {
+router.post('/', [enforceAuthentication, validate(schemaVotePost), isMemeExists("query", "idmeme"), isUserAlreadyVote], (req, res, next) => {
 
 
     if (req.isVotePresent) {
@@ -73,7 +82,7 @@ router.post('/', [isBodyVoteCorrect, enforceAuthentication, isIdPresent("query")
         let where = {
             where: {
                 UserIdUser: req.idUser,
-                MemeIdMeme: req.query.id
+                MemeIdMeme: req.query.idmeme
             }
         }
 
@@ -153,7 +162,7 @@ router.post('/', [isBodyVoteCorrect, enforceAuthentication, isIdPresent("query")
  *   }
  * }
  */
-router.get('/', isFieldsPresent("query", ["idmeme", "iduser"]), (req, res, next) => {
+router.get('/', validate(schemaCommentsGet), (req, res, next) => {
 
     let filters = VoteController.createFilterGetVote(req.query.idmeme, req.query.iduser);
 
@@ -192,7 +201,7 @@ router.get('/', isFieldsPresent("query", ["idmeme", "iduser"]), (req, res, next)
  *         "tags": ["Votes"],
  *         "parameters": [
  *           {
- *             "name": "id",
+ *             "name": "idmeme",
  *             "in": "query",
  *             "required": true,
  *             "description": "ID del meme dal quale rimuovere il voto",
@@ -222,12 +231,12 @@ router.get('/', isFieldsPresent("query", ["idmeme", "iduser"]), (req, res, next)
  *   }
  * }
  */
-router.delete('/', enforceAuthentication, isIdPresent("query"), (req, res, next) => {
+router.delete('/', enforceAuthentication, validate(idMemeRequiredQuery), (req, res, next) => {
 
     let filter = {
         where: {
             UserIdUser: req.idUser,
-            MemeIdMeme: req.query.id
+            MemeIdMeme: req.query.idmeme
         }
     }
     VoteController.deleteMemeVote(filter).then((result) => {
@@ -256,7 +265,7 @@ router.delete('/', enforceAuthentication, isIdPresent("query"), (req, res, next)
  *             "name": "id",
  *             "in": "path",
  *             "required": false,
- *             "description": "ID of the meme",
+ *             "description": "ID of the vote",
  *             "schema": {
  *               "type": "string"
  *             }
@@ -278,7 +287,7 @@ router.delete('/', enforceAuthentication, isIdPresent("query"), (req, res, next)
  *   }
  * }
  */
-router.get('/:id', isIdPresent("params"), (req, res, next) => {
+router.get('/:id', validate(idVoteRequiredParams), (req, res, next) => {
 
     VoteController.getMemeVotes({ where: { idVote: req.params.id } }).then((result) => {
         res.status(200);
