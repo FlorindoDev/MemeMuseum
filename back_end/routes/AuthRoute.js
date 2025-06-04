@@ -1,19 +1,17 @@
 import express from "express";
-import { isUserPrsent, isEmailPasswordPresent, isNickNamePresent } from "../middleware/UserMiddlewares.js";
+import { isUserPrsent } from "../middleware/UserMiddlewares.js";
 import { AuthController } from "../controllers/AuthController.js";
 import { UserAlreadyExistsError } from "../utils/error/index.js";
-import { EmailRequired, PasswordRequired } from "../schemas/user.schema.js";
+import { EmailRequiredBody, PasswordRequiredBody, NickNameRequiredBody } from "../schemas/user.schema.js";
 import { unionChecks } from "../schemas/utils.schema.js";
 import { validate } from "../middleware/Middlewares.js";
 
+const schemaLogin = unionChecks([EmailRequiredBody, PasswordRequiredBody]);
+const schemaSignUp = unionChecks([schemaLogin, NickNameRequiredBody]);
+
 export const router = express.Router();
 
-router.use(isEmailPasswordPresent);
-
 const ErrorUserAbsenct = new UserAlreadyExistsError();
-
-//TODO: continurare controllo body
-const schemaLogin = unionChecks([EmailRequired, PasswordRequired]);
 
 /**
  * @swagger
@@ -39,13 +37,18 @@ const schemaLogin = unionChecks([EmailRequired, PasswordRequired]);
  *       },
  *       "responses": {
  *         "200": {
- *           "description": "User successfully registered"
+ *           "description": "User successfully registered",
+ *           "content": {
+ *             "application/json": {
+ *               
+ *             }
+ *           }
  *         },
  *         "409": {
  *           "description": "User already exists",
  *           "content": {
  *             "application/json": {
- *               "schema": { "$ref": "#/components/schemas/Error" }
+ *               
  *             }
  *           }
  *         },
@@ -53,7 +56,7 @@ const schemaLogin = unionChecks([EmailRequired, PasswordRequired]);
  *           "description": "Service unavailable, signup temporarily disabled",
  *           "content": {
  *             "application/json": {
- *               "schema": { "$ref": "#/components/schemas/Error" }
+ *               
  *             }
  *           }
  *         },
@@ -61,7 +64,7 @@ const schemaLogin = unionChecks([EmailRequired, PasswordRequired]);
  *           "description": "email or password missing in the body",
  *           "content": {
  *             "application/json": {
- *               "schema": { "$ref": "#/components/schemas/Error" }
+ *              
  *             }
  *           }
  *         },
@@ -69,7 +72,7 @@ const schemaLogin = unionChecks([EmailRequired, PasswordRequired]);
  *           "description": "Unexpected error",
  *           "content": {
  *             "application/json": {
- *               "schema": { "$ref": "#/components/schemas/Error" }
+ *               
  *             }
  *           }
  *         }
@@ -77,7 +80,7 @@ const schemaLogin = unionChecks([EmailRequired, PasswordRequired]);
  *     }
  *   }
  */
-router.post('/signup', [isNickNamePresent, isUserPrsent(ErrorUserAbsenct)], (req, res, next) => {
+router.post('/signup', [validate(schemaSignUp), isUserPrsent(ErrorUserAbsenct)], (req, res, next) => {
     AuthController.saveUser(req).then(() => {
 
         res.status(200);
@@ -144,9 +147,7 @@ router.post('/signup', [isNickNamePresent, isUserPrsent(ErrorUserAbsenct)], (req
  *           "description": "email or passoword missing in the body",
  *           "content": {
  *             "application/json": {
- *               "schema": {
- *                 "$ref": "#/components/schemas/Error"
- *               }
+ *               
  *             }
  *           }
  *         },
@@ -154,9 +155,7 @@ router.post('/signup', [isNickNamePresent, isUserPrsent(ErrorUserAbsenct)], (req
  *           "description": "Email o password sbagliate",
  *           "content": {
  *             "application/json": {
- *               "schema": {
- *                 "$ref": "#/components/schemas/Error"
- *               }
+ *               
  *             }
  *           }
  *         }
@@ -171,7 +170,6 @@ router.post('/login', validate(schemaLogin), (req, res, next) => {
 
         res.status(200);
         res.json({ token: AuthController.issueToken(req.body.email, req.idUser) })
-
 
     }).catch((err) => {
         next(err)

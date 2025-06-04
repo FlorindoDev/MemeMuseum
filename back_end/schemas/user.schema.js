@@ -1,30 +1,54 @@
 import { z } from "zod";
+import { idRequired, idNotRequired } from "./utils.schema.js";
 
 const rfc5322EmailRegex = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@(?:[a-zA-Z0-9-]+\.)+[a-zA-Z]{2,}$/;
 
 let password = z.object({
-    password: z.string().min(8).max(50),
+    password: z.string({
+        required_error: "Il campo password è obbligatorio"
+    }).min(8).max(50),
 });
 
 let nickname = z.object({
-    nickname: z.string().min(4).max(12),
+    nickName: z.string({
+        required_error: "Il campo nickname è obbligatorio"
+    }).min(4).max(12),
 });
 
 let email = z.object({
-    email: z.string().regex(rfc5322EmailRegex, "Email non valida"),
-})
+    email: z.string({
+        required_error: "Il campo email è obbligatorio"
+    }).regex(rfc5322EmailRegex, "Email non valida"),
+});
 
-export const NickNameRequired = z.object({
+let idR = z.object({
+    idmeme: idRequired.id
+});
+
+let idNotR = z.object({
+    idmeme: idNotRequired.id
+});
+
+
+export const idUserNotRequiredQuery = z.object({
+    query: idNotR
+});
+
+export const idUserRequiredQuery = z.object({
+    query: idR
+});
+
+export const NickNameRequiredBody = z.object({
     body: nickname,
 
 });
 
-export const EmailRequired = z.object({
+export const EmailRequiredBody = z.object({
     body: email,
 
 })
 
-export const PasswordRequired = z.object({
+export const PasswordRequiredBody = z.object({
     body: password,
 
 })

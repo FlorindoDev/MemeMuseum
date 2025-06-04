@@ -1,12 +1,25 @@
 import express from "express";
 import { enforceAuthentication, isOwnComment } from "../middleware/authorization.js";
 import { CommentController } from "../controllers/CommentController.js";
-import { isIdPresent, isFieldsPresent } from "../middleware/Middlewares.js";
+import { validate } from "../middleware/Middlewares.js";
 import { isMemeExists } from "../middleware/MemeMiddlewares.js";
 import { isCommentVoteAlreadyExists } from "../middleware/CommentVoteMiddlewares.js";
 import { CommentVoteController } from "../controllers/CommentVoteController.js";
-import { isBodyVoteCorrect } from "../middleware/VoteMiddlewares.js";
 import { isCommentExists } from "../middleware/CommentMiddlewares.js";
+import { idMemeRequiredQuery } from "../schemas/meme.schema.js";
+import { contentRequiredBody, countNotRequiredQuery, idCommentRequiredParams } from "../schemas/comments.schema.js";
+import { idUserRequiredQuery } from "../schemas/user.schema.js";
+import { unionChecks, orUnionChecks } from "../schemas/utils.schema.js";
+import { upVoteRequiredBody } from "../schemas/comments_votes.schema.js";
+
+
+const schemaCommentsPost = unionChecks([idMemeRequiredQuery, contentRequiredBody]);
+
+let schemaCommentsGet = orUnionChecks([idMemeRequiredQuery, idUserRequiredQuery]);
+schemaCommentsGet = unionChecks([countNotRequiredQuery, schemaCommentsGet]);
+
+const schemaCommentsVotesPost = unionChecks([upVoteRequiredBody, idCommentRequiredParams]);
+const schemaCommentsVotesGet = unionChecks([idCommentRequiredParams, countNotRequiredQuery])
 
 
 export const router = express.Router();
@@ -65,7 +78,7 @@ export const router = express.Router();
  *   }
  * }
  */
-router.post('/', [enforceAuthentication, isIdPresent("query", "idmeme"), isMemeExists("query", "idmeme")], (req, res, next) => {
+router.post('/', [enforceAuthentication, validate(schemaCommentsPost), isMemeExists("query", "idmeme")], (req, res, next) => {
 
     CommentController.saveComment(req).then(() => {
         res.status(200);
@@ -132,7 +145,7 @@ router.post('/', [enforceAuthentication, isIdPresent("query", "idmeme"), isMemeE
  *   }
  * }
  */
-router.get('/', isFieldsPresent("query", ["idmeme", "iduser"]), (req, res, next) => {
+router.get('/', validate(schemaCommentsGet), (req, res, next) => {
 
     let filters = CommentController.createFilterGetVote(req.query.idmeme, req.query.iduser);
 
@@ -190,7 +203,7 @@ router.get('/', isFieldsPresent("query", ["idmeme", "iduser"]), (req, res, next)
  *   }
  * }
  */
-router.get('/:id', isIdPresent("params"), (req, res, next) => {
+router.get('/:id', validate(idCommentRequiredParams), (req, res, next) => {
 
 
     CommentController.getCommentMeme({ where: { idComment: req.params.id } }).then((result) => {
@@ -246,7 +259,7 @@ router.get('/:id', isIdPresent("params"), (req, res, next) => {
  *   }
  * }
  */
-router.delete('/:id', enforceAuthentication, isOwnComment, isIdPresent("params"), (req, res, next) => {
+router.delete('/:id', enforceAuthentication, validate(idCommentRequiredParams), isOwnComment, (req, res, next) => {
 
 
     CommentController.deleteComment(req.params.id).then((result) => {
@@ -314,7 +327,7 @@ router.delete('/:id', enforceAuthentication, isOwnComment, isIdPresent("params")
  *   }
  * }
  */
-router.post('/:id/comments-votes', [isBodyVoteCorrect, enforceAuthentication, isIdPresent("params"), isCommentExists, isCommentVoteAlreadyExists], (req, res, next) => {
+router.post('/:id/comments-votes', [enforceAuthentication, validate(schemaCommentsVotesPost), isCommentExists, isCommentVoteAlreadyExists], (req, res, next) => {
 
 
     if (req.isVotePresent) {
@@ -395,7 +408,7 @@ router.post('/:id/comments-votes', [isBodyVoteCorrect, enforceAuthentication, is
  *   }
  * }
  */
-router.get('/:id/comments-votes', isIdPresent("params"), (req, res, next) => {
+router.get('/:id/comments-votes', validate(schemaCommentsVotesGet), (req, res, next) => {
 
     let filters = { where: { CommentIdComment: req.params.id } }
 
@@ -464,7 +477,7 @@ router.get('/:id/comments-votes', isIdPresent("params"), (req, res, next) => {
  *   }
  * }
  */
-router.delete('/:id/comments-votes', enforceAuthentication, isIdPresent("params"), (req, res, next) => {
+router.delete('/:id/comments-votes', enforceAuthentication, validate(idCommentRequiredParams), (req, res, next) => {
 
     let filter = {
         where: {

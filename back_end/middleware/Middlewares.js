@@ -53,7 +53,6 @@ export const validate = (schema) => (req, res, next) => {
         });
         next();
     } catch (e) {
-        console.log(e.errors);
         return next(new FieldError(e.errors));
     }
 };
