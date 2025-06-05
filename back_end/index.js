@@ -13,7 +13,7 @@ import { router as CommentRoute } from "./routes/CommentRoute.js";
 
 //TODO: RICORDA DI DARE AL PROF .env gia fatto e passare il json per google storage
 
-
+//TODO: eliminare funzioni di controllo body vecchie
 //TODO: Aggiungere protezioni alle vulnerabilità
 
 const app = express();
