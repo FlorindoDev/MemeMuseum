@@ -2,9 +2,11 @@ import express from "express"
 import { upLoad as upLoadOnGoogle } from "../middleware/GoogleStorage.js"
 import { enforceAuthentication, isOwnMeme } from "../middleware/authorization.js"
 import { MemesController } from "../controllers/MemesController.js";
-import { isMaxTagsReach, isTagsBodyCorrect } from "../middleware/MemeMiddlewares.js";
-import { queryParamsToList, isIdPresent } from "../middleware/Middlewares.js";
+import { isMaxTagsReach } from "../middleware/MemeMiddlewares.js";
+import { queryParamsToList } from "../middleware/Middlewares.js";
 import { TagController } from "../controllers/TagController.js";
+import { schemaMemeGet, idMemeRequiredParams, schemaTagsPost, schemaTagsGet } from "../schemas/meme.schema.js";
+import { validate } from "../middleware/Middlewares.js";
 
 import multer from "multer";
 const upload = multer({ storage: multer.memoryStorage() });
@@ -167,13 +169,9 @@ router.post('/', [enforceAuthentication, imageParser, upLoadOnGoogle], (req, res
  *   }
  * }
  */
-router.get('/', queryParamsToList(['nametags']), (req, res, next) => {
+router.get('/', [validate(schemaMemeGet, true), queryParamsToList(['nametags'])], (req, res, next) => {
 
-    const rawPageSize = req.query.pagesize;
-    const rawPage = req.query.page;
-    const rawidUser = req.query.iduser;
-
-    let query = MemesController.checkPageAndIdUser(rawPageSize, rawPage, rawidUser);
+    let query = { pages: req.checked.query.page, size: req.checked.query.pagesize, iduser: req.query.iduser };
 
     let filters = MemesController.createFilterForGetMeme(query, req.nametags);
 
@@ -249,7 +247,7 @@ router.get('/', queryParamsToList(['nametags']), (req, res, next) => {
  *   }
  * }
  */
-router.get('/:id', isIdPresent("params"), (req, res, next) => {
+router.get('/:id', validate(idMemeRequiredParams), (req, res, next) => {
 
     MemesController.getMemeFromId(req.params.id).then((result) => {
 
@@ -361,7 +359,7 @@ router.get('/:id', isIdPresent("params"), (req, res, next) => {
  *   }
  * }
  */
-router.post('/:id/tags', [isIdPresent("params"), isTagsBodyCorrect, enforceAuthentication, isOwnMeme, isMaxTagsReach], (req, res, next) => {
+router.post('/:id/tags', [validate(schemaTagsPost), enforceAuthentication, isOwnMeme, isMaxTagsReach], (req, res, next) => {
 
     TagController.saveTags(req.params.id, req).then((result) => {
 
@@ -454,7 +452,7 @@ router.post('/:id/tags', [isIdPresent("params"), isTagsBodyCorrect, enforceAuthe
  *   }
  * }
  */
-router.get('/:id/tags', [isIdPresent("params"), queryParamsToList(['nametags'])], (req, res, next) => {
+router.get('/:id/tags', [validate(schemaTagsGet), queryParamsToList(['nametags'])], (req, res, next) => {
 
     TagController.getMemeTags(req.params.id).then((result) => {
 
@@ -557,7 +555,7 @@ router.get('/:id/tags', [isIdPresent("params"), queryParamsToList(['nametags'])]
  *   }
  * }
  */
-router.delete('/:id/tags', [isIdPresent("params"), enforceAuthentication, isOwnMeme, queryParamsToList(['nametags'], true)], (req, res, next) => {
+router.delete('/:id/tags', [validate(schemaTagsGet), enforceAuthentication, isOwnMeme, queryParamsToList(['nametags'], true)], (req, res, next) => {
 
     TagController.deleteTagsFromMeme(req.params.id, req.nametags).then((result) => {
 

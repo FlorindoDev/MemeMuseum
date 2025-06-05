@@ -2,6 +2,9 @@ import express from "express";
 import { enforceAuthentication, isOwnProfile } from "../middleware/authorization.js"
 import { UsersController } from "../controllers/UsersController.js";
 import { upLoad as upLoadOnGoogle } from "../middleware/GoogleStorage.js"
+import { idUserRequredParams } from "../schemas/user.schema.js";
+import { validate } from "../middleware/Middlewares.js";
+import { schemaPage } from "../schemas/utils.schema.js";
 
 
 //multer
@@ -81,15 +84,10 @@ export const router = express.Router();
  *   }
  * }
  */
-router.get('/', (req, res, next) => {
-
-    const rawPageSize = req.query.pagesize;
-    const rawPage = req.query.page;
+router.get('/', validate(schemaPage, true), (req, res, next) => {
 
 
-    let query = UsersController.checkPage(rawPageSize, rawPage);
-
-    UsersController.getAllUsers(query.size, query.pages).then((result) => {
+    UsersController.getAllUsers(req.checked.query.pagesize, req.checked.query.page).then((result) => {
 
         res.status(200);
         res.json(result);
@@ -165,7 +163,7 @@ router.get('/', (req, res, next) => {
  *   }
  * }
  */
-router.get('/:id', (req, res, next) => {
+router.get('/:id', validate(idUserRequredParams), (req, res, next) => {
 
     UsersController.getUserFromId(req.params.id).then((result) => {
 
@@ -237,7 +235,7 @@ router.get('/:id', (req, res, next) => {
  *   }
  * }
  */
-router.post('/:id/upload-profile-pic', [enforceAuthentication, isOwnProfile, imageParser, upLoadOnGoogle], (req, res, next) => {
+router.post('/:id/upload-profile-pic', [enforceAuthentication, validate(idUserRequredParams), isOwnProfile, imageParser, upLoadOnGoogle], (req, res, next) => {
     UsersController.updateProfilePic(req.params.id, req.profilepicUrl).then(() => {
 
         res.status(200);

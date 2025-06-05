@@ -44,14 +44,17 @@ export let isFieldsPresent = (where, list = [], leastOne = true) => (req, res, n
 
 }
 
-export const validate = (schema) => (req, res, next) => {
+export const validate = (schema, save = false, saveLocation = "checked") => (req, res, next) => {
     try {
-        schema.parse({
+        let result = schema.parse({
             body: req.body,
             query: req.query,
             params: req.params,
         });
+
+        if (save) req[saveLocation] = result;
         next();
+
     } catch (e) {
         return next(new FieldError(e.errors));
     }

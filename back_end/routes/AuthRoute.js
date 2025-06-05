@@ -2,12 +2,9 @@ import express from "express";
 import { isUserPrsent } from "../middleware/UserMiddlewares.js";
 import { AuthController } from "../controllers/AuthController.js";
 import { UserAlreadyExistsError } from "../utils/error/index.js";
-import { EmailRequiredBody, PasswordRequiredBody, NickNameRequiredBody } from "../schemas/user.schema.js";
-import { unionChecks } from "../schemas/utils.schema.js";
+import { schemaLogin, schemaSignUp } from "../schemas/auth.schema.js";
 import { validate } from "../middleware/Middlewares.js";
 
-const schemaLogin = unionChecks([EmailRequiredBody, PasswordRequiredBody]);
-const schemaSignUp = unionChecks([schemaLogin, NickNameRequiredBody]);
 
 export const router = express.Router();
 

@@ -4,16 +4,10 @@ import { isUserAlreadyVote } from "../middleware/VoteMiddlewares.js";
 import { VoteController } from "../controllers/VoteController.js";
 import { isMemeExists } from "../middleware/MemeMiddlewares.js";
 import { validate } from "../middleware/Middlewares.js";
-import { countNotRequiredQuery } from "../schemas/comments.schema.js";
-import { idUserRequiredQuery } from "../schemas/user.schema.js";
-import { unionChecks, orUnionChecks } from "../schemas/utils.schema.js";
 import { idMemeRequiredQuery } from "../schemas/meme.schema.js";
-import { upVoteRequiredBody, idVoteRequiredParams } from "../schemas/vote.schema.js";
+import { idVoteRequiredParams, schemaVotesGet, schemaVotePost } from "../schemas/vote.schema.js";
 
-let schemaCommentsGet = orUnionChecks([idMemeRequiredQuery, idUserRequiredQuery]);
-schemaCommentsGet = unionChecks([countNotRequiredQuery, schemaCommentsGet]);
 
-const schemaVotePost = unionChecks([upVoteRequiredBody, idMemeRequiredQuery])
 
 export const router = express.Router();
 
@@ -162,7 +156,7 @@ router.post('/', [enforceAuthentication, validate(schemaVotePost), isMemeExists(
  *   }
  * }
  */
-router.get('/', validate(schemaCommentsGet), (req, res, next) => {
+router.get('/', validate(schemaVotesGet), (req, res, next) => {
 
     let filters = VoteController.createFilterGetVote(req.query.idmeme, req.query.iduser);
 

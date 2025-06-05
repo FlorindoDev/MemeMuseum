@@ -68,6 +68,7 @@ export class MemesController {
 
     }
 
+    //TODO: Aggiustare il fatto che ci sono doppioni
     static createFilterForGetMeme(query, nametags) {
 
         let objectRequest = {
@@ -81,15 +82,18 @@ export class MemesController {
                 required: true,         //forza innerjoin
                 duplicating: false,     //evita che più volte lo stesso meme venga preso, se fosse true per ogni tags associato verrà stampato il meme(es 2 tag 2 volte stesso meme) e Impedisce l'uso di sottoquery
                 attributes: []
-            }
+            };
+
             objectRequest.where = {
-                '$Tags.name$': {
-                    [Op.in]: nametags
-                }
-            }
+                [Op.or]: nametags.map(tag => ({
+                    '$Tags.name$': {
+                        [Op.like]: `%${tag}%`
+                    }
+                }))
+            };
         }
 
-        if (query.iduser !== null) {
+        if (query.iduser) {
             if (objectRequest.where === undefined) {
                 objectRequest.where = { UserIdUser: query.iduser }
             } else {

@@ -6,21 +6,7 @@ import { isMemeExists } from "../middleware/MemeMiddlewares.js";
 import { isCommentVoteAlreadyExists } from "../middleware/CommentVoteMiddlewares.js";
 import { CommentVoteController } from "../controllers/CommentVoteController.js";
 import { isCommentExists } from "../middleware/CommentMiddlewares.js";
-import { idMemeRequiredQuery } from "../schemas/meme.schema.js";
-import { contentRequiredBody, countNotRequiredQuery, idCommentRequiredParams } from "../schemas/comments.schema.js";
-import { idUserRequiredQuery } from "../schemas/user.schema.js";
-import { unionChecks, orUnionChecks } from "../schemas/utils.schema.js";
-import { upVoteRequiredBody } from "../schemas/comments_votes.schema.js";
-
-//TODO: Aggiutare schemaCommentsGet qui e in voteRoute
-
-const schemaCommentsPost = unionChecks([idMemeRequiredQuery, contentRequiredBody]);
-
-let schemaCommentsGet = orUnionChecks([idUserRequiredQuery, idMemeRequiredQuery]);
-schemaCommentsGet = unionChecks([countNotRequiredQuery, schemaCommentsGet]);
-
-const schemaCommentsVotesPost = unionChecks([upVoteRequiredBody, idCommentRequiredParams]);
-const schemaCommentsVotesGet = unionChecks([idCommentRequiredParams, countNotRequiredQuery])
+import { schemaCommentsGet, schemaCommentsPost, schemaCommentsVotesGet, schemaCommentsVotesPost, idCommentRequiredParams } from "../schemas/comments.schema.js";
 
 
 export const router = express.Router();

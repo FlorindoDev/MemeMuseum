@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { idRequired, idNotRequired } from "./utils.schema.js";
+import { idRequired, idNotRequired, unionChecks } from "./utils.schema.js";
 
 const rfc5322EmailRegex = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@(?:[a-zA-Z0-9-]+\.)+[a-zA-Z]{2,}$/;
 
@@ -22,11 +22,11 @@ let email = z.object({
 });
 
 let idR = z.object({
-    idmeme: idRequired.id
+    iduser: idRequired.id
 });
 
 let idNotR = z.object({
-    idmeme: idNotRequired.id
+    iduser: idNotRequired.id
 });
 
 
@@ -46,12 +46,16 @@ export const NickNameRequiredBody = z.object({
 export const EmailRequiredBody = z.object({
     body: email,
 
-})
+});
 
 export const PasswordRequiredBody = z.object({
     body: password,
 
-})
+});
 
+export const idUserRequredParams = z.object({
+    params: z.object(idRequired),
+
+});
 
 
