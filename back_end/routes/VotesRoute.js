@@ -166,8 +166,6 @@ router.get('/', validate(schemaCommentsGet), (req, res, next) => {
 
     let filters = VoteController.createFilterGetVote(req.query.idmeme, req.query.iduser);
 
-    req.query.count = req.query.count === undefined ? "false" : "true";
-
     VoteController.getMemeVotes(filters).then((result) => {
 
         if (req.query.count === "true") {

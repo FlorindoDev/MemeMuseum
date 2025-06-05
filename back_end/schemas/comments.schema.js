@@ -6,7 +6,7 @@ let content = z.object({
 });
 
 let count = z.object({
-    count: z.string().optional()
+    count: z.string().optional().default("false")
         .refine((val) => { return !isNaN(Boolean(val)); }, { message: "il valore deve essere un true o false" }),
 });
 

@@ -12,10 +12,11 @@ import { idUserRequiredQuery } from "../schemas/user.schema.js";
 import { unionChecks, orUnionChecks } from "../schemas/utils.schema.js";
 import { upVoteRequiredBody } from "../schemas/comments_votes.schema.js";
 
+//TODO: Aggiutare schemaCommentsGet qui e in voteRoute
 
 const schemaCommentsPost = unionChecks([idMemeRequiredQuery, contentRequiredBody]);
 
-let schemaCommentsGet = orUnionChecks([idMemeRequiredQuery, idUserRequiredQuery]);
+let schemaCommentsGet = orUnionChecks([idUserRequiredQuery, idMemeRequiredQuery]);
 schemaCommentsGet = unionChecks([countNotRequiredQuery, schemaCommentsGet]);
 
 const schemaCommentsVotesPost = unionChecks([upVoteRequiredBody, idCommentRequiredParams]);
@@ -148,8 +149,6 @@ router.post('/', [enforceAuthentication, validate(schemaCommentsPost), isMemeExi
 router.get('/', validate(schemaCommentsGet), (req, res, next) => {
 
     let filters = CommentController.createFilterGetVote(req.query.idmeme, req.query.iduser);
-
-    req.query.count = req.query.count === undefined ? "false" : "true";
 
     CommentController.getCommentMeme(filters).then((result) => {
 
@@ -411,8 +410,6 @@ router.post('/:id/comments-votes', [enforceAuthentication, validate(schemaCommen
 router.get('/:id/comments-votes', validate(schemaCommentsVotesGet), (req, res, next) => {
 
     let filters = { where: { CommentIdComment: req.params.id } }
-
-    req.query.count = req.query.count === undefined ? "false" : "true";
 
     CommentVoteController.getCommentVote(filters).then((result) => {
 
