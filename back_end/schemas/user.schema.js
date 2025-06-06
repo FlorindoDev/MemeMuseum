@@ -29,9 +29,16 @@ let idNotR = z.object({
     iduser: idNotRequired.id
 });
 
+let nicknameNotRequired = z.object({
+    nickName: z.string().min(4).max(12).optional(),
+});
 
-export const idUserNotRequiredQuery = z.object({
-    query: idNotR
+let emailNotRequired = z.object({
+    email: z.string().regex(rfc5322EmailRegex, "Email non valida").optional(),
+});
+
+let passwordNotRequired = z.object({
+    password: z.string().min(8).max(50).optional(),
 });
 
 export const idUserRequiredQuery = z.object({
@@ -58,4 +65,23 @@ export const idUserRequredParams = z.object({
 
 });
 
+export const idUserNotRequiredQuery = z.object({
+    query: idNotR
+});
 
+export const NickNameNotRequiredBody = z.object({
+    body: nicknameNotRequired,
+
+});
+
+export const EmailNotRequiredBody = z.object({
+    body: emailNotRequired,
+
+});
+
+export const PasswordNotRequiredBody = z.object({
+    body: passwordNotRequired,
+
+});
+
+export const schemaUserPut = unionChecks([idUserRequredParams, NickNameNotRequiredBody, PasswordNotRequiredBody, EmailNotRequiredBody]);

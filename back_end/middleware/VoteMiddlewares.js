@@ -31,10 +31,3 @@ export function isUserAlreadyVote(req, res, next) {
     });
 
 }
-
-export function isBodyVoteCorrect(req, res, next) {
-
-    if (req.body.upVote === undefined) return next(new MissingFieldError("upVote"));
-    next()
-
-}

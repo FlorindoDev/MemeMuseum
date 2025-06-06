@@ -1,4 +1,4 @@
-import { MissingFieldError, toManyTags } from "../utils/error/index.js";
+import { toManyTags } from "../utils/error/index.js";
 import { TagController } from "../controllers/TagController.js";
 import { MemesController } from "../controllers/MemesController.js";
 
@@ -26,13 +26,4 @@ export let isMemeExists = (reqPositionName, reqFieldName) => (req, res, next) =>
         return next(err);
     });
 
-}
-
-export function isTagsBodyCorrect(req, res, next) {
-
-    if (!Array.isArray(req.body)) return next(new MissingFieldError("tags"));
-    req.body.map(tag => {
-        if (tag.name === undefined) return next(new MissingFieldError("name"));
-    });
-    next();
 }

@@ -32,17 +32,6 @@ export class UsersController {
 
     }
 
-    static checkPage(rawPageSize, rawPage) {
-
-        const isPageSizeCorrect = rawPageSize > 0 && rawPageSize <= 10;
-
-
-        let pageSize = (rawPageSize !== undefined && isPageSizeCorrect) ? rawPageSize : 10;
-        let page = (rawPage !== undefined && rawPage > 0) ? rawPage : 1;
-
-        return { pages: page, size: pageSize };
-    }
-
     static async updateProfilePic(id, link) {
         let result = await User.update(
             {
@@ -60,6 +49,32 @@ export class UsersController {
         }
 
         return result;
+    }
+
+    static async updateUser(id, changes) {
+
+        let result = await User.update(changes, {
+            where: {
+                idUser: id
+            }
+        })
+
+        return result;
+
+    }
+
+    static changesObject(req) {
+
+        let changes = {}
+
+        if (req.body.nickName) changes.nickName = req.body.nickName
+
+        if (req.body.password) changes.password = req.body.password
+
+        if (req.body.email) changes.password = req.body.password
+
+        return changes;
+
     }
 
 }

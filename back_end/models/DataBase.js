@@ -59,9 +59,7 @@ Tag.belongsToMany(Meme, { through: 'MemeTag' });
 
 
 
-
-//TODO: Controllare che sia il metodo giusto
-database.sync({ alter: true }).then(() => {
+database.sync({ /*alter: true*/ }).then(() => {
     console.log("Database synced correctly");
 }).catch(err => {
     console.log("Error with database synchronization: " + err.message);

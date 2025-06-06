@@ -2,10 +2,9 @@ import express from "express";
 import { enforceAuthentication, isOwnProfile } from "../middleware/authorization.js"
 import { UsersController } from "../controllers/UsersController.js";
 import { upLoad as upLoadOnGoogle } from "../middleware/GoogleStorage.js"
-import { idUserRequredParams } from "../schemas/user.schema.js";
+import { idUserRequredParams, schemaUserPut } from "../schemas/user.schema.js";
 import { validate } from "../middleware/Middlewares.js";
 import { schemaPage } from "../schemas/utils.schema.js";
-
 
 //multer
 import multer from "multer";
@@ -15,8 +14,6 @@ const imageParser = upload.fields([{ name: 'image', maxCount: 1 }])
 
 export const router = express.Router();
 
-
-//TODO fare in modo che un utente possa aggiornare il proprio profilo 
 
 /**
  * @swagger
@@ -169,6 +166,88 @@ router.get('/:id', validate(idUserRequredParams), (req, res, next) => {
 
         res.status(200);
         res.json(result);
+
+    }).catch((err) => {
+        next(err)
+    });
+});
+
+/**
+ * @swagger
+ * {
+ *   "/users/{id}": {
+ *     "put": {
+ *       "tags": ["Users"],
+ *       "summary": "Aggiorna un utente tramite ID",
+ *       "description": "Aggiorna un utente in base all'ID specificato",
+ *       "operationId": "putUserById",
+ *       "security": [
+ *          {
+ *              "bearerAuth": []
+ *          }
+ *        ],
+ *        "requestBody": {
+ *         "required": true,
+ *         "content": {
+ *           "application/json": {
+ *             "schema": {
+ *               "$ref": "#/components/schemas/User"
+ *             },
+ *             "example": {
+ *               "nickName": "johnDoe",
+ *               "email": "john@example.com",
+ *               "password": "5e884898da28047151d0e56f8dc6292773603d0d6aabbdd6"
+ *             }
+ *           }
+ *         }
+ *       },
+ *       "parameters": [
+ *         {
+ *           "name": "id",
+ *           "in": "path",
+ *           "description": "ID dell'utente da recuperare",
+ *           "required": true,
+ *           "schema": {
+ *             "type": "string"
+ *           }
+ *         }
+ *       ],
+ *       "produces": ["application/json"],
+ *       "responses": {
+ *         "200": {
+ *           "description": "Lista di utenti trovati",
+ *         },
+ *         "404": {
+ *           "description": "Utente non trovato",
+ *           "schema": {
+ *             "$ref": "#/components/schemas/Error"
+ *           },
+ *           "examples": {
+ *             "application/json": {
+ *               "code": 404,
+ *               "message": "non ci sono utenti"
+ *             }
+ *           }
+ *         },
+ *         "500": {
+ *           "description": "Errore del server",
+ *           "schema": {
+ *             "$ref": "#/components/schemas/Error"
+ *           }
+ *         }
+ *       }
+ *     }
+ *   }
+ * }
+ */
+router.put('/:id', enforceAuthentication, validate(schemaUserPut), isOwnProfile, (req, res, next) => {
+
+    let changes = UsersController.changesObject(req);
+
+    UsersController.updateUser(req.idUser, changes).then(() => {
+
+        res.status(200);
+        res.send();
 
     }).catch((err) => {
         next(err)

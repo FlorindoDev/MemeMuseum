@@ -13,8 +13,6 @@ import { router as CommentRoute } from "./routes/CommentRoute.js";
 
 //TODO: RICORDA DI DARE AL PROF .env gia fatto e passare il json per google storage
 
-//TODO: eliminare funzioni di controllo body vecchie
-//TODO: Aggiungere protezioni alle vulnerabilità
 
 const app = express();
 const PORT = 3000;
@@ -24,7 +22,9 @@ const PORT = 3000;
 app.use(morgan('dev'));
 
 //Accetta tutte le origini 
-app.use(cors());
+app.use(cors({
+  origin: 'http://localhost:3000'
+}));
 
 
 app.use(express.json());
