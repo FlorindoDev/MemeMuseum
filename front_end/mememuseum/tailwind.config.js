@@ -15,6 +15,9 @@ module.exports = {
                 secondary: 'var(--color-secondary)',
                 accent: 'var(--color-accent)',
             },
+            fontFamily: {
+                lexend: ['"Lexend"', 'sans-serif'],
+            },
         },
     },
     plugins: [],
