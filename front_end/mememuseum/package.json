@@ -10,6 +10,7 @@
   },
   "private": true,
   "dependencies": {
+    "@angular/animations": "^20.0.0",
     "@angular/common": "^20.0.0",
     "@angular/compiler": "^20.0.0",
     "@angular/core": "^20.0.0",
@@ -18,6 +19,7 @@
     "@angular/router": "^20.0.0",
     "@fontsource/lexend": "^5.2.8",
     "@ngneat/tailwind": "^7.0.3",
+    "@ngverse/motion": "^0.4.0",
     "@tailwindcss/postcss": "^4.1.8",
     "jwt-decode": "^4.0.0",
     "ngx-toastr": "^19.0.0",

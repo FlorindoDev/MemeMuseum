@@ -1,49 +1,58 @@
 <div class="bg-bg w-full min-h-screen m-0">
-    <div class="shadow">
+    <div class="shadow dark:shadow-white shadow-black">
         <div class="px-6">
             <div class="flex items-center justify-between py-4">
 
-                <div class="hidden md:flex md:items-center">
+                <div class="hidden md:flex md:items-center gap-4">
                     <div class="hidden md:flex md:items-center md:flex-row  md:block lg:pr-12 md:pr-6">
-                        <img class="w-16" src="/logo-black.png">
-                        <p class="lg:block hidden pl-2 text-text font-semibold text-2xl first-letter:text-3xl">Meme <br>
+                        <img class="w-16 dark:hidden" src="/logo-black.png">
+                        <img class="w-16 hidden dark:block" src="/logo-white.png">
+                        <p class="lg:block hidden pl-3 text-text font-semibold text-2xl first-letter:text-3xl">Meme <br>
                             <span class="text-3xl">M</span>useum
                         </p>
                     </div>
-                    <a href="#" class="text-text text-xl  hover:text-accent mr-5">Products</a>
-                    <a href="#" class="text-text text-xl  hover:text-accent mr-5">Marketplace</a>
-                    <a href="#" class="text-text text-xl  hover:text-accent mr-5">Partners</a>
-                    <a href="#" class="text-text text-xl  hover:text-accent">Pricing</a>
+                    <a routerLink="/home"
+                        class="text-text text-xl hover:text-accent mr-5 pr-3 pl-3 pt-1 pb-1 hover:font-bold hover:text-accent hover:border-none hover:bg-secondary hover:pr-3 hover:pl-3 hover:pt-1 hover:pb-1 hover:rounded-xl"
+                        routerLinkActive="active">Home</a>
+                    <a routerLink="/search" routerLinkActive="active"
+                        class="text-text text-xl  hover:text-accent mr-5 pr-3 pl-3 pt-1 pb-1  hover:font-bold hover:text-accent hover:border-none hover:bg-secondary hover:pr-3 hover:pl-3 hover:pt-1 hover:pb-1 hover:rounded-xl">Search</a>
+                    <app-darkmode></app-darkmode>
                 </div>
 
                 <div class="bg-bg hidden md:flex md:items-center">
-                    <a href="#" class="text-text text-lg font-semibold hover:text-accent mr-4">Sign
+                    <a href="#" class="text-text text-lg font-semibold hover:text-accent mr-10">Sign
                         in</a>
                     <a href="#"
-                        class="bg-primary text-text text-lg font-semibold border px-4 py-2 rounded-lg hover:text-accent hover:text-accent">Sign
+                        class="text-text text-lg font-semibold border px-4 py-2 rounded-lg  hover:border-accent hover:text-accent">Sign
                         up</a>
                 </div>
                 <div class="block flex items-center flex-row md:hidden pr-10 ">
-                    <img class="w-14" src="/logo-black.png">
+                    <img class="w-16 dark:hidden" src="/logo-black.png">
+                    <img class="w-16 hidden dark:block" src="/logo-white.png">
                     <h1 class="pl-2 text-text text-xl font-semibold">Meme Museum</h1>
                 </div>
 
                 <div (click)="ChangeMenuState()" class="block md:hidden cursor-pointer">
-                    <img class="w-9" src="/menu-icon.svg">
+                    <img class="w-9 dark:hidden" src="/menu-icon.svg">
+                    <img class="w-9 hidden dark:block" src="/menu-white.svg">
                 </div>
             </div>
             @if(isMenuActive()){
-            <div class="block md:hidden bg-bg border-t-2 py-2 pt-4">
+            <div class="block md:hidden bg-bg border-black dark:border-white border-t-2 py-2 pt-6">
                 <div class="flex flex-col ">
-                    <a href="#" class="text-text text-lg font-semibold hover:text-accent mb-2">Products</a>
-                    <a href="#" class="text-text text-lg font-semibold hover:text-accent mb-2">Marketplace</a>
-                    <a href="#" class="text-text text-lg font-semibold hover:text-accent mb-2">Partners</a>
-                    <a href="#" class="text-text text-lg font-semibold hover:text-accent mb-4">Pricing</a>
-                    <div class="flex justify-between items-center border-t-2 pt-3 pb-3">
-                        <a href="#" class="text-text text-lg font-semibold hover:text-accent mr-4">Sign in</a>
-                        <a href="#"
-                            class="text-text text-lg font-semibold border px-4 py-1 rounded-lg hover:text-accent hover:border-purple-600">Sign
-                            up</a>
+                    <a routerLink="/home" routerLinkActive="active"
+                        class="text-text text-lg font-semibold hover:text-accent mb-5 hover:font-bold hover:text-accent hover:border-none hover:bg-secondary hover:pr-3 hover:pl-3 hover:pt-1 hover:pb-1 hover:rounded-xl">Home</a>
+                    <a routerLink="/search" routerLinkActive="active"
+                        class="text-text text-lg font-semibold hover:text-accent pb-6 border-black dark:border-white border-b-2">Search</a>
+                    <div class="flex justify-between items-center pt-6 pb-5">
+                        <app-darkmode></app-darkmode>
+                        <div>
+                            <a href="#" class="text-text text-lg font-semibold hover:text-accent mr-4">Sign in</a>
+                            <a href="#"
+                                class="text-text text-lg font-semibold border px-4 py-1 rounded-lg hover:border-accent hover:text-accent">Sign
+                                up</a>
+                        </div>
+
                     </div>
                 </div>
             </div>

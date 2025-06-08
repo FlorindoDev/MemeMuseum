@@ -8,23 +8,29 @@
 
 
 @theme {
-    --color-text: #0c0b09;
-    --color-bg: #ebebeb;
-    --color-primary: #b98046;
-    --color-secondary: #e4bf9a;
-    --color-accent: #e39c54;
+    --color-text: #060507;
+    --color-bg: #f7f6fa;
+    --color-primary: #7d57b8;
+    --color-secondary: #ae91dc;
+    --color-accent: #9669de;
+
 }
 
 .dark {
-    --color-text: #f6f5f3;
-    --color-bg: #141414;
-    --color-primary: #b98046;
-    --color-secondary: #65401b;
-    --color-accent: #ab631c;
+    --color-text: #faf9fb;
+    --color-bg: #07050a;
+    --color-primary: #6e47a9;
+    --color-secondary: #2c184d;
+    --color-accent: #b486fe;
 }
 
 @theme {
     --breakpoint-lg: 56rem;
     --breakpoint-md: 50rem;
 
+}
+
+//link attivi
+.active {
+    @apply font-bold text-accent border-none bg-secondary pr-3 pl-3 pt-1 pb-1 rounded-xl
 }
