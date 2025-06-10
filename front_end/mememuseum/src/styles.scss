@@ -8,17 +8,19 @@
 
 
 @theme {
-    --color-text: #060507;
-    --color-bg: #f7f6fa;
-    --color-primary: #7d57b8;
-    --color-secondary: #ae91dc;
-    --color-accent: #9669de;
+    --color-text: #121212;
+    --color-bg: #fafafa;
+    --color-primary: #b4ebe6;
+    --color-secondary: #80cbc4;
+    --color-accent: #009382;
+    --color-bgcontrast: #ebebeb;
 
 }
 
 .dark {
-    --color-text: #faf9fb;
-    --color-bg: #07050a;
+    --color-bgcontrast: #07050a;
+    --color-text: #dfdfdf;
+    --color-bg: #0d0b11;
     --color-primary: #6e47a9;
     --color-secondary: #2c184d;
     --color-accent: #b486fe;
@@ -32,5 +34,5 @@
 
 //link attivi
 .active {
-    @apply font-bold text-accent border-none bg-secondary pr-3 pl-3 pt-1 pb-1 rounded-xl
+    @apply font-bold text-text border-none bg-secondary pr-3 pl-3 pt-1 pb-1 rounded-xl
 }

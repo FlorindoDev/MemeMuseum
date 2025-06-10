@@ -1,10 +1,9 @@
 import { Component } from '@angular/core';
-import { RouterLink } from '@angular/router';
 import { Router } from '@angular/router';
 
 @Component({
   selector: 'user-post',
-  imports: [RouterLink],
+  imports: [],
   templateUrl: './userpost.component.html',
   styleUrl: './userpost.component.scss'
 })

@@ -1,4 +1,4 @@
-<div class="bg-bg w-full m-0 fixed top-0 z-20">
+<div class="bg-bgcontrast w-full m-0 fixed top-0 z-20">
     <div class="shadow dark:shadow-white shadow-black">
         <div class="px-6">
             <div class="flex items-center justify-between py-4">
@@ -12,14 +12,14 @@
                         </p>
                     </div>
                     <a routerLink="/home"
-                        class="text-text text-xl hover:text-accent mr-5 pr-3 pl-3 pt-1 pb-1 hover:font-bold hover:text-accent hover:border-none hover:bg-secondary hover:pr-3 hover:pl-3 hover:pt-1 hover:pb-1 hover:rounded-xl"
+                        class="text-text text-xl mr-5 pr-3 pl-3 pt-1 pb-1 hover:font-bold hover:text-accent hover:border-none hover:bg-secondary hover:pr-3 hover:pl-3 hover:pt-1 hover:pb-1 hover:rounded-xl"
                         routerLinkActive="active">Home</a>
                     <a routerLink="/search" routerLinkActive="active"
-                        class="text-text text-xl  hover:text-accent mr-5 pr-3 pl-3 pt-1 pb-1  hover:font-bold hover:text-accent hover:border-none hover:bg-secondary hover:pr-3 hover:pl-3 hover:pt-1 hover:pb-1 hover:rounded-xl">Search</a>
+                        class="text-text text-xl mr-5 pr-3 pl-3 pt-1 pb-1  hover:font-bold hover:border-none hover:bg-secondary hover:pr-3 hover:pl-3 hover:pt-1 hover:pb-1 hover:rounded-xl">Search</a>
                     <app-darkmode></app-darkmode>
                 </div>
 
-                <div class="bg-bg hidden md:flex md:items-center">
+                <div class="bg-bgcontrast hidden md:flex md:items-center">
                     <a href="#" class="text-text text-lg font-semibold hover:text-accent mr-10">Sign
                         in</a>
                     <a href="#"
@@ -38,13 +38,14 @@
                 </div>
             </div>
             @if(isMenuActive()){
-            <div class="block md:hidden bg-bg border-black dark:border-white border-t-2 py-2 pt-6">
+            <div class="block md:hidden bg-bgcontrast border-black dark:border-white border-t-2 py-2 pt-6">
                 <div class="flex flex-col ">
                     <a routerLink="/home" routerLinkActive="active"
-                        class="text-text text-lg font-semibold hover:text-accent mb-5 hover:font-bold hover:text-accent hover:border-none hover:bg-secondary hover:pr-3 hover:pl-3 hover:pt-1 hover:pb-1 hover:rounded-xl">Home</a>
+                        class="text-text text-lg font-semibold hover:text-accent mb-5 hover:font-bold hover:text-text hover:border-none hover:bg-secondary hover:pr-3 hover:pl-3 hover:pt-1 hover:pb-1 hover:rounded-xl">Home</a>
                     <a routerLink="/search" routerLinkActive="active"
-                        class="text-text text-lg font-semibold hover:text-accent pb-6 border-black dark:border-white border-b-2">Search</a>
-                    <div class="flex justify-between items-center pt-6 pb-5">
+                        class="text-text text-lg font-semibold hover:text-accent  hover:font-bold hover:text-text hover:border-none hover:bg-secondary hover:pr-3 hover:pl-3 hover:pt-1 hover:pb-1 hover:rounded-xl">Search</a>
+                    <div
+                        class="flex justify-between items-center mt-5 pt-3 pb-2 border-black dark:border-white border-t-2">
                         <app-darkmode></app-darkmode>
                         <div>
                             <a href="#" class="text-text text-lg font-semibold hover:text-accent mr-4">Sign in</a>
