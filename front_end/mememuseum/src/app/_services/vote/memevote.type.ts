@@ -1,0 +1,1 @@
+export interface memevote { upvote: number, downvote: number }

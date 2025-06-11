@@ -1,45 +1,42 @@
 <div (click)="toUserPost($event)"
-    class="p-2 hover:bg-gray-300 focus:outline-none dark:text-gray-400 dark:hover:bg-gray-700 hover:rounded-2xl">
+    class="p-2 hover:bg-gray-300 focus:outline-none dark:text-gray-400 dark:hover:bg-gray-700 hover:rounded-2xl m-2">
 
-
-    <div
-        class="relative md:w-150 h-100 w-full rounded-2xl bg-[url('https://storage.googleapis.com/meme_bucket_pg/i3Sxfwm7vd42HUrMHDzxZ')] bg-cover bg-center overflow-hidden">
+    <div class="relative md:w-150 max-h-100 rounded-2xl bg-cover bg-center overflow-hidden"
+        [ngStyle]="{'background-image': 'url(' + meme.image + ')'}">
 
         <div class="absolute inset-0 backdrop-blur-2xl z-0"></div>
 
 
-        <a class="relative w-full h-full flex flex-row justify-center items-center"
-            href="https://storage.googleapis.com/meme_bucket_pg/i3Sxfwm7vd42HUrMHDzxZ">
+        <a class="relative flex flex-row justify-center items-center" [href]="meme.image">
 
-            <img class="relative z-1 w-full h-full object-contain"
-                src="https://storage.googleapis.com/meme_bucket_pg/i3Sxfwm7vd42HUrMHDzxZ" />
+            <img class="relative z-1 max-h-100 w-600 object-contain" [src]="this.meme.image" />
         </a>
 
     </div>
 
     <div class="pt-4 pb-4 pl-1">
         <p class="text-text break-all md:w-[600px] w-full">
-            DescrizioneDescrizioneDescrizioneDescrizioneDescrizioneDescrizioneDescrizioneDescrizioneDescrizioneDescrizionDescrizioneDescrizioneDescrizioneDescrizioneDescrizionDescrizioneDescrizioneDescrizioneDescrizioneDescrizion
+            {{this.meme.description}}
         </p>
     </div>
     <div class="flex flex-row items-center gap-5 w-full h-full ">
         <div class="flex flex-row items-center gap-1 bg-gray-400 dark:bg-gray-800  rounded-4xl">
-            <div class="hover:bg-gray-600 hover:rounded-4xl p-2">
-                <svg class="w-5 dark:text-white text-black dark:hover:text-accent hover:text-secondary"
+            <div class="group hover:bg-gray-600 hover:rounded-4xl p-2">
+                <svg class="w-5 dark:text-white text-black dark:hover:text-accent dark:group-hover:text-accent group-hover:text-secondary"
                     fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                     <path
                         d="M12.781 2.375c-.381-.475-1.181-.475-1.562 0l-8 10A1.001 1.001 0 0 0 4 14h4v7a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1v-7h4a1.001 1.001 0 0 0 .781-1.625l-8-10zM15 12h-1v8h-4v-8H6.081L12 4.601 17.919 12H15z" />
                 </svg>
             </div>
-            <p class="mr-1 text-text">2000</p>
-            <div class="hover:bg-gray-600 hover:rounded-4xl p-2">
-                <svg class="w-5 h-5 dark:text-white text-black dark:hover:text-accent hover:text-secondary rounded-4xl"
+            <p class="mr-1 text-text">{{this.votes.upvote}}</p>
+            <div class="group hover:bg-gray-600 hover:rounded-4xl p-2">
+                <svg class="w-5 h-5 dark:text-white text-black dark:group-hover:text-accent group-hover:text-secondary rounded-4xl"
                     fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                     <path
                         d="M20.901 10.566A1.001 1.001 0 0 0 20 10h-4V3a1 1 0 0 0-1-1H9a1 1 0 0 0-1 1v7H4a1.001 1.001 0 0 0-.781 1.625l8 10a1 1 0 0 0 1.562 0l8-10c.24-.301.286-.712.12-1.059zM12 19.399 6.081 12H10V4h4v8h3.919L12 19.399z" />
                 </svg>
             </div>
-            <p class="text-text pr-3">2</p>
+            <p class="text-text pr-3">{{this.votes.downvote}}</p>
         </div>
         <div
             class="flex flex-row items-center gap-2 bg-gray-400 dark:bg-gray-800 hover:bg-gray-500 rounded-4xl pl-4 pr-4 pt-2 pb-1">
@@ -75,6 +72,4 @@
         </div>
     </div>
 </div>
-
-
-<hr class="my-5 border-gray-800 dark:border-white">
+<hr class="my-5 border-gray-800 dark:border-white w-full">

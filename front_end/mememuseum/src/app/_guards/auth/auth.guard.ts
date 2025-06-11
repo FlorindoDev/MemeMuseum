@@ -3,6 +3,8 @@ import { AuthService } from '../../_services/auth/auth.service';
 import { inject } from '@angular/core';
 //import { ToastrService } from 'ngx-toastr';
 
+//TODO: Aggiustare ToastrService
+
 export const authGuard: CanActivateFn = (route, state) => {
   const authService = inject(AuthService);
   //const toastr = inject(ToastrService);

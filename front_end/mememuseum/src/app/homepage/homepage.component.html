@@ -1,4 +1,11 @@
 <div class="bg-bg flex flex-col justify-center items-center pt-30">
-    <user-post></user-post>
-    <user-post></user-post>
+
+    <!--TODO AGGIUNGERE MEME DEL Giorno-->
+    @for(meme of memes; track meme){
+    <user-post [meme]=meme></user-post>
+    }@empty {
+    <li
+        class="flex items-center flex-wrap content-between w-full px-4 py-2 border-b border-gray-200 rounded-t-lg dark:border-gray-600">
+        No to-do items to show.</li>
+    }
 </div>
