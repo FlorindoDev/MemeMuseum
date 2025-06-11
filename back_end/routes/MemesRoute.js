@@ -221,9 +221,6 @@ router.get('/', [validate(schemaMemeGet, true), queryParamsToList(['nametags'])]
  *                      "idMeme": 1,
  *                      "image": "meme/url/image.png",
  *                      "description": "un gatto",
- *                      "upVoteNum": "1",
- *                      "downVoteNum": "0",
- *                      "commentNum": "2",
  *                      "createdAt": "2025-05-17T16:18:36.773Z",
  *                      "updatedAt": "2025-05-17T16:18:36.773Z"
  *               }

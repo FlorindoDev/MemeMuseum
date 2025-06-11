@@ -170,7 +170,7 @@ router.get('/', validate(schemaVotesGet), (req, res, next) => {
 
             let downvote = result.length - upVote.length;
 
-            result = { upVote: upVote.length, downvote: downvote };
+            result = { upvote: upVote.length, downvote: downvote };
         }
 
         res.status(200);

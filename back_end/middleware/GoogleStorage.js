@@ -31,7 +31,7 @@ export function upLoad(req, res, next) {
         });
 
         blobStream.on('finish', () => {
-            req.profilepicUrl = `https://storage.cloud.google.com/${bucket.name}/${blob.name}`;
+            req.profilepicUrl = `https://storage.googleapis.com/${bucket.name}/${blob.name}`;
             next();
         });
 
