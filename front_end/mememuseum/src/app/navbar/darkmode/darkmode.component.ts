@@ -9,22 +9,23 @@ import { Component } from '@angular/core';
 export class Darkmode {
 
   constructor() {
-    let dark = localStorage.getItem("dark");
-    if (dark === null) {
-      document.body.classList.remove("dark");
-    } else {
+    let light = localStorage.getItem("light");
+    if (light === null) {
       document.body.classList.add("dark");
+    } else {
+      document.body.classList.remove("dark");
     }
   }
 
   changeMode() {
-    let dark = localStorage.getItem("dark");
-    if (dark === null) {
-      document.body.classList.add("dark");
-      localStorage.setItem("dark", "true");
-    } else {
+    let light = localStorage.getItem("light");
+    if (light === null) {
+      document.body.classList.add("light");
+      localStorage.setItem("light", "true");
       document.body.classList.remove("dark");
-      localStorage.removeItem("dark");
+    } else {
+      document.body.classList.add("dark");
+      localStorage.removeItem("light");
     }
   }
 

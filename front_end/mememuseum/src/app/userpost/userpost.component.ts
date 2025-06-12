@@ -3,7 +3,11 @@ import { Router } from '@angular/router';
 import { Meme } from '../_services/meme/meme.type';
 import { CommonModule } from '@angular/common';
 import { VoteService } from '../_services/vote/vote.service';
-import { memevote } from '../_services/vote/memevote.type';
+import { numvote } from '../_services/vote/numvote.type';
+import { User } from '../_services/user/user.type';
+import { UserService } from '../_services/user/user.service';
+import { numcomments } from '../_services/comment/numcommets.type';
+import { CommentService } from '../_services/comment/comment.service';
 
 @Component({
   selector: 'user-post',
@@ -14,9 +18,16 @@ import { memevote } from '../_services/vote/memevote.type';
 export class Userpost {
 
   @Input({ required: true }) meme: Meme = { idMeme: 0, image: "", description: "" };
-  votes: memevote = { upvote: 0, downvote: 0 }
+  votes: numvote = { upvote: 0, downvote: 0 };
+  user: User = { nickName: "", email: "", profilePic: null };
+  comments: numcomments = { comment: 0 };
 
-  constructor(private route: Router, private voteservice: VoteService) { }
+  constructor(
+    private route: Router,
+    private voteservice: VoteService,
+    private userservice: UserService,
+    private commentservice: CommentService
+  ) { }
 
   //TODO: creare la pagina al meme
   toUserPost(event: Event) {
@@ -30,16 +41,51 @@ export class Userpost {
   }
 
   ngOnInit() {
-    this.fatchVotes();
+    this.fatchNumVotes();
+    this.fatchUser();
+    this.fatchNumComments();
   }
 
-  fatchVotes() {
+  fatchNumVotes() {
+    this.voteservice.getNumVotes({ idmeme: this.meme.idMeme }).subscribe({
+      next: (response) => {
+        if (response.status === 204) {
+          this.votes = { upvote: 0, downvote: 0 };
+          return;
+        }
 
-
-    this.voteservice.getVotes({ idmeme: this.meme.idMeme, count: true }).subscribe({
-      next: (value) => {
-        this.votes = value;
+        if (response.body !== null) this.votes = response.body;
       },
+      error: (err) => {
+      }
+    })
+  }
+
+  fatchUser() {
+    this.userservice.getUserFromId(this.meme.UserIdUser).subscribe({
+      next: (value) => {
+        this.user = value;
+      },
+      error: (err) => {
+
+      }
+    })
+  }
+
+  fatchNumComments() {
+    this.commentservice.getNumComment({ idmeme: this.meme.idMeme }).subscribe({
+      next: (response) => {
+        if (response.status === 204) {
+          this.comments = { comment: 0 };
+          return;
+        }
+
+        if (response.body !== null) this.comments = response.body;
+      },
+
+      error: (err) => {
+
+      }
     })
   }
 

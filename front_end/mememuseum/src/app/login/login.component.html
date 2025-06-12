@@ -1,0 +1,55 @@
+<div id="login" class="">
+    <div id="over" class="z-50 inset-0 fixed w-full h-full dark:bg-white/30 bg-black opacity-60 backdrop-blur-sm"></div>
+
+
+    <div id="button-close-login" class="fixed inset-0 flex items-center justify-center z-60">
+        <div class="bg-bg  w-full max-w-lg mx-4 rounded-2xl p-6 text-text">
+
+            <div class="flex justify-end">
+                <button (click)="closeLogin()" class="p-2 dark:hover:bg-gray-600 hover:bg-[#cfd1d3] rounded-full">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                </button>
+            </div>
+
+            <h2 class="text-3xl font-bold text-center mb-6">Accedi</h2>
+
+            <form class="flex flex-col" [formGroup]="loginForm" (ngSubmit)="handleLogin()">
+                <input (keyup)="hendleTyping($event)" type="email" placeholder="Email o nome utente"
+                    formControlName="user"
+                    class="dark:bg-[#272729] bg-[#d9dadc] placeholder-gray-500 rounded-md px-4 py-3 focus:outline-none focus:ring-2 focus:ring-accent" />
+                @if(isSubmitted && loginForm.controls.user.errors){
+                @if (isSubmitted && loginForm.controls.user.errors['email']) {
+                <p class="form-error">Email not valid.</p>
+                }
+                @if(loginForm.controls.user.errors['required']){
+                <p class="form-error">Email is required.</p>
+                }
+
+                }
+                <div class="pb-5"></div>
+                <input type="password" placeholder="Password" formControlName="pass"
+                    class="dark:bg-[#272729] bg-[#d9dadc] placeholder-gray-500 rounded-md px-4 py-3 focus:outline-none focus:ring-2 focus:ring-accent" />
+                @if(isSubmitted && loginForm.controls.pass.errors){
+                @if(loginForm.controls.pass.errors['required']){
+                <p class="form-error">Password is required.</p>
+                }
+                @if(loginForm.controls.pass.errors['minlength']){
+                <p class="form-error">Password should contain at least 4 characters</p>
+                }
+                }
+                <div class="pb-5"></div>
+                <button type="submit" class="mt-2 bg-secondary hover:bg-primary rounded-full py-3 font-bold">
+                    Accedi
+                </button>
+            </form>
+
+            <div class="mt-4 text-center text-md text-text space-y-2">
+                <a href="#" class="block hover:underline">Password dimenticata?</a>
+                <span>Prima volta su Meme Museum? <a href="#" class="text-blue-500 hover:underline">Iscriviti</a></span>
+            </div>
+        </div>
+    </div>
+</div>

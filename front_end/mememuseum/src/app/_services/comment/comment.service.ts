@@ -1,14 +1,14 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { Observable } from 'rxjs';
 import { environment } from '../../environment.prod';
-import { numvote } from './numvote.type';
-import { Observable, map, catchError, throwError } from 'rxjs';
+import { numcomments } from './numcommets.type';
 import { Filter } from './filter.type';
 
 @Injectable({
   providedIn: 'root'
 })
-export class VoteService {
+export class CommentService {
 
   url = environment.apiBaseUrl
 
@@ -39,18 +39,10 @@ export class VoteService {
     return url;
   }
 
-  getNumVotes(filter: Filter = {}) {
-
+  getNumComment(filter: Filter = {}) {
     filter.count = true;
-    let url: string = this.createFilterForGetVote(filter, `/votes`);
-    return this.http.get<numvote>(`${this.url}${url}`, { ...this.httpOptions, observe: 'response' }); //... è il spread inserisce le proprità di un oggetto in un altro
+    let url: string = this.createFilterForGetVote(filter, `/comments`);
+    return this.http.get<numcomments>(`${this.url}${url}`, { ...this.httpOptions, observe: 'response' }); //"..." è il spread inserisce le proprità di un oggetto in un altro
   }
-
-  /*
-  addVotes(idmeme: number, upvote: boolean): Observable<memevote> {
-
-    let url: string = `/votes?count=true&idmeme=${idmeme}`;
-    return this.http.get<memevote>(`${this.url}${url}`, this.httpOptions);
-  }*/
 
 }

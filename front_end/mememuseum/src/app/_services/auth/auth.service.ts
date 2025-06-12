@@ -1,11 +1,23 @@
 import { Injectable, WritableSignal, computed, effect, signal } from '@angular/core';
 import { jwtDecode } from "jwt-decode";
 import { AuthState } from './auth-state.type';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { Observable } from 'rxjs';
+import { environment } from '../../environment.prod';
+import { AuthRequest } from './auth-request.type';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
+
+  url = environment.apiBaseUrl
+
+  httpOptions = {
+    headers: new HttpHeaders({
+      'Content-Type': 'application/json'
+    })
+  }
 
   authState: WritableSignal<AuthState> = signal<AuthState>({
     user: this.getUser(),
@@ -19,11 +31,11 @@ export class AuthService {
   iduser = computed(() => this.authState().iduser);
   isAuthenticated = computed(() => this.authState().isAuthenticated);
 
-  constructor() {
+  constructor(private http: HttpClient) {
     effect(() => {
-      this.setFieldOnStorage(this.token, "token");
-      this.setFieldOnStorage(this.user, "user");
-      this.setFieldOnStorage(this.iduser, "iduser");
+      this.setFieldOnStorage(this.token(), "token");
+      this.setFieldOnStorage(this.user(), "user");
+      this.setFieldOnStorage(this.iduser(), "iduser");
 
     });
   }
@@ -89,4 +101,12 @@ export class AuthService {
       isAuthenticated: false
     });
   }
+
+  login(loginRequest: AuthRequest) {
+
+    const url = `${this.url}/auth`;
+    return this.http.post<string>(url, loginRequest, this.httpOptions);
+
+  }
+
 }

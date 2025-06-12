@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component } from '@angular/core';
 import { Userpost } from '../userpost/userpost.component';
 import { MemeService } from '../_services/meme/meme.service';
 import { Meme } from '../_services/meme/meme.type';

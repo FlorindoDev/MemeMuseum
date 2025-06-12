@@ -15,5 +15,4 @@ export const routes: Routes = [
         component: Homepage
     }
 
-
 ];

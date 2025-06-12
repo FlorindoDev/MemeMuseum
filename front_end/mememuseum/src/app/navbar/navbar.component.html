@@ -20,8 +20,8 @@
                 </div>
 
                 <div class="bg-bgcontrast hidden md:flex md:items-center">
-                    <a href="#" class="text-text text-lg font-semibold hover:text-accent mr-10">Sign
-                        in</a>
+                    <button (click)="openLogin()" class="text-text text-lg font-semibold hover:text-accent mr-10">Sign
+                        in</button>
                     <a href="#"
                         class="text-text text-lg font-semibold border px-4 py-2 rounded-lg  hover:border-accent hover:text-accent">Sign
                         up</a>
@@ -48,7 +48,9 @@
                         class="flex justify-between items-center mt-5 pt-3 pb-2 border-black dark:border-white border-t-2">
                         <app-darkmode></app-darkmode>
                         <div>
-                            <a href="#" class="text-text text-lg font-semibold hover:text-accent mr-4">Sign in</a>
+                            <button (click)="openLogin()"
+                                class="text-text text-lg font-semibold hover:text-accent mr-4">Sign
+                                in</button>
                             <a href="#"
                                 class="text-text text-lg font-semibold border px-4 py-1 rounded-lg hover:border-accent hover:text-accent">Sign
                                 up</a>
@@ -62,3 +64,5 @@
         </div>
     </div>
 </div>
+
+<login></login>
