@@ -104,8 +104,8 @@ export class AuthService {
 
   login(loginRequest: AuthRequest) {
 
-    const url = `${this.url}/auth`;
-    return this.http.post<string>(url, loginRequest, this.httpOptions);
+    const url = `${this.url}/auth/login`;
+    return this.http.post<{ token: string }>(url, loginRequest, this.httpOptions);
 
   }
 

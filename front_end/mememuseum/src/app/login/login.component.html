@@ -30,7 +30,7 @@
 
                 }
                 <div class="pb-5"></div>
-                <input type="password" placeholder="Password" formControlName="pass"
+                <input (keyup)="hendleTyping($event)" type="password" placeholder="Password" formControlName="pass"
                     class="dark:bg-[#272729] bg-[#d9dadc] placeholder-gray-500 rounded-md px-4 py-3 focus:outline-none focus:ring-2 focus:ring-accent" />
                 @if(isSubmitted && loginForm.controls.pass.errors){
                 @if(loginForm.controls.pass.errors['required']){

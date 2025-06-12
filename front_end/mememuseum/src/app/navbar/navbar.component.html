@@ -7,10 +7,13 @@
                     <div class="hidden md:flex md:items-center md:flex-row  md:block lg:pr-12 md:pr-6">
                         <img class="w-16 dark:hidden" src="/logo-black.png">
                         <img class="w-16 hidden dark:block" src="/logo-white.png">
-                        <p class="lg:block hidden pl-3 text-text font-semibold text-2xl first-letter:text-3xl">Meme <br>
+                        <p class="lg:block hidden pl-3 text-text font-semibold text-2xl first-letter:text-3xl">Meme
+                            <br>
                             <span class="text-3xl">M</span>useum
                         </p>
                     </div>
+
+
                     <a routerLink="/home"
                         class="text-text text-xl mr-5 pr-3 pl-3 pt-1 pb-1 hover:font-bold hover:text-accent hover:border-none hover:bg-secondary hover:pr-3 hover:pl-3 hover:pt-1 hover:pb-1 hover:rounded-xl"
                         routerLinkActive="active">Home</a>
@@ -18,7 +21,7 @@
                         class="text-text text-xl mr-5 pr-3 pl-3 pt-1 pb-1  hover:font-bold hover:border-none hover:bg-secondary hover:pr-3 hover:pl-3 hover:pt-1 hover:pb-1 hover:rounded-xl">Search</a>
                     <app-darkmode></app-darkmode>
                 </div>
-
+                @if(!isLogged()){
                 <div class="bg-bgcontrast hidden md:flex md:items-center">
                     <button (click)="openLogin()" class="text-text text-lg font-semibold hover:text-accent mr-10">Sign
                         in</button>
@@ -26,6 +29,15 @@
                         class="text-text text-lg font-semibold border px-4 py-2 rounded-lg  hover:border-accent hover:text-accent">Sign
                         up</a>
                 </div>
+                }@else{
+                @if(profilePic()){
+                <img class="w-15 rounded-full hidden md:flex md:items-center" [src]="this.profilePic()">
+
+                }@else{
+                <img class="w-15 rounded-full hidden md:flex md:items-center" src="/logo.jpg">
+                }
+
+                }
                 <div class="block flex items-center flex-row md:hidden pr-10 ">
                     <img class="w-16 dark:hidden" src="/logo-black.png">
                     <img class="w-16 hidden dark:block" src="/logo-white.png">
@@ -48,12 +60,22 @@
                         class="flex justify-between items-center mt-5 pt-3 pb-2 border-black dark:border-white border-t-2">
                         <app-darkmode></app-darkmode>
                         <div>
+                            @if(!isLogged()){
                             <button (click)="openLogin()"
                                 class="text-text text-lg font-semibold hover:text-accent mr-4">Sign
                                 in</button>
                             <a href="#"
                                 class="text-text text-lg font-semibold border px-4 py-1 rounded-lg hover:border-accent hover:text-accent">Sign
                                 up</a>
+                            }@else{
+                            @if(profilePic()){
+                            <img class="w-12 rounded-full" [src]="this.profilePic()">
+
+                            }@else{
+                            <img class="w-12 rounded-full" src="/logo.jpg">
+                            }
+
+                            }
                         </div>
 
                     </div>
@@ -65,4 +87,4 @@
     </div>
 </div>
 
-<login></login>
+<login (logged)="onLogin()"></login>
