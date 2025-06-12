@@ -66,10 +66,17 @@ app.use((err, req, res, next) => {
     code: err.code,
     description: err.message || "An error occurred",
   }
-
   if (err.errors) body.errorsfield = err.errors;
 
-  res.status(err.status || 500).json(body);
+  if (err.status !== 204) {
+    res.status(err.status || 500).json(body);
+    res.send();
+    return;
+  }
+
+  res.status(err.status || 500);
+  res.send();
+
 });
 
 

@@ -4,10 +4,45 @@ const BED_REQUEST = 400;
 const CONFLICT = 409;
 const UNAUTHORIZED = 401;
 const NOT_FOUND = 404;
+const NO_CONTENT = 204;
 const INTERNAL_SERVER_ERROR = 500;
 const SERVICE_UNAVAILABLE = 503
 const FORBIDDEN = 403
 
+//Codici 200
+
+export class UserNotFoundError extends AppErrorHttp {
+    constructor() {
+        super(NO_CONTENT, "non ci sono utenti", "USER_NOT_EXISTS");
+    }
+}
+
+export class VoteNotFoundError extends AppErrorHttp {
+    constructor() {
+        super(NO_CONTENT, "non ci sono voti", "VOTE_NOT_EXISTS");
+    }
+}
+
+export class MemeNotFoundError extends AppErrorHttp {
+    constructor() {
+        super(NO_CONTENT, "non ci sono memes", "MEME_NOT_EXISTS");
+    }
+}
+
+export class CommentNotFoundError extends AppErrorHttp {
+    constructor() {
+        super(NO_CONTENT, "non ci sono comment", "COMMENT_NOT_EXISTS");
+    }
+}
+
+export class TagsNotFoundError extends AppErrorHttp {
+    constructor() {
+        super(NO_CONTENT, "non ci sono tags per questo meme", "TAGS_NOT_EXISTS");
+    }
+}
+
+
+/* ****************************************************************** */
 //Codici 400
 export class MissingFieldError extends AppErrorHttp {
     constructor(fieldName) {
@@ -58,39 +93,9 @@ export class CredentialError extends AppErrorHttp {
     }
 }
 
-export class UserNotFoundError extends AppErrorHttp {
-    constructor() {
-        super(NOT_FOUND, "non ci sono utenti", "USER_NOT_EXISTS");
-    }
-}
-
-export class VoteNotFoundError extends AppErrorHttp {
-    constructor() {
-        super(NOT_FOUND, "non ci sono voti", "VOTE_NOT_EXISTS");
-    }
-}
-
-export class MemeNotFoundError extends AppErrorHttp {
-    constructor() {
-        super(NOT_FOUND, "non ci sono memes", "MEME_NOT_EXISTS");
-    }
-}
-
-export class CommentNotFoundError extends AppErrorHttp {
-    constructor() {
-        super(NOT_FOUND, "non ci sono comment", "COMMENT_NOT_EXISTS");
-    }
-}
-
-export class TagsNotFoundError extends AppErrorHttp {
-    constructor() {
-        super(NOT_FOUND, "non ci sono tags per questo meme", "TAGS_NOT_EXISTS");
-    }
-}
-
 export class toManyTags extends AppErrorHttp {
     constructor() {
-        super(FORBIDDEN, "puoi mettere massimo 5 tags", "TO_MANY_TAGS");
+        super(CONFLICT, "puoi mettere massimo 5 tags", "TO_MANY_TAGS");
     }
 }
 

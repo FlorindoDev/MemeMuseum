@@ -151,7 +151,8 @@ router.post('/', [enforceAuthentication, imageParser, upLoadOnGoogle], (req, res
  *                      "image": "meme/url/image.png",
  *                      "description": "un gatto",
  *                      "createdAt": "2025-05-17T16:18:36.773Z",
- *                      "updatedAt": "2025-05-17T16:18:36.773Z"
+ *                      "updatedAt": "2025-05-17T16:18:36.773Z",
+ *                       "UserIdUser": 5
  *               }
  *             }
  *           }
@@ -222,7 +223,8 @@ router.get('/', [validate(schemaMemeGet, true), queryParamsToList(['nametags'])]
  *                      "image": "meme/url/image.png",
  *                      "description": "un gatto",
  *                      "createdAt": "2025-05-17T16:18:36.773Z",
- *                      "updatedAt": "2025-05-17T16:18:36.773Z"
+ *                      "updatedAt": "2025-05-17T16:18:36.773Z",
+ *                      "UserIdUser": 1
  *               }
  *             }
  *           }
