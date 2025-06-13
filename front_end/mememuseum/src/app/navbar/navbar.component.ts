@@ -20,23 +20,15 @@ export class Navbar {
 
   constructor(private authservice: AuthService, private UserService: UserService) { }
 
-  //TODO sistemare
+
   onLogin() {
     this.isLogged.set(this.authservice.isUserAuthenticated());
-    this.UserService.getProfilePic().subscribe({
-      next: (val) => {
-        this.profilePic.set(val);
-      }
-    });
+    this.profilePic.set(this.UserService.getProfilePic());
   }
 
   ngOnInit() {
     this.isLogged.set(this.authservice.isUserAuthenticated());
-    this.UserService.getProfilePic().subscribe({
-      next: (val) => {
-        this.profilePic.set(val);
-      }
-    })
+    this.profilePic.set(this.UserService.getProfilePic());
   }
 
   ChangeMenuState() {

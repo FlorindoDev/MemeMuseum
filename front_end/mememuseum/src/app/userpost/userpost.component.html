@@ -2,12 +2,15 @@
     class="p-2 hover:bg-gray-300 focus:outline-none dark:text-gray-400 dark:hover:bg-gray-700 hover:rounded-2xl m-2">
 
     <div class="flex flex-row items-center gap-3 pl-2 py-2">
-        @if(this.user.profilePic !== null){
-        <img class="w-9 rounded-full" [src]="this.user.profilePic">
-        }@else{
-        <img class="w-9 rounded-full" src="/logo.jpg">
-        }
-        <p class="text-text">{{this.user.nickName}}</p>
+        <div class="skeleton flex flex-row justify-center items-center gap-2">
+            <div class="w-9 h-9 rounded-full bg-gray-400 animate-pulse"></div>
+            <div class="w-40 h-5 rounded-full bg-gray-400 animate-pulse skeleton"></div>
+        </div>
+
+        <img (load)="stopLoading($event);" onload="this.nextElementSibling?.classList.remove('hidden')"
+            class="w-9 rounded-full hidden" [src]="this.user.profilePic">
+        <p class="text-text hidden">{{this.user.nickName}}</p>
+
     </div>
 
     <div class="relative md:w-150 max-h-100 rounded-2xl bg-cover bg-center overflow-hidden"
@@ -17,8 +20,13 @@
 
 
         <a class="relative flex flex-row justify-center items-center" [href]="meme.image">
+            <div class="skeleton">
 
-            <img class="relative z-1 max-h-100 w-600 object-contain" [src]="this.meme.image" />
+                <div class="relative md:w-150 w-screen h-100 rounded-2xl bg-gray-400 animate-pulse skeleton">
+                </div>
+            </div>
+            <img (load)="stopLoading($event)" class="relative z-1 max-h-100 w-600 object-contain hidden"
+                [src]="this.meme.image" />
         </a>
 
     </div>
@@ -53,11 +61,7 @@
                 xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
                 xmlns:sketch="http://www.bohemiancoding.com/sketch/ns">
 
-                <title>comment-5</title>
-                <desc>Created with Sketch Beta.</desc>
-                <defs>
 
-                </defs>
                 <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" sketch:type="MSPage">
                     <g id="Icon-Set" sketch:type="MSLayerGroup" transform="translate(-360.000000, -255.000000)"
                         class="dark:text-white text-black" fill="currentColor">

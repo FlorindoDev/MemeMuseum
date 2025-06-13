@@ -1,0 +1,29 @@
+<svg class="w-10 h-10 animate-spin text-text" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path
+        d="M20.0001 12C20.0001 13.3811 19.6425 14.7386 18.9623 15.9405C18.282 17.1424 17.3022 18.1477 16.1182 18.8587C14.9341 19.5696 13.5862 19.9619 12.2056 19.9974C10.825 20.0328 9.45873 19.7103 8.23975 19.0612"
+        stroke="currentColor" stroke-width="3.55556" stroke-linecap="round" />
+</svg>
+
+<div class="mx-auto w-full max-w-sm rounded-md border border-blue-300 p-4">
+    <div class="flex animate-pulse space-x-4">
+        <div class="size-10 rounded-full bg-gray-200"></div>
+        <div class="flex-1 space-y-6 py-1">
+            <div class="h-2 rounded bg-gray-200 w-3/4"></div>
+            <div class="space-y-3">
+                <div class="grid grid-cols-3 gap-4">
+                    <div class="col-span-2 h-2 rounded bg-gray-200"></div>
+                    <div class="col-span-1 h-2 rounded bg-gray-200"></div>
+                </div>
+                <div class="h-2 rounded bg-gray-200"></div>
+            </div>
+        </div>
+    </div>
+    <!-- Area immagine che si carica -->
+    <div class="mt-4 relative w-full h-48 bg-gray-200 rounded-md overflow-hidden">
+        <div class="absolute inset-0 flex items-center justify-center animate-pulse">
+            <div class="w-16 h-16 bg-gray-300 rounded-full"></div>
+        </div>
+        <!-- L'immagine reale viene caricata sotto -->
+        <img src="" alt="preview" class="w-full h-full object-cover hidden" onload="this.classList.remove('hidden')">
+    </div>
+</div>

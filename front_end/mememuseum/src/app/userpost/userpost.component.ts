@@ -46,6 +46,12 @@ export class Userpost {
     this.fatchNumComments();
   }
 
+  stopLoading(event: Event) {
+    let target = event.target as HTMLElement;
+    target.classList.remove('hidden');
+    target.previousElementSibling?.classList.add('hidden');
+  }
+
   fatchNumVotes() {
     this.voteservice.getNumVotes({ idmeme: this.meme.idMeme }).subscribe({
       next: (response) => {
@@ -53,21 +59,16 @@ export class Userpost {
           this.votes = { upvote: 0, downvote: 0 };
           return;
         }
-
         if (response.body !== null) this.votes = response.body;
-      },
-      error: (err) => {
       }
     })
   }
 
   fatchUser() {
-    this.userservice.getUserFromId(this.meme.UserIdUser).subscribe({
+    this.userservice.getUserFromId(this.meme.UserIdUser as number).subscribe({
       next: (value) => {
+        if (value.profilePic === null) value.profilePic = "/logo.jpg";
         this.user = value;
-      },
-      error: (err) => {
-
       }
     })
   }

@@ -4,6 +4,7 @@ import { provideHttpClient, withFetch, withInterceptors } from '@angular/common/
 import { authInterceptor } from './_interceptors/auth/auth.interceptor';
 import { ToastrModule } from 'ngx-toastr';
 import { provideAnimations } from '@angular/platform-browser/animations';
+import { errorHendlerInterceptor } from './_interceptors/errorHendler/error-hendler.interceptor';
 
 import { routes } from './app.routes';
 
@@ -23,7 +24,7 @@ export const appConfig: ApplicationConfig = {
     provideRouter(routes),
     provideHttpClient(
       withFetch(), //use the Fetch API instead of XMLHttpRequests
-      withInterceptors([authInterceptor])
+      withInterceptors([authInterceptor, errorHendlerInterceptor])
     ),
   ]
 };

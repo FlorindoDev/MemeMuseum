@@ -37,12 +37,14 @@
                 <p class="form-error">Password is required.</p>
                 }
                 @if(loginForm.controls.pass.errors['minlength']){
-                <p class="form-error">Password should contain at least 4 characters</p>
+                <p class="form-error">Password should contain at least 8 characters</p>
                 }
                 }
                 <div class="pb-5"></div>
-                <button type="submit" class="mt-2 bg-secondary hover:bg-primary rounded-full py-3 font-bold">
-                    Accedi
+                <button type="submit"
+                    class="mt-2 bg-secondary hover:bg-primary rounded-full py-3 font-bold flex justify-center">
+                    <p id="text-accedi">Accedi</p>
+                    <loading-screen id="loading" class="hidden"></loading-screen>
                 </button>
             </form>
 

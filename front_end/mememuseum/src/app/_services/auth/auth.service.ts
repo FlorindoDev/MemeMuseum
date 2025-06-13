@@ -34,7 +34,7 @@ export class AuthService {
   constructor(private http: HttpClient) {
     effect(() => {
       this.setFieldOnStorage(this.token(), "token");
-      this.setFieldOnStorage(this.user(), "user");
+      this.setFieldOnStorage(this.user(), "user-email");
       this.setFieldOnStorage(this.iduser(), "iduser");
 
     });
@@ -65,11 +65,16 @@ export class AuthService {
   }
 
   getUser() {
-    return localStorage.getItem("user");
+    return localStorage.getItem("user-email");
   }
 
   getidUser() {
     return localStorage.getItem("iduser");
+  }
+
+  getIdFromToken(token: string): string {
+    const decodedToken: any = jwtDecode(token);
+    return decodedToken.idUser;
   }
 
   verifyToken(token: string | null): boolean {

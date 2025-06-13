@@ -6,12 +6,10 @@ import { User } from './user.type';
 import { AuthService } from '../auth/auth.service';
 import { map } from 'rxjs/operators';
 
-
 @Injectable({
   providedIn: 'root'
 })
 export class UserService {
-
 
   url = environment.apiBaseUrl;
 
@@ -25,36 +23,26 @@ export class UserService {
 
 
 
-  getUserFromId(iduser?: number): Observable<User> {
-
+  getUserFromId(iduser: number | string): Observable<User> {
     return this.http.get<User>(`${this.url}/users/${iduser}`, this.httpOptions);
   }
 
-  //TODO Aggiustare fare che prende tutto e salva tutto
-  getAndSaveProfilePic(): Observable<string | null> {
-    const iduser = this.AuthService.getidUser();
-
-    return this.http.get<User>(`${this.url}/users/${iduser}`, this.httpOptions).pipe(
-      map((val) => {
-        const profile = val.profilePic;
-        if (profile !== null) localStorage.setItem("ProfilePic", `${profile}`);
-
-        return profile;
-      })
-    );
+  saveUser(user: User) {
+    localStorage.setItem("user", JSON.stringify(user));
   }
 
-  getProfilePic(): Observable<string | null> {
+  getProfilePic(): string | null {
     if (!this.AuthService.isUserAuthenticated()) {
-      return of(null);
+      return null;
     }
 
-    const profile = localStorage.getItem("ProfilePic");
+    const profile = localStorage.getItem("user");
     if (profile) {
-      return of(profile);
+      return (JSON.parse(profile) as User).profilePic;
     }
 
-    return this.getAndSaveProfilePic(); // ora è un Observable valido
+    return null;
+
   }
 
 }
