@@ -16,12 +16,9 @@ export function errorHendlerInterceptor(request: HttpRequest<any>, next: HttpHan
 
       let myerr: errorHTTP;
       let myErrors = environment.myErrors;
-
       if (err.status === 0) {
         myerr = { status: err.status, description: "Errore di connessione", code: "CONNECTION_ERROR" }
-      }
-
-      if (myErrors.find(val => val === err.status)) {
+      } else if (myErrors.find(val => val === err.status)) {
 
         myerr = err.error;
 

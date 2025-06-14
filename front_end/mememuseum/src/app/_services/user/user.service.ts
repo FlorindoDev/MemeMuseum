@@ -1,10 +1,8 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { environment } from '../../environment.prod';
-import { Observable, of } from 'rxjs';
+import { Observable } from 'rxjs';
 import { User } from './user.type';
-import { AuthService } from '../auth/auth.service';
-import { map } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
@@ -19,7 +17,7 @@ export class UserService {
     })
   };
 
-  constructor(private http: HttpClient, private AuthService: AuthService) { }
+  constructor(private http: HttpClient) { }
 
 
 
@@ -31,10 +29,12 @@ export class UserService {
     localStorage.setItem("user", JSON.stringify(user));
   }
 
+  deleteUser() {
+    localStorage.removeItem("user");
+  }
+
   getProfilePic(): string | null {
-    if (!this.AuthService.isUserAuthenticated()) {
-      return null;
-    }
+
 
     const profile = localStorage.getItem("user");
     if (profile) {
@@ -44,5 +44,18 @@ export class UserService {
     return null;
 
   }
+
+  getNickName(): string | null {
+
+
+    const nickName = localStorage.getItem("user");
+    if (nickName) {
+      return (JSON.parse(nickName) as User).nickName;
+    }
+
+    return null;
+
+  }
+
 
 }

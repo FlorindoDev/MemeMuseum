@@ -11,10 +11,14 @@
     background-color: #a62e28;
 }
 
+.toast-warning {
+    background-color: #d09304;
+}
+
 @theme {
     --color-text: #121212;
     --color-bg: #fafafa;
-    --color-primary: #b4ebe6;
+    --color-primary: #7fe8df;
     --color-secondary: #80cbc4;
     --color-accent: #009382;
     --color-bgcontrast: #ebebeb;

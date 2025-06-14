@@ -8,6 +8,7 @@ import { User } from '../_services/user/user.type';
 import { UserService } from '../_services/user/user.service';
 import { numcomments } from '../_services/comment/numcommets.type';
 import { CommentService } from '../_services/comment/comment.service';
+import { environment } from '../environment.prod';
 
 @Component({
   selector: 'user-post',
@@ -67,7 +68,7 @@ export class Userpost {
   fatchUser() {
     this.userservice.getUserFromId(this.meme.UserIdUser as number).subscribe({
       next: (value) => {
-        if (value.profilePic === null) value.profilePic = "/logo.jpg";
+        if (value.profilePic === null) value.profilePic = environment.noProfilePic;
         this.user = value;
       }
     })

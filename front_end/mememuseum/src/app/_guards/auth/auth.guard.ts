@@ -13,6 +13,6 @@ export const authGuard: CanActivateFn = (route, state) => {
     return true;
   } else {
     toastr.warning("Perfavore fai il login", "Unauthorized!");
-    return router.parseUrl("/login"); //return a UrlTree
+    return router.parseUrl("/"); //return a UrlTree
   }
 };

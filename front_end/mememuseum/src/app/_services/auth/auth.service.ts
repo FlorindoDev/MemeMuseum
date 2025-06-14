@@ -2,9 +2,9 @@ import { Injectable, WritableSignal, computed, effect, signal } from '@angular/c
 import { jwtDecode } from "jwt-decode";
 import { AuthState } from './auth-state.type';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Observable } from 'rxjs';
 import { environment } from '../../environment.prod';
 import { AuthRequest } from './auth-request.type';
+import { UserService } from '../user/user.service';
 
 @Injectable({
   providedIn: 'root'
@@ -31,7 +31,7 @@ export class AuthService {
   iduser = computed(() => this.authState().iduser);
   isAuthenticated = computed(() => this.authState().isAuthenticated);
 
-  constructor(private http: HttpClient) {
+  constructor(private http: HttpClient, private UserService: UserService) {
     effect(() => {
       this.setFieldOnStorage(this.token(), "token");
       this.setFieldOnStorage(this.user(), "user-email");
@@ -105,6 +105,7 @@ export class AuthService {
       iduser: null,
       isAuthenticated: false
     });
+    this.UserService.deleteUser();
   }
 
   login(loginRequest: AuthRequest) {

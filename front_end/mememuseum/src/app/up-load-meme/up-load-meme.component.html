@@ -1,0 +1,49 @@
+<drag-and-drop></drag-and-drop>
+
+<div class="pt-4 m-5 flex items-center justify-center flex-col text-text">
+    <h2 class="text-2xl font-semibold">Tags e Descrizione</h2>
+    <form [formGroup]="upLoadForm" class="flex flex-col max-w-lg w-full pt-5 " (ngSubmit)="handleUpLoad()">
+
+        <input id="tagsInput" (keyup)="onEnter($event)" type="text" placeholder="Nome tag" formControlName="tags"
+            name="tagInput"
+            class="mb-2 dark:bg-[#272729] bg-[#d9dadc] placeholder-gray-500 rounded-md px-4 py-3 focus:outline-none focus:ring-2 focus:ring-accent" />
+
+        @if(upLoadForm.controls.tags.errors){
+        @if(upLoadForm.controls.tags.errors['minlength']){
+        <p class="form-error mb-2">Tag should contain at least 3 characters</p>
+        }
+
+        @if(upLoadForm.controls.tags.errors['maxlength']){
+        <p class="form-error mb-2">Tag should contain at max 10 characters</p>
+        }
+        }
+        <div class="flex flex-wrap gap-2">
+            @for(tag of tags; track tag){
+            <span class="inline-flex items-center px-2 py-1 text-sm font-medium text-text bg-primary rounded-sm ">
+                {{tag}}
+                <button (click)="removeTag($event)" type="button"
+                    class="inline-flex items-center p-1 ms-2 text-sm text-text bg-transparent rounded-xs hover:bg-green-200 hover:bg-secondary  hover:text-text hover:rounded-full"
+                    aria-label="Remove">
+                    <svg class="w-2 h-2" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none"
+                        viewBox="0 0 14 14">
+                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6" />
+                    </svg>
+
+                </button>
+            </span>
+            }
+        </div>
+
+        <div class="mt-5">
+            <textarea formControlName="descrizione" placeholder="Inserisci descrizione del meme" rows="4"
+                class="w-full text-text dark:bg-[#272729] bg-[#d9dadc] placeholder-gray-500 rounded-md px-4 py-3 focus:outline-none focus:ring-2 focus:ring-accent"></textarea>
+        </div>
+
+        <button type="submit"
+            class="text-text mt-4 bg-secondary hover:bg-primary rounded-full py-3 font-bold flex justify-center">
+            <p id="text-accedi">Accedi</p>
+            <loading-screen id="loading" class="hidden"></loading-screen>
+        </button>
+    </form>
+</div>
