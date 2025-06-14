@@ -1,12 +1,12 @@
 import { Storage } from '@google-cloud/storage';
 import { nanoid } from 'nanoid';
-import { MissingFile, FailToUploadFile } from '../utils/error/index.js';
+import { MissingFile, FailToUploadFile, ExtensionFileNotValid } from '../utils/error/index.js';
 import 'dotenv/config.js';
 
 //google storage
 const storage = new Storage({ keyFilename: process.env.GOOGLE_APPLICATION_CREDENTIALS });
 const bucket = storage.bucket(process.env.BUCKET_NAME);
-
+const fileConsentiti = ["jpg", "png", "gif", "jpeg"];
 
 export function upLoad(req, res, next) {
     try {
@@ -16,6 +16,10 @@ export function upLoad(req, res, next) {
         }
 
         const file = req.files['image'][0]
+
+        if (!fileConsentiti.find((val) => file.mimetype === `image/${val}`)) {
+            return next(new ExtensionFileNotValid())
+        }
 
         const blob = bucket.file(nanoid());
 

@@ -15,11 +15,11 @@ let description = z.object({
 });
 
 let nametags = z.object({
-    nametags: z.string().optional(),
+    nametags: z.string().min(3).max(10).optional(),
 });
 
 let arraytags = z.object({
-    name: z.string(),
+    name: z.string().min(3).max(10),
 });
 
 

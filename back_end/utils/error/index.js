@@ -63,6 +63,12 @@ export class MissingFile extends AppErrorHttp {
     }
 }
 
+export class ExtensionFileNotValid extends AppErrorHttp {
+    constructor() {
+        super(BED_REQUEST, "Estensione File non valida", "EXTENSION_NOT_VALID");
+    }
+}
+
 export class UserAlreadyExistsError extends AppErrorHttp {
     constructor() {
         super(CONFLICT, "Utente con questa email già registrato", "USER_EXISTS");
