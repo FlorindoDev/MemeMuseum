@@ -3,13 +3,15 @@ import { signal } from '@angular/core';
 import { RouterLink, RouterLinkActive } from '@angular/router';
 import { Darkmode } from './darkmode/darkmode.component';
 import { Login } from '../login/login.component';
+import { SignUp } from '../sign-up/sign-up.component';
 import { AuthService } from '../_services/auth/auth.service';
 import { UserService } from '../_services/user/user.service';
 import { Router } from '@angular/router';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-navbar',
-  imports: [RouterLink, RouterLinkActive, Darkmode, Login],
+  imports: [RouterLink, RouterLinkActive, Darkmode, Login, SignUp],
   templateUrl: './navbar.component.html',
   styleUrl: './navbar.component.scss',
 })
@@ -21,7 +23,12 @@ export class Navbar {
   profilePic = signal<string | null>(null);
   nickname = signal<string | null>(null);
 
-  constructor(private authservice: AuthService, private UserService: UserService, private router: Router) { }
+  constructor(
+    private authservice: AuthService,
+    private UserService: UserService,
+    private router: Router,
+    private toastr: ToastrService
+  ) { }
 
 
   onLogin() {
@@ -55,11 +62,17 @@ export class Navbar {
     element?.classList.remove("hidden");
   }
 
+  openSignup() {
+    let element = document.getElementById("signup");
+    element?.classList.remove("hidden");
+  }
+
   logout() {
 
     this.authservice.logout();
     setTimeout(() => {
       this.isLogged.set(this.authservice.isUserAuthenticated());
+      this.toastr.success("Hai fatto il logout con successo", "Logout Completato!");
       this.router.navigate(["/"]);
     }, 100);
 

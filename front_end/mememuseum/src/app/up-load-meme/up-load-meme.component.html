@@ -1,8 +1,9 @@
-<drag-and-drop></drag-and-drop>
+<drag-and-drop (loadedfile)="saveFile($event)"></drag-and-drop>
 
 <div class="pt-4 m-5 flex items-center justify-center flex-col text-text">
     <h2 class="text-2xl font-semibold">Tags e Descrizione</h2>
-    <form [formGroup]="upLoadForm" class="flex flex-col max-w-lg w-full pt-5 " (ngSubmit)="handleUpLoad()">
+    <form [formGroup]="upLoadForm" class="flex flex-col max-w-lg w-full pt-5 " (ngSubmit)="handleUpLoad()"
+        (keydown.enter)="$event.preventDefault()">
 
         <input id="tagsInput" (keyup)="onEnter($event)" type="text" placeholder="Nome tag" formControlName="tags"
             name="tagInput"
@@ -42,8 +43,8 @@
 
         <button type="submit"
             class="text-text mt-4 bg-secondary hover:bg-primary rounded-full py-3 font-bold flex justify-center">
-            <p id="text-accedi">Accedi</p>
-            <loading-screen id="loading" class="hidden"></loading-screen>
+            <p id="text-crea">Crea Meme</p>
+            <loading-screen id="loading-icon" class="hidden"></loading-screen>
         </button>
     </form>
 </div>

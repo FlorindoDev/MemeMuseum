@@ -3,6 +3,10 @@ import { DragAndDrop } from '../drag-and-drop/drag-and-drop.component';
 import { FormGroup, FormControl, Validators, ReactiveFormsModule } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
 import { LoadingScreen } from '../loading-screeen/loading-screen.component';
+import { MemeService } from '../_services/meme/meme.service';
+import { tag } from '../_services/meme/tag.type';
+import { Meme } from '../_services/meme/meme.type';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'up-load-meme',
@@ -12,9 +16,11 @@ import { LoadingScreen } from '../loading-screeen/loading-screen.component';
 })
 export class UpLoadMeme {
 
-  constructor(private ToastrService: ToastrService) { }
+  constructor(private toastr: ToastrService, private meme_service: MemeService, private router: Router) { }
 
   tags: Array<string> = [];
+  file?: File;
+  tagsToSend: tag[] = [];
 
   upLoadForm = new FormGroup({
     tags: new FormControl('', [Validators.minLength(3), Validators.maxLength(10), Validators.required]),
@@ -35,20 +41,22 @@ export class UpLoadMeme {
 
     this.addRedRing(event.target as HTMLElement, this.upLoadForm.invalid);
 
-    if (this.upLoadForm.controls.tags.errors) {
-      if (this.upLoadForm.controls.tags.errors['required']) {
-        this.ToastrService.error("Insersici qualcosa", "Tag vuoto");
+    if (event.code === "Enter") {
+
+      if (this.upLoadForm.controls.tags.errors) {
+        if (this.upLoadForm.controls.tags.errors['required']) {
+          this.toastr.error("Insersici qualcosa", "Tag vuoto");
+
+        }
         return;
       }
-    }
 
-    if (event.code === "Enter") {
       if (this.tags.length === 5) {
         this.addRedRing(event.target as HTMLElement, this.upLoadForm.invalid);
-        this.ToastrService.error("Massimo 5 tags per meme", "Massimo raggiunto");
+        this.toastr.error("Massimo 5 tags per meme", "Massimo raggiunto");
       }
       else if (this.tags.find((val) => this.upLoadForm.value.tags === val)) {
-        this.ToastrService.error("Qeusto tag è gia presente", "Tag già inserito!");
+        this.toastr.error("Qeusto tag è gia presente", "Tag già inserito!");
       } else {
         this.tags.push(this.upLoadForm.value.tags as string);
         this.upLoadForm.get('tags')?.setValue('');
@@ -63,16 +71,52 @@ export class UpLoadMeme {
   }
 
   startLoading() {
-    document.getElementById("text-accedi")?.classList.add("hidden");
-    document.getElementById("loading")?.classList.remove("hidden");
+    document.getElementById("text-crea")?.classList.add("hidden");
+    document.getElementById("loading-icon")?.classList.remove("hidden");
   }
 
   stopLoading() {
-    document.getElementById("text-accedi")?.classList.remove("hidden");
-    document.getElementById("loading")?.classList.add("hidden");
+    document.getElementById("text-crea")?.classList.remove("hidden");
+    document.getElementById("loading-icon")?.classList.add("hidden");
+  }
+
+  saveFile(loadedfile: File) {
+    this.file = loadedfile;
+  }
+
+  prepareTags() {
+    this.tags.map((val) => {
+      this.tagsToSend.push({ name: val })
+    });
+  }
+
+  saveTags(meme: Meme) {
+    this.prepareTags();
+    this.meme_service.addTags(meme.idMeme, this.tagsToSend).subscribe({
+      next: () => {
+        this.toastr.success("Successo aricamento tags!");
+      },
+      error: () => {
+        this.stopLoading();
+      }
+    });
   }
 
   handleUpLoad() {
+    this.startLoading();
+    this.meme_service.saveMeme({ image: this.file as File, description: this.upLoadForm.value.descrizione }).subscribe({
+      next: (meme: Meme) => {
+
+        this.toastr.success("Successo caricamento Meme!");
+        this.saveTags(meme);
+        this.router.navigate(["/"]);
+      },
+      error: () => {
+        this.stopLoading();
+      }
+
+    })
+
 
   }
 

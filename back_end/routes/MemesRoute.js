@@ -75,9 +75,9 @@ export const router = express.Router();
  * }
  */
 router.post('/', [enforceAuthentication, imageParser, upLoadOnGoogle], (req, res, next) => {
-    MemesController.saveMeme(req).then(() => {
+    MemesController.saveMeme(req).then((result) => {
         res.status(200);
-        res.send();
+        res.send(result);
     }).catch((err) => {
         next(err)
     });

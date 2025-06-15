@@ -29,9 +29,9 @@
                 <div class="bg-bgcontrast hidden md:flex md:items-center">
                     <button (click)="openLogin()" class="text-text text-lg font-semibold hover:text-accent mr-10">Sign
                         in</button>
-                    <a href="#"
+                    <button (click)="openSignup()"
                         class="text-text text-lg font-semibold border px-4 py-2 rounded-lg  hover:border-accent hover:text-accent">Sign
-                        up</a>
+                        up</button>
                 </div>
                 }@else{
                 <div class="relative md:inline-flex hidden">
@@ -155,3 +155,4 @@
 </div>
 
 <login (logged)="onLogin()"></login>
+<sign-up></sign-up>

@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, EventEmitter, Output } from '@angular/core';
 import { ToastrService } from 'ngx-toastr';
 
 @Component({
@@ -14,6 +14,7 @@ export class DragAndDrop {
   droppedFile: File | null = null;
   isDrop = false;
   fileConsentiti = ["jpg", "png", "gif", "jpeg"];
+  @Output() loadedfile = new EventEmitter<File>()
 
   constructor(private toastr: ToastrService) { }
 
@@ -38,6 +39,8 @@ export class DragAndDrop {
       this.droppedFile = event.dataTransfer.files[0];
       if (this.fileConsentiti.find((val) => this.droppedFile?.type === `image/${val}`)) {
         this.isDrop = true;
+        this.loadedfile.emit(this.droppedFile);
+
       } else {
         this.toastr.error("File deve essere jpg,png o gif", " file non valido!");
       }
