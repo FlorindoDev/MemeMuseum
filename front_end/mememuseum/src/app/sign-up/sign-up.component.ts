@@ -4,9 +4,7 @@ import { AuthService } from '../_services/auth/auth.service';
 import { FormControl, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
 import { Output } from '@angular/core';
-import { UserService } from '../_services/user/user.service';
 import { LoadingScreen } from '../loading-screeen/loading-screen.component';
-import { environment } from '../environment.prod';
 
 @Component({
   selector: 'sign-up',
@@ -16,17 +14,17 @@ import { environment } from '../environment.prod';
 })
 export class SignUp {
 
-  @Output() logged = new EventEmitter<boolean>();
+  @Output() gotoLogin = new EventEmitter<string>();
 
   constructor(
     private authservice: AuthService,
-    private UserService: UserService,
     private toastr: ToastrService,
   ) { }
 
   isSubmitted: boolean = false;
 
   signupForm = new FormGroup({
+    nickname: new FormControl('', [Validators.required, Validators.minLength(3), Validators.maxLength(25)]),
     user: new FormControl('', [Validators.required, Validators.email]),
     pass: new FormControl('', [
       Validators.required,
@@ -44,7 +42,7 @@ export class SignUp {
     document.getElementById("loading")?.classList.add("hidden");
   }
 
-  addRedRing(element: HTMLElement, error: unknown | boolean): void {
+  addRedRing(element: HTMLElement, error: boolean): void {
     if (error) {
       element.classList.add("ring-2");
       element.classList.add("ring-red-400");
@@ -57,53 +55,59 @@ export class SignUp {
   hendleTyping(event?: Event) {
     let element = event?.target as HTMLElement;
     if (this.isSubmitted) {
-
-      if (element.getAttribute("type") === "email") {
-        this.addRedRing(element, this.signupForm.controls.user.errors);
-      } else {
-        this.addRedRing(element, this.signupForm.controls.pass.errors);
-      }
-
+      console.log(this.isFieldInError(element));
+      this.addRedRing(element, this.isFieldInError(element));
     }
   }
 
-  userLoggedSuccess(token: string) {
-    this.authservice.updateToken(token);
-    this.UserService.getUserFromId(this.authservice.getIdFromToken(token)).subscribe({
-      next: (val) => {
-        if (val.profilePic === null) val.profilePic = environment.noProfilePic;
-        this.UserService.saveUser(val);
-        this.closeLogin();
-        this.toastr.success("Hai fatto l'accesso con successo", "Accesso Completato!");
-        setTimeout(() => {
-          this.logged.emit(true);
-          this.stopLoading();
-        }, 10);
-      }
-    });
+  clearInput() {
+    this.signupForm.get('pass')?.setValue('');
+    this.signupForm.get('user')?.setValue('');
+    this.signupForm.get('nickname')?.setValue('');
+    this.isSubmitted = false;
+  }
+
+  userSignedSuccess() {
+
+    this.closeSingup();
+    this.toastr.success("Hai fatto la registrazione con successo", "Registrazione Completata!");
+    this.clearInput();
+
+    setTimeout(() => {
+      this.stopLoading();
+    }, 10);
+
 
   }
 
+  isFieldInError(element: HTMLElement) {
+    let attr: string = element.getAttribute("formControlName") as string;
+    const control = this.signupForm.get(attr);
+    return control?.errors !== null;
 
-  handleLogin() {
+  }
+
+  handleSignup() {
     this.isSubmitted = true;
     if (this.signupForm.invalid) {
 
       this.toastr.error("I dati che hai inserito non sono validi!", "Oops! Dati invalidi!");
-      let element = document.querySelectorAll("input[type]");
+      let element = document.querySelectorAll("#form-signup input[type]");
       element.forEach((val) => {
-        this.addRedRing(val as HTMLElement, true);
-      })
+
+        this.addRedRing(val as HTMLElement, this.isFieldInError(val as HTMLElement));
+      });
 
     } else {
       this.startLoading();
-      this.authservice.login({
+      this.authservice.signup({
         email: this.signupForm.value.user as string,
+        nickName: this.signupForm.value.nickname as string,
         password: this.signupForm.value.pass as string
       }).subscribe({
 
-        next: (val) => {
-          this.userLoggedSuccess(val.token);
+        next: () => {
+          this.userSignedSuccess();
         },
 
         error: () => {
@@ -115,11 +119,11 @@ export class SignUp {
   }
 
   ngOnInit() {
-    let element = document.getElementById("login");
+    let element = document.getElementById("signup");
     element?.classList.add("hidden");
   }
 
-  closeLogin() {
+  closeSingup() {
     let element = document.getElementById("signup");
     element?.classList.add("hidden");
   }

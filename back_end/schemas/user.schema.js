@@ -12,7 +12,7 @@ let password = z.object({
 let nickname = z.object({
     nickName: z.string({
         required_error: "Il campo nickname è obbligatorio"
-    }).min(4).max(12),
+    }).min(4).max(25),
 });
 
 let email = z.object({
@@ -30,7 +30,7 @@ let idNotR = z.object({
 });
 
 let nicknameNotRequired = z.object({
-    nickName: z.string().min(4).max(12).optional(),
+    nickName: z.string().min(4).max(25).optional(),
 });
 
 let emailNotRequired = z.object({

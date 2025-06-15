@@ -13,7 +13,6 @@ export function errorHendlerInterceptor(request: HttpRequest<any>, next: HttpHan
 
   return next(request).pipe(
     catchError((err: HttpErrorResponse) => {
-
       let myerr: errorHTTP;
       let myErrors = environment.myErrors;
       if (err.status === 0) {

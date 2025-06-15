@@ -5,6 +5,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { environment } from '../../environment.prod';
 import { AuthRequest } from './auth-request.type';
 import { UserService } from '../user/user.service';
+import { SignupRequest } from './signup.type';
 
 @Injectable({
   providedIn: 'root'
@@ -112,6 +113,13 @@ export class AuthService {
 
     const url = `${this.url}/auth/login`;
     return this.http.post<{ token: string }>(url, loginRequest, this.httpOptions);
+
+  }
+
+  signup(signupRequest: SignupRequest) {
+
+    const url = `${this.url}/auth/signup`;
+    return this.http.post(url, signupRequest, this.httpOptions);
 
   }
 

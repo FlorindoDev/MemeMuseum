@@ -154,5 +154,5 @@
     </div>
 </div>
 
-<login (logged)="onLogin()"></login>
-<sign-up></sign-up>
+<login (logged)="onLogin()" (gotoSignup)="openSignup()"></login>
+<sign-up (gotoLogin)="openLogin()"></sign-up>

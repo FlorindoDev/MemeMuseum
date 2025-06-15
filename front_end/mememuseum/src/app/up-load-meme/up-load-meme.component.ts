@@ -23,7 +23,7 @@ export class UpLoadMeme {
   tagsToSend: tag[] = [];
 
   upLoadForm = new FormGroup({
-    tags: new FormControl('', [Validators.minLength(3), Validators.maxLength(10), Validators.required]),
+    tags: new FormControl('', [Validators.minLength(3), Validators.maxLength(15), Validators.required]),
     descrizione: new FormControl('')
   });
 
@@ -94,7 +94,7 @@ export class UpLoadMeme {
     this.prepareTags();
     this.meme_service.addTags(meme.idMeme, this.tagsToSend).subscribe({
       next: () => {
-        this.toastr.success("Successo aricamento tags!");
+        this.toastr.success("Successo caricamento tags!");
       },
       error: () => {
         this.stopLoading();

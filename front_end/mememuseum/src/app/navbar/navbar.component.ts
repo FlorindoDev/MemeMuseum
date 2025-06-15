@@ -31,6 +31,14 @@ export class Navbar {
   ) { }
 
 
+  switchForm(event: string) {
+
+    if (event === "login") this.openLogin();
+    else if (event === "signup") this.openSignup();
+
+
+  }
+
   onLogin() {
     this.isLogged.set(this.authservice.isUserAuthenticated());
     this.profilePic.set(this.UserService.getProfilePic());

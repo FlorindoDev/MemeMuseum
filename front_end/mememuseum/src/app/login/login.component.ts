@@ -16,6 +16,7 @@ import { environment } from '../environment.prod';
 export class Login {
 
   @Output() logged = new EventEmitter<boolean>();
+  @Output() gotoSignup = new EventEmitter<string>();
 
   constructor(
     private authservice: AuthService,
@@ -57,13 +58,15 @@ export class Login {
     let element = event?.target as HTMLElement;
     if (this.isSubmitted) {
 
-      if (element.getAttribute("type") === "email") {
-        this.addRedRing(element, this.loginForm.controls.user.errors);
-      } else {
-        this.addRedRing(element, this.loginForm.controls.pass.errors);
-      }
+      this.addRedRing(element, this.isFieldInError(element));
 
     }
+  }
+
+  clearInput() {
+    this.loginForm.get('pass')?.setValue('');
+    this.loginForm.get('user')?.setValue('');
+    this.isSubmitted = false;
   }
 
   userLoggedSuccess(token: string) {
@@ -71,8 +74,11 @@ export class Login {
     this.UserService.getUserFromId(this.authservice.getIdFromToken(token)).subscribe({
       next: (val) => {
         if (val.profilePic === null) val.profilePic = environment.noProfilePic;
+
         this.UserService.saveUser(val);
         this.closeLogin();
+        this.clearInput();
+
         this.toastr.success("Hai fatto l'accesso con successo", "Accesso Completato!");
         setTimeout(() => {
           this.logged.emit(true);
@@ -83,16 +89,22 @@ export class Login {
 
   }
 
+  isFieldInError(element: HTMLElement) {
+    let attr: string = element.getAttribute("formControlName") as string;
+    const control = this.loginForm.get(attr);
+    return control?.errors !== null;
+
+  }
+
 
   handleLogin() {
     this.isSubmitted = true;
     if (this.loginForm.invalid) {
 
-      this.toastr.error("I dati che hai inserito non sono validi!", "Oops! Dati invalidi!");
-      let element = document.querySelectorAll("input[type]");
+      let element = document.querySelectorAll("#form-login input[type]");
       element.forEach((val) => {
-        this.addRedRing(val as HTMLElement, true);
-      })
+        this.addRedRing(val as HTMLElement, this.isFieldInError(val as HTMLElement));
+      });
 
     } else {
       this.startLoading();
