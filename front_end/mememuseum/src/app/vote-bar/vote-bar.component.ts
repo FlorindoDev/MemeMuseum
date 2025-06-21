@@ -5,6 +5,7 @@ import { VoteService } from '../_services/vote/vote.service';
 import { numvote } from '../_services/vote/numvote.type';
 import { AuthService } from '../_services/auth/auth.service';
 import { vote } from '../_services/vote/vote.type';
+import { ToastrService } from 'ngx-toastr';
 
 
 @Component({
@@ -23,8 +24,8 @@ export class VoteBar {
 
   constructor(
     private vote_service: VoteService,
-    private auth_service: AuthService
-
+    private auth_service: AuthService,
+    private toastr: ToastrService
   ) { }
 
   ngOnInit() {
@@ -62,7 +63,7 @@ export class VoteBar {
       this.votes.upvote += 1;
 
     } else {
-      
+
       if (this.userVote !== null) this.votes.upvote -= 1;
       this.votes.downvote += 1;
 
@@ -76,6 +77,10 @@ export class VoteBar {
   }
 
   changeVote(event: Event) {
+
+    if (!this.auth_service.isAuthenticated()) {
+      //TODO: Fare che quando clicco si apre il login
+    }
 
     event.stopPropagation(); //evita che quando clicco apre la pagina del meme
 
