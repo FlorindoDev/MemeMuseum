@@ -1,0 +1,66 @@
+<div class="flex flex-row items-center gap-1 bg-secondary/80  rounded-4xl">
+
+    @if(this.userVote !== null && this.userVote !== undefined){
+    @if(this.userVote[0].upVote){
+
+
+    <div (click)="changeVote($event)" id="up-active" class="group hover:bg-primary hover:rounded-4xl p-2.5">
+        <svg class="w-5 text-accent  " fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <path
+                d="M4 14h4v7a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1v-7h4a1.001 1.001 0 0 0 .781-1.625l-8-10c-.381-.475-1.181-.475-1.562 0l-8 10A1.001 1.001 0 0 0 4 14z" />
+        </svg>
+    </div>
+    }@else{
+    <div (click)="changeVote($event)" id="up" class="group hover:bg-primary hover:rounded-4xl p-2.5">
+        <svg class="w-5 dark:text-white text-black   " fill="currentColor" viewBox="0 0 24 24"
+            xmlns="http://www.w3.org/2000/svg">
+            <path
+                d="M4 14h4v7a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1v-7h4a1.001 1.001 0 0 0 .781-1.625l-8-10c-.381-.475-1.181-.475-1.562 0l-8 10A1.001 1.001 0 0 0 4 14z" />
+        </svg>
+    </div>
+    }
+
+    }@else{
+    <div (click)="changeVote($event)" id="up" class="group hover:bg-primary hover:rounded-4xl p-2.5">
+        <svg class="w-5 dark:text-white text-black   " fill="currentColor" viewBox="0 0 24 24"
+            xmlns="http://www.w3.org/2000/svg">
+            <path
+                d="M4 14h4v7a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1v-7h4a1.001 1.001 0 0 0 .781-1.625l-8-10c-.381-.475-1.181-.475-1.562 0l-8 10A1.001 1.001 0 0 0 4 14z" />
+        </svg>
+    </div>
+    }
+
+    <p class="mr-1 text-text">{{this.votes.upvote}}</p>
+
+    @if(this.userVote !== null && this.userVote !== undefined){
+    @if(!(this.userVote[0].upVote)){
+
+    <div (click)="changeVote($event)" id="down-active" class="group hover:bg-primary hover:rounded-4xl p-2">
+        <svg class="w-5 text-accent  transform rotate-180" fill="currentColor" viewBox="0 0 24 24"
+            xmlns="http://www.w3.org/2000/svg">
+            <path
+                d="M4 14h4v7a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1v-7h4a1.001 1.001 0 0 0 .781-1.625l-8-10c-.381-.475-1.181-.475-1.562 0l-8 10A1.001 1.001 0 0 0 4 14z" />
+        </svg>
+    </div>
+    }@else{
+    <div (click)="changeVote($event)" id="down" class="group hover:bg-primary hover:rounded-4xl p-2">
+        <svg class="w-5 h-5 dark:text-white text-black rounded-4xl transform rotate-180" fill="currentColor"
+            viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <path
+                d="M4 14h4v7a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1v-7h4a1.001 1.001 0 0 0 .781-1.625l-8-10c-.381-.475-1.181-.475-1.562 0l-8 10A1.001 1.001 0 0 0 4 14z" />
+        </svg>
+    </div>
+    }
+
+    }@else{
+    <div (click)="changeVote($event)" id="down" class="group hover:bg-primary hover:rounded-4xl p-2">
+        <svg class="w-5 h-5 dark:text-white text-black rounded-4xl transform rotate-180" fill="currentColor"
+            viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <path
+                d="M4 14h4v7a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1v-7h4a1.001 1.001 0 0 0 .781-1.625l-8-10c-.381-.475-1.181-.475-1.562 0l-8 10A1.001 1.001 0 0 0 4 14z" />
+        </svg>
+    </div>
+    }
+
+    <p class="text-text pr-3">{{this.votes.downvote}}</p>
+</div>

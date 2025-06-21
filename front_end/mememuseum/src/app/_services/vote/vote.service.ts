@@ -2,8 +2,9 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { environment } from '../../environment.prod';
 import { numvote } from './numvote.type';
-import { Observable, map, catchError, throwError } from 'rxjs';
+import { Observable } from 'rxjs';
 import { Filter } from './filter.type';
+import { vote } from './vote.type';
 
 @Injectable({
   providedIn: 'root'
@@ -46,11 +47,24 @@ export class VoteService {
     return this.http.get<numvote>(`${this.url}${url}`, { ...this.httpOptions, observe: 'response' }); //... è il spread inserisce le proprità di un oggetto in un altro
   }
 
-  /*
-  addVotes(idmeme: number, upvote: boolean): Observable<memevote> {
 
-    let url: string = `/votes?count=true&idmeme=${idmeme}`;
-    return this.http.get<memevote>(`${this.url}${url}`, this.httpOptions);
-  }*/
+  addVotes(idmeme: number, upvote: boolean): Observable<any> {
+
+    let url: string = `/votes?idmeme=${idmeme}`;
+    return this.http.post(`${this.url}${url}`, { upVote: upvote }, this.httpOptions);
+  }
+
+  removeVotes(idmeme: number): Observable<any> {
+
+    let url: string = `/votes?idmeme=${idmeme}`;
+    return this.http.delete(`${this.url}${url}`);
+  }
+
+
+  userVote(idmeme: number, iduser: number): Observable<vote[]> {
+
+    let url: string = `/votes?idmeme=${idmeme}&iduser=${iduser}`;
+    return this.http.get<vote[]>(`${this.url}${url}`, this.httpOptions);
+  }
 
 }

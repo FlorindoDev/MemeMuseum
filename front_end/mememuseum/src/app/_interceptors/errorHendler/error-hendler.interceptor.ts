@@ -11,8 +11,10 @@ export function errorHendlerInterceptor(request: HttpRequest<any>, next: HttpHan
 
   const toastr = inject(ToastrService);
 
+  //TODO: togliere console log serve per debug
   return next(request).pipe(
     catchError((err: HttpErrorResponse) => {
+      console.log(err);
       let myerr: errorHTTP;
       let myErrors = environment.myErrors;
       if (err.status === 0) {

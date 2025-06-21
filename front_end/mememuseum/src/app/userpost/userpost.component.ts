@@ -9,10 +9,11 @@ import { UserService } from '../_services/user/user.service';
 import { numcomments } from '../_services/comment/numcommets.type';
 import { CommentService } from '../_services/comment/comment.service';
 import { environment } from '../environment.prod';
+import { VoteBar } from '../vote-bar/vote-bar.component';
 
 @Component({
   selector: 'user-post',
-  imports: [CommonModule],
+  imports: [CommonModule, VoteBar],
   templateUrl: './userpost.component.html',
   styleUrl: './userpost.component.scss'
 })
@@ -42,7 +43,6 @@ export class Userpost {
   }
 
   ngOnInit() {
-    this.fatchNumVotes();
     this.fatchUser();
     this.fatchNumComments();
   }
@@ -53,17 +53,6 @@ export class Userpost {
     target.previousElementSibling?.classList.add('hidden');
   }
 
-  fatchNumVotes() {
-    this.voteservice.getNumVotes({ idmeme: this.meme.idMeme }).subscribe({
-      next: (response) => {
-        if (response.status === 204) {
-          this.votes = { upvote: 0, downvote: 0 };
-          return;
-        }
-        if (response.body !== null) this.votes = response.body;
-      }
-    })
-  }
 
   fatchUser() {
     this.userservice.getUserFromId(this.meme.UserIdUser as number).subscribe({

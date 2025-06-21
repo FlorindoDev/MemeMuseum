@@ -55,7 +55,6 @@ export class SignUp {
   hendleTyping(event?: Event) {
     let element = event?.target as HTMLElement;
     if (this.isSubmitted) {
-      console.log(this.isFieldInError(element));
       this.addRedRing(element, this.isFieldInError(element));
     }
   }
