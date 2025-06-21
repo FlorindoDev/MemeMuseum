@@ -43,6 +43,7 @@ export class Navbar {
     this.isLogged.set(this.authservice.isUserAuthenticated());
     this.profilePic.set(this.UserService.getProfilePic());
     this.nickname.set(this.UserService.getNickName());
+    window.location.reload();
   }
 
   stopLoading(event: Event) {
@@ -82,6 +83,7 @@ export class Navbar {
       this.isLogged.set(this.authservice.isUserAuthenticated());
       this.toastr.success("Hai fatto il logout con successo", "Logout Completato!");
       this.router.navigate(["/"]);
+      window.location.reload();
     }, 100);
 
 
