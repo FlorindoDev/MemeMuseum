@@ -12,8 +12,10 @@ export class Darkmode {
     let light = localStorage.getItem("light");
     if (light === null) {
       document.body.classList.add("dark");
+      document.body.classList.remove("light");
     } else {
       document.body.classList.remove("dark");
+      document.body.classList.add("light");
     }
   }
 
