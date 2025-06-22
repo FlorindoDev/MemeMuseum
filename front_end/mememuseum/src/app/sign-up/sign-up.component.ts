@@ -38,7 +38,7 @@ export class SignUp {
   }
 
   stopLoading() {
-    document.getElementById("text-sign")?.classList.remove("hidden");
+    document.getElementById("text-of-sign")?.classList.remove("hidden");
     document.getElementById("loading-sign")?.classList.add("hidden");
   }
 

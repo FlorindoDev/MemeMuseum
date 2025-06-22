@@ -24,7 +24,7 @@ app.use(morgan('dev'));
 
 //Accetta tutte le origini 
 app.use(cors({
-  origin: 'http://localhost:4200'
+  origin: process.env.END_POINT_ALLOWED
 }));
 
 

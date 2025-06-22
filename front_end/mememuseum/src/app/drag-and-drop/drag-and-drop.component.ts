@@ -51,4 +51,23 @@ export class DragAndDrop {
 
     }
   }
+
+  onFileBrowse(event: Event): void {
+    const input = event.target as HTMLInputElement;
+
+    if (input.files && input.files.length > 0) {
+      this.droppedFile = input.files[0];
+
+      if (this.fileConsentiti.find((val) => this.droppedFile?.type === `image/${val}`)) {
+        this.isDrop = true;
+        this.isError = false;
+        this.loadedfile.emit(this.droppedFile);
+      } else {
+        this.isError = true;
+        this.isDrop = false;
+        this.toastr.error("File deve essere jpg, png o gif", "File non valido!");
+      }
+    }
+  }
+
 }
