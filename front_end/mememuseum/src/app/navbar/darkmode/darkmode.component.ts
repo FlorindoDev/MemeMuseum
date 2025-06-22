@@ -25,6 +25,7 @@ export class Darkmode {
       document.body.classList.remove("dark");
     } else {
       document.body.classList.add("dark");
+      document.body.classList.remove("light");
       localStorage.removeItem("light");
     }
   }

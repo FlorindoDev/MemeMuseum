@@ -4,12 +4,11 @@ import { FormControl, FormGroup, Validators, ReactiveFormsModule } from '@angula
 import { ToastrService } from 'ngx-toastr';
 import { Output } from '@angular/core';
 import { UserService } from '../_services/user/user.service';
-import { LoadingScreen } from '../loading-screeen/loading-screen.component';
 import { environment } from '../environment.prod';
 
 @Component({
   selector: 'login',
-  imports: [ReactiveFormsModule, LoadingScreen],
+  imports: [ReactiveFormsModule],
   templateUrl: './login.component.html',
   styleUrl: './login.component.scss'
 })

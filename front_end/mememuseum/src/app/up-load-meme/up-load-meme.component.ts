@@ -2,7 +2,6 @@ import { Component } from '@angular/core';
 import { DragAndDrop } from '../drag-and-drop/drag-and-drop.component';
 import { FormGroup, FormControl, Validators, ReactiveFormsModule } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
-import { LoadingScreen } from '../loading-screeen/loading-screen.component';
 import { MemeService } from '../_services/meme/meme.service';
 import { tag } from '../_services/meme/tag.type';
 import { Meme } from '../_services/meme/meme.type';
@@ -10,7 +9,7 @@ import { Router } from '@angular/router';
 
 @Component({
   selector: 'up-load-meme',
-  imports: [DragAndDrop, ReactiveFormsModule, LoadingScreen],
+  imports: [DragAndDrop, ReactiveFormsModule],
   templateUrl: './up-load-meme.component.html',
   styleUrl: './up-load-meme.component.scss'
 })

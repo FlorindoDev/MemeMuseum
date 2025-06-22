@@ -34,6 +34,26 @@
     --color-primary: #6e47a9;
     --color-secondary: #2c184d;
     --color-accent: #b486fe;
+
+    //colori cubbo caricamento
+    --background-cube: #222;
+    --left-face: #502a88;
+    --right-face: #b486fe;
+    --top-face: #2c184d;
+    --scale: 1;
+    --duration: 3s;
+    --timing-function: ease;
+}
+
+.light {
+    //colori cubbo caricamento
+    --background-cube: #222;
+    --left-face: #D53A33;
+    --right-face: #E79C10;
+    --top-face: #1d9099;
+    --scale: 1;
+    --duration: 3s;
+    --timing-function: ease;
 }
 
 @theme {

@@ -9,6 +9,7 @@ import { router as UsersRoute } from "./routes/UsersRoute.js"
 import { router as MemesRoute } from "./routes/MemesRoute.js"
 import { router as VotesRoute } from "./routes/VotesRoute.js";
 import { router as CommentRoute } from "./routes/CommentRoute.js";
+import { AppErrorHttp } from "./utils/AppError.js";
 
 
 //TODO: RICORDA DI DARE AL PROF .env gia fatto e passare il json per google storage
@@ -60,6 +61,8 @@ app.use('/comments', CommentRoute);
 //error handler
 app.use((err, req, res, next) => {
   console.log(err.stack);
+
+  if (!(err instanceof AppErrorHttp)) err.message = "An error occurred";
 
   let body = {
     status: err.status || 500,

@@ -4,11 +4,11 @@ import { AuthService } from '../_services/auth/auth.service';
 import { FormControl, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
 import { Output } from '@angular/core';
-import { LoadingScreen } from '../loading-screeen/loading-screen.component';
+
 
 @Component({
   selector: 'sign-up',
-  imports: [LoadingScreen, ReactiveFormsModule],
+  imports: [ReactiveFormsModule],
   templateUrl: './sign-up.component.html',
   styleUrl: './sign-up.component.scss'
 })
@@ -33,13 +33,13 @@ export class SignUp {
   });
 
   startLoading() {
-    document.getElementById("text-accedi")?.classList.add("hidden");
-    document.getElementById("loading")?.classList.remove("hidden");
+    document.getElementById("text-of-sign")?.classList.add("hidden");
+    document.getElementById("loading-sign")?.classList.remove("hidden");
   }
 
   stopLoading() {
-    document.getElementById("text-accedi")?.classList.remove("hidden");
-    document.getElementById("loading")?.classList.add("hidden");
+    document.getElementById("text-sign")?.classList.remove("hidden");
+    document.getElementById("loading-sign")?.classList.add("hidden");
   }
 
   addRedRing(element: HTMLElement, error: boolean): void {

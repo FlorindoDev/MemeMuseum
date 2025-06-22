@@ -5,13 +5,14 @@ import { Meme } from './meme.type';
 import { Filter } from './filter.type';
 import { environment } from '../../environment.prod';
 import { tag } from './tag.type';
+import { PagedResources } from '../interfaces/PagedResources.interfaces';
 
 @Injectable({
   providedIn: 'root'
 })
-export class MemeService {
+export class MemeService implements PagedResources<Meme> {
 
-  url = environment.apiBaseUrl
+  url: string = environment.apiBaseUrl
 
   httpOptions = {
     headers: new HttpHeaders({
@@ -58,6 +59,12 @@ export class MemeService {
     return this.http.post<tag[]>(`${this.url}${url}`, tags, this.httpOptions);
   }
 
+  getNextPage(page: number): Observable<Meme[]> {
+
+    let url = `/memes?page=${page}`;
+    return this.http.get<Meme[]>(`${this.url}${url}`, this.httpOptions);
+
+  }
 
 
 }

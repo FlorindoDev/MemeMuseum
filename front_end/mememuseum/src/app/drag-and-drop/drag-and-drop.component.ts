@@ -11,6 +11,7 @@ import { ToastrService } from 'ngx-toastr';
 
 export class DragAndDrop {
   isHovering = false;
+  isError = false;
   droppedFile: File | null = null;
   isDrop = false;
   fileConsentiti = ["jpg", "png", "gif", "jpeg"];
@@ -39,9 +40,12 @@ export class DragAndDrop {
       this.droppedFile = event.dataTransfer.files[0];
       if (this.fileConsentiti.find((val) => this.droppedFile?.type === `image/${val}`)) {
         this.isDrop = true;
+        this.isError = false;
         this.loadedfile.emit(this.droppedFile);
 
       } else {
+        this.isError = true;
+        this.isDrop = false;
         this.toastr.error("File deve essere jpg,png o gif", " file non valido!");
       }
 
