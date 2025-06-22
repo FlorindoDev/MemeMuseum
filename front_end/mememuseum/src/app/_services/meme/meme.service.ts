@@ -60,7 +60,6 @@ export class MemeService implements PagedResources<Meme> {
   }
 
   getNextPage(page: number): Observable<Meme[]> {
-
     let url = `/memes?page=${page}`;
     return this.http.get<Meme[]>(`${this.url}${url}`, this.httpOptions);
 
