@@ -6,6 +6,7 @@ import { isMemeExists } from "../middleware/MemeMiddlewares.js";
 import { isCommentVoteAlreadyExists } from "../middleware/CommentVoteMiddlewares.js";
 import { CommentVoteController } from "../controllers/CommentVoteController.js";
 import { isCommentExists } from "../middleware/CommentMiddlewares.js";
+import { queryParamsToList } from "../middleware/Middlewares.js";
 import { schemaCommentsGet, schemaCommentsPost, schemaCommentsVotesGet, schemaCommentsVotesPost, idCommentRequiredParams } from "../schemas/comments.schema.js";
 
 
@@ -105,6 +106,15 @@ router.post('/', [enforceAuthentication, validate(schemaCommentsPost), isMemeExi
  *               "type": "string"
  *             }
  *           },
+ *          {
+ *             "name": "orderby",
+ *             "in": "query",
+ *             "required": false,
+ *             "description": "elemento per cui vuoi ordinare: `upvote,ASC/DESC` o `downvote,ASC/DESC`",
+ *             "schema": {
+ *               "type": "string"
+ *             }
+ *           },
  *           {
  *              "name": "count",
  *              "in": "query",
@@ -132,9 +142,16 @@ router.post('/', [enforceAuthentication, validate(schemaCommentsPost), isMemeExi
  *   }
  * }
  */
-router.get('/', validate(schemaCommentsGet), (req, res, next) => {
+router.get('/', validate(schemaCommentsGet), queryParamsToList(["orderby"]), (req, res, next) => {
 
-    let filters = CommentController.createFilterGetVote(req.query.idmeme, req.query.iduser);
+    let filters;
+
+    try {
+        filters = CommentController.createFilterGetVote(req.query.idmeme, req.query.iduser, req.orderby);
+    } catch (err) {
+        next(err);
+    }
+
 
     CommentController.getCommentMeme(filters).then((result) => {
 

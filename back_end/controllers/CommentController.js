@@ -1,5 +1,7 @@
 import { Comment } from '../models/DataBase.js'
+import { CommentVote } from '../models/DataBase.js';
 import { FailToSaveComment, CommentNotFoundError } from '../utils/error/index.js';
+import { Sequelize } from 'sequelize';
 
 export class CommentController {
 
@@ -33,7 +35,8 @@ export class CommentController {
         return result;
     }
 
-    static createFilterGetVote(idmeme, iduser) {
+    static createFilterGetVote(idmeme, iduser, orderby) {
+
         let filters = { where: {} }
 
         if (idmeme !== undefined) {
@@ -42,6 +45,22 @@ export class CommentController {
 
         if (iduser !== undefined) {
             filters.where.UserIdUser = iduser;
+        }
+
+        if (orderby !== undefined) {
+
+            filters.include = [{
+                model: CommentVote,
+                attributes: [],
+                required: false  // se vuoi includere anche i meme con 0 upvote
+            }];
+            filters.attributes = {
+                include: [
+                    [Sequelize.fn('COUNT', Sequelize.col('CommentVotes.idVote')), orderby[0]]
+                ]
+            };
+            filters.group = ['Comment.idComment'];
+            filters.order = [[orderby[0], orderby[1].toUpperCase()]];
         }
 
         return filters;
