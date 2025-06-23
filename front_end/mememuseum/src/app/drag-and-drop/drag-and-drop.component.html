@@ -1,7 +1,7 @@
 <div class="flex items-center justify-center w-full pt-35 ">
     <label (dragover)="onDragOver($event)" (dragleave)="onDragLeave($event)" (change)="onFileBrowse($event)"
         (drop)="onDrop($event)" for="dropzone-file" [class.hover]="isHovering"
-        class="transition-colors mx-20 flex flex-col items-center justify-center w-250 h-64 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 dark:hover:bg-gray-800 dark:bg-gray-700 hover:bg-gray-100 dark:border-gray-600 dark:hover:border-gray-500 dark:hover:bg-gray-600">
+        class="transition-colors mx-10 flex flex-col items-center justify-center w-150 h-64 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-200 dark:hover:bg-gray-800 dark:bg-gray-700 hover:bg-gray-100 dark:border-gray-600 dark:hover:border-gray-500 dark:hover:bg-gray-600">
         <div class="flex flex-col items-center justify-center pt-5 pb-6">
             @if(!this.isDrop){
             @if(this.isError){

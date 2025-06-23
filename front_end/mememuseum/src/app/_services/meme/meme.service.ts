@@ -42,6 +42,11 @@ export class MemeService implements PagedResources<Meme> {
     return this.http.get<Meme[]>(`${this.url}${url}`, this.httpOptions);
   }
 
+  getMemeFromId(idmeme: number): Observable<Meme> {
+    let url = `/memes/${idmeme}`;
+    return this.http.get<Meme>(`${this.url}${url}`, this.httpOptions);
+  }
+
   saveMeme(body: { image: File, description?: string | null }): Observable<Meme> {
     let url = "/memes";
 

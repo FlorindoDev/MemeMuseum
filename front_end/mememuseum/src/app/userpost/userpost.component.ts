@@ -2,7 +2,6 @@ import { Component, Input } from '@angular/core';
 import { Router } from '@angular/router';
 import { Meme } from '../_services/meme/meme.type';
 import { CommonModule } from '@angular/common';
-import { VoteService } from '../_services/vote/vote.service';
 import { numvote } from '../_services/vote/numvote.type';
 import { User } from '../_services/user/user.type';
 import { UserService } from '../_services/user/user.service';
@@ -10,6 +9,7 @@ import { numcomments } from '../_services/comment/numcommets.type';
 import { CommentService } from '../_services/comment/comment.service';
 import { environment } from '../environment.prod';
 import { VoteBar } from '../vote-bar/vote-bar.component';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'user-post',
@@ -20,16 +20,25 @@ import { VoteBar } from '../vote-bar/vote-bar.component';
 export class Userpost {
 
   @Input({ required: true }) meme: Meme = { idMeme: 0, image: "", description: "" };
+  @Input() isCard: boolean = true;
+
   votes: numvote = { upvote: 0, downvote: 0 };
   user: User = { nickName: "", email: "", profilePic: null };
   comments: numcomments = { comment: 0 };
 
   constructor(
     private route: Router,
-    private voteservice: VoteService,
     private userservice: UserService,
-    private commentservice: CommentService
+    private commentservice: CommentService,
+    private toastrservice: ToastrService
   ) { }
+
+  onShare() {
+    navigator.clipboard.writeText(`${environment.apiBaseUrl}/memes/${this.meme.idMeme}`)
+      .then(() => {
+        this.toastrservice.success("link salvato con successo negli appunti", "Salvato con successo")
+      })
+  }
 
   //TODO: creare la pagina al meme
   toUserPost(event: Event) {
