@@ -2,16 +2,16 @@
     <div class="flex items-start gap-3">
 
         <div class="flex-shrink-0">
-            <img src="https://i.pravatar.cc/40" alt="avatar" class="w-10 h-10 rounded-full" />
+            <img [src]=this.comment_owner?.profilePic alt="avatar" class="w-10 h-10 rounded-full" />
         </div>
 
         <div class="flex-1">
             <div class="flex items-center justify-between">
-                <h4 class="font-semibold text-sm text-text">johnDoe</h4>
-                <span class="text-sm text-gray-400">2h fa</span>
+                <h4 class="font-semibold text-sm text-text">{{this.comment_owner?.nickName}}</h4>
+                <span class="text-sm text-gray-400">{{this.getTime()}}</span>
             </div>
             <p class="text-md text-text mt-1">
-                Questo è un esempio di commento. Bel post!
+                {{this.comment.content}}
             </p>
         </div>
     </div>

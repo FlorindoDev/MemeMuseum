@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, NgModule } from '@angular/core';
 import { Userpost } from '../userpost/userpost.component';
 import { MemeService } from '../_services/meme/meme.service';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -9,11 +9,12 @@ import { Validators, FormControl, FormGroup, ReactiveFormsModule } from '@angula
 import { Comment } from '../comment/comment.component';
 import { CommentService } from '../_services/comment/comment.service';
 import { comment } from '../_services/comment/comment.type';
+import { NextPage } from '../next-page/next-page.component';
 
 
 @Component({
   selector: 'meme-page',
-  imports: [Userpost, LoadingScreen, ReactiveFormsModule, Comment],
+  imports: [Userpost, LoadingScreen, ReactiveFormsModule, Comment, NextPage],
   templateUrl: './meme-page.html',
   styleUrl: './meme-page.scss'
 })
@@ -22,13 +23,14 @@ export class MemePage {
   memeId: string | null = "";
   meme: Meme | null = null;
   comments: comment[] = [];
+  isSubmitted: boolean = false;
 
   constructor(
     private meme_service: MemeService,
     private route: ActivatedRoute,
     private toastr_service: ToastrService,
     private router: Router,
-    private comment_service: CommentService
+    protected comment_service: CommentService
   ) { }
 
   commentForm = new FormGroup({
@@ -37,8 +39,67 @@ export class MemePage {
 
   ngOnInit() {
     this.memeId = this.route.snapshot.paramMap.get('id');
+    if (this.memeId !== null) this.comment_service.setIdMeme(Number(this.memeId));
     this.fetchMeme();
   }
+
+  addRedRing(element: HTMLElement, error: unknown | boolean): void {
+    if (error) {
+      element.classList.add("ring-2");
+      element.classList.add("ring-red-400");
+    } else {
+      element.classList.remove("ring-2");
+      element.classList.remove("ring-red-400");
+    }
+  }
+
+  startLoading() {
+    document.getElementById("text-commenta")?.classList.add("hidden");
+    document.getElementById("loading-comment")?.classList.remove("hidden");
+  }
+
+  stopLoading() {
+    document.getElementById("text-commenta")?.classList.remove("hidden");
+    document.getElementById("loading-comment")?.classList.add("hidden");
+  }
+
+  handleComment() {
+    this.startLoading();
+    this.isSubmitted = true;
+    let element = document.querySelector("#textarea-comment") as HTMLElement
+
+    if (this.commentForm.invalid) {
+      this.stopLoading();
+      this.addRedRing(element, this.isFieldInError(element));
+    } else {
+      this.comment_service.saveComment({ content: this.commentForm.value.comment as string, MemeIdMeme: this.meme?.idMeme }).subscribe({
+        next: () => {
+          window.location.reload();
+          this.toastr_service.success('Commento aggiunto con successo', 'Successo!');
+          this.stopLoading();
+        },
+
+        error: () => {
+          this.stopLoading();
+        }
+      })
+    }
+  }
+
+  hendleTyping(event?: Event) {
+    let element = event?.target as HTMLElement;
+    if (this.isSubmitted) {
+      this.addRedRing(element, this.isFieldInError(element));
+    }
+  }
+
+  isFieldInError(element: HTMLElement) {
+    let attr: string = element.getAttribute("formControlName") as string;
+    const control = this.commentForm.get(attr);
+    return control?.errors !== null;
+
+  }
+
 
   fetchMeme() {
     this.meme_service.getMemeFromId(Number(this.memeId)).subscribe({
@@ -62,6 +123,14 @@ export class MemePage {
         this.comments = val;
       }
     })
+  }
+
+  onNewComments(new_comments: comment[]) {
+    if (new_comments != null) {
+      new_comments.map((val) => {
+        this.comments.push(val);
+      });
+    }
   }
 
 }

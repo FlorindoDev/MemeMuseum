@@ -25,6 +25,7 @@ export class Userpost {
   votes: numvote = { upvote: 0, downvote: 0 };
   user: User = { nickName: "", email: "", profilePic: null };
   comments: numcomments = { comment: 0 };
+  timeDiffFromCreation = environment.timeDiffFromCreation;
 
   constructor(
     private route: Router,
@@ -40,7 +41,6 @@ export class Userpost {
       })
   }
 
-  //TODO: creare la pagina al meme
   toUserPost(event: Event) {
 
     const target = event.target as HTMLElement;
@@ -54,6 +54,10 @@ export class Userpost {
   ngOnInit() {
     this.fatchUser();
     this.fatchNumComments();
+  }
+
+  getTime() {
+    return environment.timeDiffFromCreation(this.meme.createdAt as Date);
   }
 
   stopLoading(event: Event) {

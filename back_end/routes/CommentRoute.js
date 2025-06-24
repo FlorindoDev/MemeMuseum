@@ -88,6 +88,29 @@ router.post('/', [enforceAuthentication, validate(schemaCommentsPost), isMemeExi
  *         "description": "da i commenti di un meme o i commenti fatti da un utente ",
  *         "tags": ["Comments"],
  *         "parameters": [
+ *          {
+ *           "name": "pagesize",
+ *           "in": "query",
+ *           "description": "Numero di memes per pagina (1–10). Default: 10",
+ *           "required": false,
+ *           "schema": {
+ *             "type": "integer",
+ *             "minimum": 1,
+ *             "maximum": 10,
+ *             "default": 10
+ *           }
+ *         },
+ *         {
+ *           "name": "page",
+ *           "in": "query",
+ *           "description": "Numero di pagina da visualizzare (>=1). Default: 1",
+ *           "required": false,
+ *           "schema": {
+ *             "type": "integer",
+ *             "minimum": 1,
+ *             "default": 1
+ *           }
+ *         },
  *           {
  *             "name": "idmeme",
  *             "in": "query",
@@ -142,13 +165,14 @@ router.post('/', [enforceAuthentication, validate(schemaCommentsPost), isMemeExi
  *   }
  * }
  */
-router.get('/', validate(schemaCommentsGet), queryParamsToList(["orderby"]), (req, res, next) => {
+router.get('/', validate(schemaCommentsGet, true), queryParamsToList(["orderby"]), (req, res, next) => {
 
     let filters;
-
+    let paginazione = { pages: req.checked.query.page, size: req.checked.query.pagesize }
     try {
-        filters = CommentController.createFilterGetVote(req.query.idmeme, req.query.iduser, req.orderby);
+        filters = CommentController.createFilterGetComment(paginazione, req.query.idmeme, req.query.iduser, req.orderby, req.query.count);
     } catch (err) {
+        console.log(err);
         next(err);
     }
 

@@ -1,6 +1,5 @@
 import { Component, EventEmitter, Input, Output, HostListener } from '@angular/core';
 import { PagedResources } from '../_services/interfaces/PagedResources.interfaces';
-//import { MemeService } from '../_services/meme/meme.service';
 
 @Component({
   selector: 'next-page',
@@ -25,7 +24,7 @@ export class NextPage<C> {
 
   @HostListener('window:scroll', []) // esegue questa funzione ogni volta che l’utente scrolla la finestra (window)
   onWindowScroll() {
-    const threshold = 300;
+    const threshold = 100;
     const position = window.innerHeight + window.scrollY; // window.innerHeight grandezza viewport  window.scrollY quanto ho scrollato
     const height = document.body.offsetHeight;  //Altezza totale della pagina
 

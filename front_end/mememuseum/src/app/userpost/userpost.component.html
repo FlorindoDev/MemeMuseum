@@ -2,6 +2,7 @@
     'hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors duration-300': isCard
   }" class="p-4 m-2 rounded-2xl  cursor-pointer dark:text-gray-300 text-gray-800">
 
+
     <div class="flex flex-row items-center gap-3 pl-2 py-2">
         <div class="skeleton flex flex-row justify-center items-center gap-2">
             <div class="w-9 h-9 rounded-full bg-gray-400 animate-pulse"></div>
@@ -11,8 +12,11 @@
         <img (load)="stopLoading($event);" onload="this.nextElementSibling?.classList.remove('hidden')"
             class="w-9 rounded-full hidden" [src]="this.user.profilePic">
         <p class="text-text hidden">{{this.user.nickName}}</p>
-
+        <div class="w-1.5 h-1.5 bg-gray-400/80 rounded-full mt-0.5"></div>
+        <p class="text-text"> {{this.getTime()}} </p>
     </div>
+
+
 
     <div class="relative md:w-170 max-h-100 rounded-2xl bg-cover bg-center overflow-hidden"
         [ngStyle]="{'background-image': 'url(' + meme.image + ')'}" [ngClass]="{

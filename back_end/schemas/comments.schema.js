@@ -2,7 +2,7 @@ import { z } from "zod";
 import { idRequired } from "./utils.schema.js";
 import { idMemeRequiredQuery } from "../schemas/meme.schema.js";
 import { idUserRequiredQuery } from "../schemas/user.schema.js";
-import { unionChecks, orUnionChecks } from "../schemas/utils.schema.js";
+import { unionChecks, orUnionChecks, schemaPage } from "../schemas/utils.schema.js";
 import { upVoteRequiredBody } from "../schemas/comments_votes.schema.js";
 
 let content = z.object({
@@ -57,6 +57,6 @@ export let idMemeOridUser = (data) => {
 }
 
 export const schemaCommentsPost = unionChecks([idMemeRequiredQuery, contentRequiredBody]);
-export const schemaCommentsGet = unionChecks([countNotRequiredQuery, orderbyNotRequiredQuery, orUnionChecks([idUserRequiredQuery, idMemeRequiredQuery])]);
+export const schemaCommentsGet = unionChecks([schemaPage, countNotRequiredQuery, orderbyNotRequiredQuery, orUnionChecks([idUserRequiredQuery, idMemeRequiredQuery])]);
 export const schemaCommentsVotesPost = unionChecks([upVoteRequiredBody, idCommentRequiredParams]);
 export const schemaCommentsVotesGet = unionChecks([idCommentRequiredParams, countNotRequiredQuery])

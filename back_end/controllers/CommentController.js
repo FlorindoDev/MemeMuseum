@@ -35,9 +35,16 @@ export class CommentController {
         return result;
     }
 
-    static createFilterGetVote(idmeme, iduser, orderby) {
+    static createFilterGetComment(paginazione, idmeme, iduser, orderby, count) {
 
         let filters = { where: {} }
+
+        if (count != "true") {
+            filters.subQuery = false;
+            filters.limit = paginazione.size;
+            filters.offset = (paginazione.pages - 1) * paginazione.size;
+
+        }
 
         if (idmeme !== undefined) {
             filters.where.MemeIdMeme = idmeme;
@@ -62,7 +69,6 @@ export class CommentController {
             filters.group = ['Comment.idComment'];
             filters.order = [[orderby[0], orderby[1].toUpperCase()]];
         }
-
         return filters;
     }
 
