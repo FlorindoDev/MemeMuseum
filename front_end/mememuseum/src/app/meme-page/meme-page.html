@@ -23,7 +23,6 @@
                 </button>
             </form>
         </div>
-        <!--TODO: VENGONO STAMPATI DOPPIONI -->
         <hr class="border-gray-800 dark:border-white/50 w-full">
         <next-page [service]="comment_service" [page]=2 (resource)="onNewComments($event)"></next-page>
         @for(comment of comments; track comment){
