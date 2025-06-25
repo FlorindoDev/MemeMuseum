@@ -24,7 +24,8 @@
             </form>
         </div>
         <hr class="border-gray-800 dark:border-white/50 w-full">
-        <next-page [service]="comment_service" [page]=2 (resource)="onNewComments($event)"></next-page>
+        <next-page [service]="comment_service" [page]=2 (resource)="onNewComments($event)"
+            [filter]=this.filter></next-page>
         @for(comment of comments; track comment){
         <div class="m-5">
             <comment [comment]=comment></comment>

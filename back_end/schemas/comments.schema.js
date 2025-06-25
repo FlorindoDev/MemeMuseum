@@ -4,6 +4,7 @@ import { idMemeRequiredQuery } from "../schemas/meme.schema.js";
 import { idUserRequiredQuery } from "../schemas/user.schema.js";
 import { unionChecks, orUnionChecks, schemaPage } from "../schemas/utils.schema.js";
 import { upVoteRequiredBody } from "../schemas/comments_votes.schema.js";
+import { idUserNotRequiredQuery } from "../schemas/user.schema.js";
 
 let content = z.object({
     content: z.string(),
@@ -59,4 +60,4 @@ export let idMemeOridUser = (data) => {
 export const schemaCommentsPost = unionChecks([idMemeRequiredQuery, contentRequiredBody]);
 export const schemaCommentsGet = unionChecks([schemaPage, countNotRequiredQuery, orderbyNotRequiredQuery, orUnionChecks([idUserRequiredQuery, idMemeRequiredQuery])]);
 export const schemaCommentsVotesPost = unionChecks([upVoteRequiredBody, idCommentRequiredParams]);
-export const schemaCommentsVotesGet = unionChecks([idCommentRequiredParams, countNotRequiredQuery])
+export const schemaCommentsVotesGet = unionChecks([idCommentRequiredParams, countNotRequiredQuery, idUserNotRequiredQuery])

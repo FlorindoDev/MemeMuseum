@@ -10,6 +10,8 @@ import { Comment } from '../comment/comment.component';
 import { CommentService } from '../_services/comment/comment.service';
 import { comment } from '../_services/comment/comment.type';
 import { NextPage } from '../next-page/next-page.component';
+import { AuthService } from '../_services/auth/auth.service';
+import { Filter } from '../_services/comment/filter.type';
 
 
 @Component({
@@ -24,13 +26,16 @@ export class MemePage {
   meme: Meme | null = null;
   comments: comment[] = [];
   isSubmitted: boolean = false;
+  filter?: Filter;
 
   constructor(
     private meme_service: MemeService,
     private route: ActivatedRoute,
     private toastr_service: ToastrService,
     private router: Router,
-    protected comment_service: CommentService
+    protected comment_service: CommentService,
+    private auth_service: AuthService,
+    private toastr: ToastrService
   ) { }
 
   commentForm = new FormGroup({
@@ -39,7 +44,7 @@ export class MemePage {
 
   ngOnInit() {
     this.memeId = this.route.snapshot.paramMap.get('id');
-    if (this.memeId !== null) this.comment_service.setIdMeme(Number(this.memeId));
+    if (this.memeId !== null) this.filter = { idmeme: Number(this.memeId), orderby: "upvote,DESC" }
     this.fetchMeme();
   }
 
@@ -64,6 +69,13 @@ export class MemePage {
   }
 
   handleComment() {
+
+    if (!this.auth_service.isAuthenticated()) {
+      //TODO: Fare che quando clicco si apre il login
+      this.toastr.error('Non sei autetificato', 'Necessario Login!')
+      return;
+    }
+
     this.startLoading();
     this.isSubmitted = true;
     let element = document.querySelector("#textarea-comment") as HTMLElement
@@ -118,7 +130,7 @@ export class MemePage {
   }
 
   fetchComments() {
-    this.comment_service.getComment({ idmeme: this.meme?.idMeme, orderby: "upvote,ASC" }).subscribe({
+    this.comment_service.getComment({ idmeme: this.meme?.idMeme, orderby: "upvote,DESC" }).subscribe({
       next: (val) => {
         this.comments = val;
       }

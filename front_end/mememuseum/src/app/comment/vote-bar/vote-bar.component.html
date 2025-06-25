@@ -1,7 +1,7 @@
-<div class="flex flex-row items-center gap-1 bg-secondary/80  rounded-4xl">
+<div class="flex flex-row items-center gap-1 bg-secondary/80  rounded-4xl select-none">
 
-    @if(this.userVote !== null && this.userVote !== undefined){
-    @if(this.userVote[0].upVote){
+    @if(this.vote !== null && this.vote !== undefined){
+    @if(this.vote[0].upVote){
 
 
     <div (click)="changeVote($event)" id="up-active" class="group hover:bg-primary hover:rounded-4xl p-2.5">
@@ -30,10 +30,10 @@
     </div>
     }
 
-    <p class="mr-1 text-text">{{this.votes.upvote}}</p>
+    <p class="mr-1 text-text">{{this.numvotes.upvote}}</p>
 
-    @if(this.userVote !== null && this.userVote !== undefined){
-    @if(!(this.userVote[0].upVote)){
+    @if(this.vote !== null && this.vote !== undefined){
+    @if(!(this.vote[0].upVote)){
 
     <div (click)="changeVote($event)" id="down-active" class="group hover:bg-primary hover:rounded-4xl p-2">
         <svg class="w-5 text-accent  transform rotate-180" fill="currentColor" viewBox="0 0 24 24"
@@ -62,5 +62,5 @@
     </div>
     }
 
-    <p class="text-text pr-3">{{this.votes.downvote}}</p>
+    <p class="text-text pr-3">{{this.numvotes.downvote}}</p>
 </div>

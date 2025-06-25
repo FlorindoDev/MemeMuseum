@@ -1,0 +1,1 @@
+export interface numvote { upvote: number, downvote: number }

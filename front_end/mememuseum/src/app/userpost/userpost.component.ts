@@ -8,7 +8,7 @@ import { UserService } from '../_services/user/user.service';
 import { numcomments } from '../_services/comment/numcommets.type';
 import { CommentService } from '../_services/comment/comment.service';
 import { environment } from '../environment.prod';
-import { VoteBar } from '../vote-bar/vote-bar.component';
+import { VoteBar } from './vote-bar/vote-bar.component';
 import { ToastrService } from 'ngx-toastr';
 
 @Component({
@@ -30,7 +30,7 @@ export class Userpost {
   constructor(
     private route: Router,
     private userservice: UserService,
-    private commentservice: CommentService,
+    private comment_service: CommentService,
     private toastrservice: ToastrService
   ) { }
 
@@ -77,7 +77,7 @@ export class Userpost {
   }
 
   fatchNumComments() {
-    this.commentservice.getNumComment({ idmeme: this.meme.idMeme }).subscribe({
+    this.comment_service.getNumComments({ idmeme: this.meme.idMeme }).subscribe({
       next: (response) => {
         if (response.status === 204) {
           this.comments = { comment: 0 };

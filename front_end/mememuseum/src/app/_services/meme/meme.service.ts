@@ -10,7 +10,7 @@ import { PagedResources } from '../interfaces/PagedResources.interfaces';
 @Injectable({
   providedIn: 'root'
 })
-export class MemeService implements PagedResources<Meme> {
+export class MemeService implements PagedResources<Meme, Filter> {
 
   url: string = environment.apiBaseUrl
 
@@ -64,8 +64,9 @@ export class MemeService implements PagedResources<Meme> {
     return this.http.post<tag[]>(`${this.url}${url}`, tags, this.httpOptions);
   }
 
-  getNextPage(page: number): Observable<Meme[]> {
-    let url = `/memes?page=${page}`;
+  getNextPage(page: number, filter: Filter = {}): Observable<Meme[]> {
+    let url = this.createFilterGetMemes(filter, "/memes");
+    url = `${url}page=${page}`;
     return this.http.get<Meme[]>(`${this.url}${url}`, this.httpOptions);
 
   }

@@ -407,6 +407,15 @@ router.post('/:id/comments-votes', [enforceAuthentication, validate(schemaCommen
  *               "type": "string"
  *             }
  *           },
+ *          {
+ *           "name": "iduser",
+ *           "in": "query",
+ *           "description": "id utente",
+ *           "required": false,
+ *           "schema": {
+ *             "type": "integer"
+ *           }
+ *         },
  *           {
  *              "name": "count",
  *              "in": "query",
@@ -436,7 +445,9 @@ router.post('/:id/comments-votes', [enforceAuthentication, validate(schemaCommen
  */
 router.get('/:id/comments-votes', validate(schemaCommentsVotesGet), (req, res, next) => {
 
-    let filters = { where: { CommentIdComment: req.params.id } }
+    let filters = { where: { CommentIdComment: req.params.id } };
+
+    if (req.query.iduser) filters.where.UserIdUser = req.query.iduser;
 
     CommentVoteController.getCommentVote(filters).then((result) => {
 
@@ -448,7 +459,7 @@ router.get('/:id/comments-votes', validate(schemaCommentsVotesGet), (req, res, n
 
             let downvote = result.length - upVote.length;
 
-            result = { upVote: upVote.length, downvote: downvote };
+            result = { upvote: upVote.length, downvote: downvote };
         }
 
         res.status(200);

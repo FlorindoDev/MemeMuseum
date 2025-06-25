@@ -1,5 +1,4 @@
 <div class="bg-bg flex flex-col justify-center items-center min-h-screen">
-    <next-page class="pt-30" [service]="memeService" (resource)="onNewMemes($event)" [page]=2></next-page>
     <!--TODO AGGIUNGERE MEME DEL Giorno-->
     @for(meme of memes; track meme){
     <div class="bg-bg flex flex-col justify-center items-center"><user-post [meme]=meme></user-post></div>
@@ -7,5 +6,6 @@
     }@empty {
     <loading-screen></loading-screen>
     }
+    <next-page class="pt-30" [service]="memeService" (resource)="onNewMemes($event)" [page]=2></next-page>
 
 </div>
