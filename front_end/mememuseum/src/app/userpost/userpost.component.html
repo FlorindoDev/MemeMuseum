@@ -65,7 +65,8 @@
             </svg>
             <p class="pb-1 text-text">{{this.comments.comment}}</p>
         </div>
-        <div (click)="onShare()" class="flex flex-row items-center bg-secondary/80 hover:bg-primary rounded-4xl p-2">
+        <div (click)="onShare($event)"
+            class="flex flex-row items-center bg-secondary/80 hover:bg-primary rounded-4xl p-2">
             <svg class="w-6 dark:text-white text-black" viewBox="-0.5 0 25 25" fill="none"
                 xmlns="http://www.w3.org/2000/svg">
                 <path

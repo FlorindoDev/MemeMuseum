@@ -34,7 +34,8 @@ export class Userpost {
     private toastrservice: ToastrService
   ) { }
 
-  onShare() {
+  onShare(event: Event) {
+    event.stopPropagation();
     navigator.clipboard.writeText(`${window.location.origin}/memes/${this.meme.idMeme}`)
       .then(() => {
         this.toastrservice.success("link salvato con successo negli appunti", "Salvato con successo")
