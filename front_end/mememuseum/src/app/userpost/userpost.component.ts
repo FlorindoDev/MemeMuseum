@@ -35,7 +35,7 @@ export class Userpost {
   ) { }
 
   onShare() {
-    navigator.clipboard.writeText(`${environment.apiBaseUrl}/memes/${this.meme.idMeme}`)
+    navigator.clipboard.writeText(`${window.location.origin}/memes/${this.meme.idMeme}`)
       .then(() => {
         this.toastrservice.success("link salvato con successo negli appunti", "Salvato con successo")
       })
