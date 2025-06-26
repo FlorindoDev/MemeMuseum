@@ -16,8 +16,6 @@
         <p class="text-text"> {{this.getTime()}} </p>
     </div>
 
-
-
     <div class="relative md:w-170 max-h-100 rounded-2xl bg-cover bg-center overflow-hidden"
         [ngStyle]="{'background-image': 'url(' + meme.image + ')'}" [ngClass]="{
             'md:w-190 max-h-120 ': !isCard
@@ -38,11 +36,20 @@
 
     </div>
 
+    <div class="flex flex-wrap gap-3 pt-4">
+        @for(tag of tags; track tag){
+        <span class="inline-flex items-center px-2 py-1 text-sm font-medium text-text bg-primary rounded-full">
+            {{tag.name}}
+        </span>
+        }
+    </div>
+
     <div class="pt-4 pb-4 pl-1">
         <p class="text-text break-all md:w-[600px] max-h-100 w-full">
             {{this.meme.description}}
         </p>
     </div>
+
     <div class="flex flex-row items-center gap-5 w-full h-full ">
         <vote-bar [meme]=this.meme></vote-bar>
 

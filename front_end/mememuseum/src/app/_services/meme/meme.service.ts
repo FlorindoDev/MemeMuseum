@@ -32,7 +32,7 @@ export class MemeService implements PagedResources<Meme, Filter> {
     } else {
       url = `${url}?`
       if (filter.iduser) url = `iduser=${filter.iduser}&`;
-      if (filter.nametags) url = `$iduser=${filter.nametags}&`;
+      if (filter.nametags) url = `mametags=${filter.nametags}&`;
     }
     return url;
   }
@@ -62,6 +62,11 @@ export class MemeService implements PagedResources<Meme, Filter> {
   addTags(idmeme: number, tags: tag[]): Observable<tag[]> {
     let url = `/memes/${idmeme}/tags`;
     return this.http.post<tag[]>(`${this.url}${url}`, tags, this.httpOptions);
+  }
+
+  getTags(filter: Filter): Observable<tag[]> {
+    let url = this.createFilterGetMemes(filter, "/memes");
+    return this.http.get<tag[]>(`${this.url}${url}/tags`, this.httpOptions);
   }
 
   getNextPage(page: number, filter: Filter = {}): Observable<Meme[]> {

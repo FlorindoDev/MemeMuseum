@@ -10,6 +10,8 @@ import { CommentService } from '../_services/comment/comment.service';
 import { environment } from '../environment.prod';
 import { VoteBar } from './vote-bar/vote-bar.component';
 import { ToastrService } from 'ngx-toastr';
+import { tag } from '../_services/meme/tag.type';
+import { MemeService } from '../_services/meme/meme.service';
 
 @Component({
   selector: 'user-post',
@@ -26,12 +28,14 @@ export class Userpost {
   user: User = { nickName: "", email: "", profilePic: null };
   comments: numcomments = { comment: 0 };
   timeDiffFromCreation = environment.timeDiffFromCreation;
+  tags: tag[] = [];
 
   constructor(
     private route: Router,
     private userservice: UserService,
     private comment_service: CommentService,
-    private toastrservice: ToastrService
+    private toastrservice: ToastrService,
+    private meme_service: MemeService
   ) { }
 
   onShare(event: Event) {
@@ -55,6 +59,7 @@ export class Userpost {
   ngOnInit() {
     this.fatchUser();
     this.fatchNumComments();
+    this.fatchTags();
   }
 
   getTime() {
@@ -73,6 +78,14 @@ export class Userpost {
       next: (value) => {
         if (value.profilePic === null) value.profilePic = environment.noProfilePic;
         this.user = value;
+      }
+    })
+  }
+
+  fatchTags() {
+    this.meme_service.getTags({ idmeme: this.meme.idMeme }).subscribe({
+      next: (val) => {
+        this.tags = val;
       }
     })
   }
