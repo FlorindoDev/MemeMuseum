@@ -1,4 +1,4 @@
-import { Meme, Tag } from '../models/DataBase.js'
+import { Meme, Tag, User } from '../models/DataBase.js'
 import { Op } from "sequelize";
 import { MemeNotFoundError, MemeUploadError } from '../utils/error/index.js';
 
@@ -55,9 +55,12 @@ export class MemesController {
 
     }
 
-    static createFilterForGetMeme(query, nametags) {
+    static createFilterForGetMeme(query, nametags, username) {
 
-        let objectRequest = {
+        const includes = [];
+        const whereConditions = [];
+
+        const objectRequest = {
             limit: query.size,
             offset: (query.pages - 1) * query.size,
             attributes: [
@@ -68,39 +71,50 @@ export class MemesController {
                 'updatedAt',
                 'UserIdUser'
             ],
-
-
             group: ['Meme.idMeme']
+
         };
 
-        if (nametags !== undefined) {
-            objectRequest.include = {
+        if (nametags) {
+            includes.push({
                 model: Tag,
-                required: true,         //forza innerjoin
-                duplicating: false,     //evita che più volte lo stesso meme venga preso, se fosse true per ogni tags associato verrà stampato il meme(es 2 tag 2 volte stesso meme) e Impedisce l'uso di sottoquery
+                required: true,
+                duplicating: false,
                 attributes: [],
-                through: {
-                    attributes: []
-                },
-            };
-
-            objectRequest.where = {
+                through: { attributes: [] }
+            });
+            whereConditions.push({
                 [Op.or]: nametags.map(tag => ({
                     '$Tags.name$': {
-                        [Op.like]: `%${tag}%`
+                        [Op.iLike]: `%${tag}%`
                     }
                 }))
-            };
+            });
+        }
+
+        if (username) {
+            includes.push({
+                model: User,
+                required: true,
+                attributes: []
+            });
+            whereConditions.push({
+                '$User.nickName$': {
+                    [Op.iLike]: `%${username}%`
+                }
+            });
+
         }
 
         if (query.iduser) {
-            if (objectRequest.where === undefined) {
-                objectRequest.where = { UserIdUser: query.iduser }
-            } else {
-                objectRequest.where.UserIdUser = query.iduser;
-            }
+            whereConditions.push({ UserIdUser: query.iduser });
+        }
 
-        };
+        if (whereConditions.length) {
+            objectRequest.where = { [Op.and]: whereConditions };
+        }
+
+        objectRequest.include = includes;
 
         return objectRequest;
     }

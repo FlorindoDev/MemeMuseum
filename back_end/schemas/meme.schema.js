@@ -1,6 +1,6 @@
 import { z } from "zod";
 import { idRequired, idNotRequired, schemaPage, unionChecks } from "./utils.schema.js";
-import { idUserNotRequiredQuery } from "./user.schema.js";
+import { idUserNotRequiredQuery, NickNameNotRequiredQuery } from "./user.schema.js";
 
 let idR = z.object({
     idmeme: idRequired.id
@@ -15,7 +15,7 @@ let description = z.object({
 });
 
 let nametags = z.object({
-    nametags: z.string().min(3).max(15).optional(),
+    nametags: z.string().optional(),
 });
 
 let arraytags = z.object({
@@ -54,4 +54,4 @@ export const nametagsArrayRequiredBody = z.object({
 
 export const schemaTagsPost = unionChecks([idMemeRequiredParams, nametagsArrayRequiredBody]);
 export const schemaTagsGet = unionChecks([idMemeRequiredParams, nametagsNotRequiredQuery]);
-export const schemaMemeGet = unionChecks([schemaPage, idUserNotRequiredQuery, nametagsNotRequiredQuery]);
+export const schemaMemeGet = unionChecks([NickNameNotRequiredQuery, schemaPage, idUserNotRequiredQuery, nametagsNotRequiredQuery]);

@@ -74,6 +74,11 @@ export const NickNameNotRequiredBody = z.object({
 
 });
 
+export const NickNameNotRequiredQuery = z.object({
+    query: nicknameNotRequired,
+
+});
+
 export const EmailNotRequiredBody = z.object({
     body: emailNotRequired,
 

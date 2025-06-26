@@ -7,6 +7,8 @@ import { queryParamsToList } from "../middleware/Middlewares.js";
 import { TagController } from "../controllers/TagController.js";
 import { schemaMemeGet, idMemeRequiredParams, schemaTagsPost, schemaTagsGet } from "../schemas/meme.schema.js";
 import { validate } from "../middleware/Middlewares.js";
+import { DailyMemeController } from "../controllers/DailyMemeController.js";
+import { Op } from "sequelize";
 
 import multer from "multer";
 const upload = multer({ storage: multer.memoryStorage() });
@@ -128,6 +130,15 @@ router.post('/', [enforceAuthentication, imageParser, upLoadOnGoogle], (req, res
  *           }
  *          },
  *          {
+ *           "name": "username",
+ *           "in": "query",
+ *           "description": "username del utente di cui si vuole vedere i memes",
+ *           "required": false,
+ *           "schema": {
+ *             "type": "string",
+ *           }
+ *          },
+ *          {
  *           "name": "nametags",
  *           "in": "query",
  *           "description": "Lista di nomi dei tag da filtrare, separati da virgola (es. name1,name2)",
@@ -174,9 +185,119 @@ router.get('/', [validate(schemaMemeGet, true), queryParamsToList(['nametags'])]
 
     let query = { pages: req.checked.query.page, size: req.checked.query.pagesize, iduser: req.query.iduser };
 
-    let filters = MemesController.createFilterForGetMeme(query, req.nametags);
+    let filters = MemesController.createFilterForGetMeme(query, req.nametags, req.query.username);
 
     MemesController.getAllMemes(filters).then((result) => {
+
+        res.status(200);
+        res.json(result);
+
+    }).catch((err) => {
+        next(err)
+    });
+
+});
+
+
+/**
+ * @swagger
+ * {
+ *   "/memes/fetchDailyMeme": {
+ *     "get": {
+ *       "tags": ["Memes"],
+ *       "summary": "Recupera la lista dei memes",
+ *       "description": "Restituisce una paginazione di memes; i parametri `pagesize`,`page`, `iduser` e `nametags` sono opzionali.",
+ *       "parameters": [
+ *         {
+ *           "name": "pagesize",
+ *           "in": "query",
+ *           "description": "Numero di memes per pagina (1–10). Default: 10",
+ *           "required": false,
+ *           "schema": {
+ *             "type": "integer",
+ *             "minimum": 1,
+ *             "maximum": 10,
+ *             "default": 10
+ *           }
+ *         },
+ *         {
+ *           "name": "page",
+ *           "in": "query",
+ *           "description": "Numero di pagina da visualizzare (>=1). Default: 1",
+ *           "required": false,
+ *           "schema": {
+ *             "type": "integer",
+ *             "minimum": 1,
+ *             "default": 1
+ *           }
+ *         },
+ *          {
+ *           "name": "iduser",
+ *           "in": "query",
+ *           "description": "Id del utente di cui si vuole vedere i memes (>= 1)",
+ *           "required": false,
+ *           "schema": {
+ *             "type": "integer",
+ *             "minimum": 1
+ *           }
+ *          },
+ *          {
+ *           "name": "username",
+ *           "in": "query",
+ *           "description": "username del utente di cui si vuole vedere i memes",
+ *           "required": false,
+ *           "schema": {
+ *             "type": "string",
+ *           }
+ *          },
+ *          {
+ *           "name": "nametags",
+ *           "in": "query",
+ *           "description": "Lista di nomi dei tag da filtrare, separati da virgola (es. name1,name2)",
+ *           "required": false,
+ *           "schema": {
+ *             "type": "string"
+ *           }
+ *         }
+ *       ],
+ *       "responses": {
+ *         "200": {
+ *           "description": "Lista di memes trovati",
+ *           "content": {
+ *             "application/json": {
+ *               "schema": {
+ *                 "type": "array",
+ *                 "items": { "$ref": "#/components/schemas/Meme" }
+ *               },
+ *                "example": {
+ *                      "idMeme": 1,
+ *                      "image": "meme/url/image.png",
+ *                      "description": "un gatto",
+ *                      "createdAt": "2025-05-17T16:18:36.773Z",
+ *                      "updatedAt": "2025-05-17T16:18:36.773Z",
+ *                       "UserIdUser": 5
+ *               }
+ *             }
+ *           }
+ *         },
+ *         "404": {
+ *           "description": "Nessun memes trovato",
+ *           "content": {
+ *             "application/json": {
+ *               "schema": { "$ref": "#/components/schemas/Error" }
+ *             }
+ *           }
+ *         },
+ *       }
+ *     }
+ *   }
+ * }
+ */
+router.get('/fetchDailyMeme', [validate(schemaMemeGet, true), queryParamsToList(['nametags'])], (req, res, next) => {
+
+    let filters = DailyMemeController.makeFilterForDailyMeme(req);
+
+    DailyMemeController.dailyMeme(filters).then((result) => {
 
         res.status(200);
         res.json(result);
