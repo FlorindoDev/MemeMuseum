@@ -1,7 +1,7 @@
 import { MissingFieldError, FieldError } from "../utils/error/index.js";
 
 
-export let queryParamsToList = (listParams = [], required = false) => (req, res, next) => {
+export let queryParamsToList = (listParams = [], required = false, separeitor = ',') => (req, res, next) => {
 
     if (required) {
         listParams.forEach((value) => {
@@ -11,7 +11,7 @@ export let queryParamsToList = (listParams = [], required = false) => (req, res,
 
 
     listParams.forEach((value) => {
-        if (req.query[value] !== undefined) req[value] = req.query[value].split(',').map(item => item.toLowerCase().trim());
+        if (req.query[value] !== undefined) req[value] = req.query[value].split(separeitor).map(item => item.toLowerCase().trim());
     })
     next();
 

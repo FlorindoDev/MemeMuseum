@@ -2,6 +2,8 @@ import { MemesController } from "./MemesController.js";
 import { VoteController } from "./VoteController.js";
 import { Op } from "sequelize";
 
+const BACKWARDS_RANGE = 5 //i post dei ultimi tot giorni 
+
 export class DailyMemeController {
 
     static makeFilterForDailyMeme(req) {
@@ -10,7 +12,7 @@ export class DailyMemeController {
         let filters = MemesController.createFilterForGetMeme(query, req.nametags, req.query.username);
 
         let range_date = {
-            [Op.between]: [new Date(Date.now() - 5 * 24 * 60 * 60 * 1000), new Date(Date.now())]
+            [Op.between]: [new Date(Date.now() - BACKWARDS_RANGE * 24 * 60 * 60 * 1000), new Date(Date.now())]
         }
 
         if (filters.where) {
@@ -84,6 +86,7 @@ export class DailyMemeController {
         let results = await this.getVotes(memes);
 
         for (let index = 0; index < results.length; index++) {
+            votes = { upvote: 0, downvote: 0 };
             let meme_data = memes[index].dataValues;
 
             if (results[index].status === "fulfilled") votes = this.getNumVotes(results[index].value);

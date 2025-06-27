@@ -1,13 +1,18 @@
-<next-page [service]="memeService" (resource)="onNewMemes($event)" [page]=2></next-page>
-<div class="pt-26"></div>
-<div class="bg-bg flex flex-col justify-center items-center min-h-screen">
-    <!--TODO AGGIUNGERE MEME DEL Giorno-->
-    @for(meme of memes; track meme){
-    <div class="bg-bg flex flex-col justify-center items-center"><user-post [meme]=meme></user-post></div>
+<next-page [service]="memeService" (resource)="onNewMemes($event)" [page]=2 [filter]=this.filter></next-page>
 
-    }@empty {
-    <loading-screen></loading-screen>
-    }
+<div class="grid grid-cols-1 lg:grid-cols-[16rem_1fr] gap-0 min-h-screen">
 
+    <div class="hidden lg:block h-full pt-35 pl-5 pr-2 z-10">
+        <filters (filterd_meme)=onSearch($event) (filter)=onFilter($event)></filters>
+    </div>
 
+    <div class="pt-26 px-2 flex flex-col items-center">
+        @for(meme of memes; track meme){
+        <div class="bg-bg flex flex-col justify-center items-center mb-4 w-full max-w-3xl">
+            <user-post [meme]=meme></user-post>
+        </div>
+        }@empty {
+        <loading-screen></loading-screen>
+        }
+    </div>
 </div>

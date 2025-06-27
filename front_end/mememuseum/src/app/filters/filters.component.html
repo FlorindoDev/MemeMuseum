@@ -1,0 +1,67 @@
+<form [formGroup]="filtersForm" (ngSubmit)="applyFilters()"
+    class="w-64 p-4 bg-bg rounded-2xl shadow-md space-y-4 border-2 border-secondary text-text"
+    (keydown.enter)="$event.preventDefault()">
+
+
+    <h2 class="text-lg font-semibold text-gray-800 dark:text-gray-100">Ricerca</h2>
+
+
+    <div class="space-y-1">
+        <label for="username" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Utente</label>
+        <input (keyup)="handleTyping($event)" type="text" placeholder="Nome utente" formControlName="username"
+            class="dark:bg-[#272729] bg-[#d9dadc] placeholder-gray-500 rounded-md px-4 py-3 focus:outline-none focus:ring-2 focus:ring-accent w-full" />
+    </div>
+
+    <label for="tagsInput" class="text-sm text-text hover:text-white cursor-pointer">Tags</label>
+    <input id="tagsInput" (keyup)="onEnter($event)" type="text" placeholder="Nome tag" formControlName="tags"
+        name="tagInput"
+        class="mb-2 dark:bg-[#272729] bg-[#d9dadc] placeholder-gray-500 rounded-md px-4 py-3 focus:outline-none focus:ring-2 focus:ring-accent" />
+
+    @if(filtersForm.controls.tags.errors){
+    @if(filtersForm.controls.tags.errors['minlength']){
+    <p class="form-error mb-2">Tag should contain at least 3 characters</p>
+    }
+
+    @if(filtersForm.controls.tags.errors['maxlength']){
+    <p class="form-error mb-2">Tag should contain at max 25 characters</p>
+    }
+    }
+    <div class="flex flex-wrap gap-2">
+        @for(tag of tags; track tag){
+        <span class="inline-flex items-center px-2 py-1 text-sm font-medium text-text bg-primary rounded-sm ">
+            {{tag}}
+            <button (click)="removeTag($event)" type="button"
+                class="inline-flex items-center p-1 ms-2 text-sm text-text bg-transparent rounded-xs hover:bg-green-200 hover:bg-secondary  hover:text-text hover:rounded-full"
+                aria-label="Remove">
+                <svg class="w-2 h-2" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none"
+                    viewBox="0 0 14 14">
+                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6" />
+                </svg>
+
+            </button>
+        </span>
+        }
+    </div>
+
+
+    <div class="space-y-3">
+        <label class="block text-sm font-semibold text-text">Ordina per</label>
+
+        <div class="flex items-center space-x-3">
+            <input type="checkbox" id="upvotes" formControlName="upvotes"
+                class=" h-5 w-5 text-text border-accent rounded focus:ring-2 focus:ring-purple-400 bg-bg transition-all duration-150" />
+            <label for="upvotes" class="text-sm text-text hover:text-white cursor-pointer">Upvote</label>
+        </div>
+
+        <div class="flex items-center space-x-3">
+            <input type="checkbox" id="downvotes" formControlName="downvotes"
+                class="h-5 w-5 text-text border-accent rounded focus:ring-2 focus:ring-purple-400 bg-bg transition-all duration-150" />
+            <label for="downvotes" class="text-sm text-text hover:text-white cursor-pointer">Downvote</label>
+        </div>
+    </div>
+
+    <button type="submit" class="w-full bg-primary text-white py-2 rounded-md hover:bg-accent transition duration-200">
+        Cerca
+    </button>
+</form>

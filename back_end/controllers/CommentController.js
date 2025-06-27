@@ -59,7 +59,7 @@ export class CommentController {
             filters.include = [{
                 model: CommentVote,
                 attributes: [],
-                required: false  // se vuoi includere anche i meme con 0 upvote
+                required: false  // per includere anche i meme con 0 upvote
             }];
             filters.attributes = {
                 include: [

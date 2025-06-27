@@ -57,9 +57,12 @@ export class UpLoadMeme {
       else if (this.tags.find((val) => this.upLoadForm.value.tags === val)) {
         this.toastr.error("Qeusto tag è gia presente", "Tag già inserito!");
       } else {
+        this.addRedRing(event.target as HTMLElement, this.upLoadForm.invalid);
         this.tags.push(this.upLoadForm.value.tags as string);
         this.upLoadForm.get('tags')?.setValue('');
       }
+
+
 
     }
 
