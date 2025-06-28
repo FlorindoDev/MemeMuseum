@@ -8,10 +8,11 @@ import { AuthService } from '../_services/auth/auth.service';
 import { UserService } from '../_services/user/user.service';
 import { Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
+import { Filterbutton } from './filterbutton/filterbutton.component';
 
 @Component({
   selector: 'app-navbar',
-  imports: [RouterLink, RouterLinkActive, Darkmode, Login, SignUp],
+  imports: [RouterLink, RouterLinkActive, Darkmode, Login, SignUp, Filterbutton],
   templateUrl: './navbar.component.html',
   styleUrl: './navbar.component.scss',
 })

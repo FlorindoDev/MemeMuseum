@@ -25,7 +25,10 @@
                     <a routerLink="/upload" routerLinkActive="active"
                         class="text-text text-xl mr-5 pr-3 pl-3 pt-1 pb-1  hover:font-bold hover:border-none hover:bg-secondary hover:pr-3 hover:pl-3 hover:pt-1 hover:pb-1 hover:rounded-xl">Carica</a>
                     }
+                    <filterbutton></filterbutton>
                     <app-darkmode class="pb-1"></app-darkmode>
+
+
                 </div>
                 @if(!isLogged()){
                 <div class="bg-bgcontrast hidden md:flex md:items-center">
@@ -47,7 +50,7 @@
                             class="w-10 rounded-full hidden md:flex md:items-center hidden" [src]="this.profilePic()"
                             onload=" this.nextElementSibling?.classList.remove('hidden')">
 
-                        <p class=" px-2 text-text hidden text-xl">{{nickname()}}</p>
+                        <p class="px-2 text-text hidden text-xl">{{nickname()}}</p>
 
                     </div>
                     @if(isProfileMenuActive()){
@@ -73,7 +76,7 @@
 
 
                 }
-                <div class="block flex items-center flex-row md:hidden pr-10 ">
+                <div class="block flex items-center flex-row md:hidden pr-10 " (click)=goHome()>
                     <img class="w-16 dark:hidden" src="/logo-black.png">
                     <img class="w-16 hidden dark:block" src="/logo-white.png">
                     <h1 class="pl-2 text-text text-xl font-semibold">Meme Museum</h1>
@@ -97,7 +100,11 @@
                     }
                     <div
                         class="flex justify-between items-center mt-5 pt-3 pb-2 border-black dark:border-white border-t-2">
-                        <app-darkmode></app-darkmode>
+                        <div class="flex flex-row gap-3">
+                            <filterbutton class="pt-1"></filterbutton>
+                            <app-darkmode></app-darkmode>
+                        </div>
+
                         <div>
                             @if(!isLogged()){
                             <button (click)="openLogin()"

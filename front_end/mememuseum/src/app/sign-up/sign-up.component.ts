@@ -24,7 +24,7 @@ export class SignUp {
   isSubmitted: boolean = false;
 
   signupForm = new FormGroup({
-    nickname: new FormControl('', [Validators.required, Validators.minLength(3), Validators.maxLength(25)]),
+    nickname: new FormControl('', [Validators.required, Validators.minLength(3), Validators.maxLength(16)]),
     user: new FormControl('', [Validators.required, Validators.email]),
     pass: new FormControl('', [
       Validators.required,

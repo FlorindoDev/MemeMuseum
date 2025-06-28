@@ -8,6 +8,13 @@ module.exports = {
 
     theme: {
         extend: {
+            screens: {
+                'xl': '72rem',
+                'lg': '56rem',
+                'md': '50rem',
+                'sx': '38rem',
+                'xxs': '24rem',
+            },
             colors: {
                 text: 'var(--color-text)',
                 background: 'var(--color-bg)',
