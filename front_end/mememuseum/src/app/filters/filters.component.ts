@@ -1,6 +1,5 @@
 import { Component, EventEmitter, Output } from '@angular/core';
 import { FormGroup, FormControl, Validators, ReactiveFormsModule } from '@angular/forms';
-import { tag } from '../_services/meme/tag.type';
 import { ToastrService } from 'ngx-toastr';
 import { Meme } from '../_services/meme/meme.type';
 import { MemeService } from '../_services/meme/meme.service';
@@ -24,8 +23,7 @@ export class Filters {
   filtersForm = new FormGroup({
     username: new FormControl('', []),  // qui puoi mettere Validators se vuoi
     tags: new FormControl('', [Validators.minLength(3), Validators.maxLength(15), Validators.required]),
-    upvotes: new FormControl(false),     // checkbox
-    downvotes: new FormControl(false),   // checkbox
+    sort_vote: new FormControl('upvote', [])
   });
 
   handleTyping(event: Event) { }
@@ -35,13 +33,25 @@ export class Filters {
   }
 
   applyFilters() {
-    console.log("adawd");
 
+    let sort_element = this.filtersForm.value.sort_vote
 
     this.prepareTags();
+
     let filter: Filter = {}
+
     if (this.filtersForm.value.username) filter.username = this.filtersForm.value.username as string;
     if (this.tags) filter.nametags = this.tagsToSend;
+
+    if (sort_element) {
+      if (sort_element === "ASC" || sort_element === "DESC") {
+        filter.orderbydate = `${sort_element}`
+      } else {
+        filter.orderby = `${sort_element},DESC`
+      }
+
+    }
+
     this.meme_service.getMeme(filter).subscribe({
       next: (val: Meme[]) => {
         this.filterd_meme.emit(val);

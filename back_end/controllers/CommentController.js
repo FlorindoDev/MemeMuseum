@@ -55,7 +55,6 @@ export class CommentController {
         }
 
         if (orderby !== undefined) {
-
             filters.include = [{
                 model: CommentVote,
                 attributes: [],
@@ -63,11 +62,18 @@ export class CommentController {
             }];
             filters.attributes = {
                 include: [
-                    [Sequelize.fn('COUNT', Sequelize.col('CommentVotes.idVote')), orderby[0]]
+                    [
+                        Sequelize.literal(`
+                            COUNT(CASE WHEN "CommentVotes"."upVote" = true THEN 1 ELSE NULL END)
+                            - 
+                            COUNT(CASE WHEN "CommentVotes"."upVote" = false THEN 1 ELSE NULL END)
+                        `),
+                        'voteDifference'
+                    ]
                 ]
             };
             filters.group = ['Comment.idComment'];
-            filters.order = [[orderby[0], orderby[1].toUpperCase()]];
+            filters.order = [["voteDifference", orderby[1].toUpperCase()]];
         }
         return filters;
     }

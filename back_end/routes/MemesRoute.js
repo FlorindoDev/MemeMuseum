@@ -8,7 +8,6 @@ import { TagController } from "../controllers/TagController.js";
 import { schemaMemeGet, idMemeRequiredParams, schemaTagsPost, schemaTagsGet } from "../schemas/meme.schema.js";
 import { validate } from "../middleware/Middlewares.js";
 import { DailyMemeController } from "../controllers/DailyMemeController.js";
-import { Op } from "sequelize";
 
 import multer from "multer";
 const upload = multer({ storage: multer.memoryStorage() });
@@ -120,6 +119,24 @@ router.post('/', [enforceAuthentication, imageParser, upLoadOnGoogle], (req, res
  *           }
  *         },
  *          {
+ *             "name": "orderby",
+ *             "in": "query",
+ *             "required": false,
+ *             "description": "elemento per cui vuoi ordinare: `upvote,ASC/DESC` o `downvote,ASC/DESC`",
+ *             "schema": {
+ *               "type": "string"
+ *             }
+ *           },
+ *              {
+ *             "name": "orderbydate",
+ *             "in": "query",
+ *             "required": false,
+ *             "description": "ordina per data: `ASC` o `DESC`",
+ *             "schema": {
+ *               "type": "string"
+ *             }
+ *           },
+ *          {
  *           "name": "iduser",
  *           "in": "query",
  *           "description": "Id del utente di cui si vuole vedere i memes (>= 1)",
@@ -181,11 +198,11 @@ router.post('/', [enforceAuthentication, imageParser, upLoadOnGoogle], (req, res
  *   }
  * }
  */
-router.get('/', [validate(schemaMemeGet, true), queryParamsToList(['nametags'])], (req, res, next) => {
+router.get('/', [validate(schemaMemeGet, true), queryParamsToList(['nametags', 'orderby'])], (req, res, next) => {
 
     let query = { pages: req.checked.query.page, size: req.checked.query.pagesize, iduser: req.query.iduser };
 
-    let filters = MemesController.createFilterForGetMeme(query, req.nametags, req.query.username);
+    let filters = MemesController.createFilterForGetMeme(query, req.nametags, req.query.username, req.orderby, req.query.orderbydate);
 
     MemesController.getAllMemes(filters).then((result) => {
 

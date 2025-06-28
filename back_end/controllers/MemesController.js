@@ -1,5 +1,5 @@
-import { Meme, Tag, User } from '../models/DataBase.js'
-import { Op } from "sequelize";
+import { Meme, Tag, User, MemeVote } from '../models/DataBase.js'
+import { Op, Sequelize } from "sequelize";
 import { MemeNotFoundError, MemeUploadError } from '../utils/error/index.js';
 
 
@@ -55,12 +55,13 @@ export class MemesController {
 
     }
 
-    static createFilterForGetMeme(query, nametags, username) {
+    static createFilterForGetMeme(query, nametags, username, orderby, orderbydate) {
 
         const includes = [];
         const whereConditions = [];
 
         const objectRequest = {
+            subQuery: false,
             limit: query.size,
             offset: (query.pages - 1) * query.size,
             attributes: [
@@ -74,6 +75,8 @@ export class MemesController {
             group: ['Meme.idMeme']
 
         };
+
+        objectRequest.order = [];
 
         if (nametags) {
             includes.push({
@@ -106,8 +109,31 @@ export class MemesController {
 
         }
 
+        if (orderby !== undefined) {
+            let vote = orderby[0] === "upvote" ? true : false;
+
+            includes.push({
+                model: MemeVote,
+                attributes: [],
+                required: false  // per includere anche i meme con 0 upvote
+            });
+
+            objectRequest.attributes = {
+
+                include: [
+                    [Sequelize.literal(`COUNT(CASE WHEN "MemeVotes"."upVote" = ${vote} THEN 1 ELSE NULL END)`), orderby[0]]
+                ]
+            };
+            objectRequest.group = ['Meme.idMeme'];
+            objectRequest.order = [[orderby[0], orderby[1].toUpperCase()]];
+        }
+
         if (query.iduser) {
             whereConditions.push({ UserIdUser: query.iduser });
+        }
+
+        if (orderbydate) {
+            objectRequest.order.push(["createdAt", orderbydate])
         }
 
         if (whereConditions.length) {

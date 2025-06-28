@@ -1,10 +1,12 @@
-<div class="bg-bgcontrast w-full m-0 fixed top-0 z-20 font-semibold">
+<div class="bg-bgcontrast w-full m-0 fixed top-0 z-30 font-semibold">
     <div class="shadow dark:shadow-white shadow-black">
         <div class="px-6">
             <div class="flex items-center justify-between py-4">
 
                 <div class="hidden md:flex md:items-center gap-4">
-                    <div class="hidden md:flex md:items-center md:flex-row  md:block lg:pr-12 md:pr-6">
+
+                    <div (click)=goHome()
+                        class="hidden md:flex md:items-center md:flex-row  md:block lg:pr-12 md:pr-6 select-none">
                         <img class="w-16 dark:hidden" src="/logo-black.png">
                         <img class="w-16 hidden dark:block" src="/logo-white.png">
                         <p class="lg:block hidden pl-3 text-text font-semibold text-2xl first-letter:text-3xl">Meme
@@ -14,7 +16,7 @@
                     </div>
 
 
-                    <a routerLink="/home"
+                    <a routerLink="/home" (click)=goHome()
                         class="text-text text-xl mr-5 pr-3 pl-3 pt-1 pb-1  hover:font-bold hover:border-none hover:bg-secondary hover:pr-3 hover:pl-3 hover:pt-1 hover:pb-1 hover:rounded-xl"
                         routerLinkActive="active">Home</a>
                     <a routerLink="/search" routerLinkActive="active"

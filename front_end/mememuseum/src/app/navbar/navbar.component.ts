@@ -83,10 +83,20 @@ export class Navbar {
       this.isLogged.set(this.authservice.isUserAuthenticated());
       this.toastr.success("Hai fatto il logout con successo", "Logout Completato!");
       this.router.navigate(["/"]);
-      window.location.reload();
+      setTimeout(() => {
+        window.location.reload();
+      }, 10);
     }, 100);
 
 
+
+  }
+
+  goHome() {
+    this.router.navigate(["/"]);
+    setTimeout(() => {
+      window.location.reload();
+    }, 10);
 
   }
 

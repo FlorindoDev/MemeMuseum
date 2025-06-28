@@ -34,6 +34,8 @@ export class MemeService implements PagedResources<Meme, Filter> {
       if (filter.iduser) url = `${url}iduser=${filter.iduser}&`;
       if (filter.nametags) url = `${url}nametags=${filter.nametags}&`;
       if (filter.username) url = `${url}username=${filter.username}&`;
+      if (filter.orderby) url = `${url}orderby=${filter.orderby}&`;
+      if (filter.orderbydate) url = `${url}orderbydate=${filter.orderbydate}&`;
     }
     return url;
   }
