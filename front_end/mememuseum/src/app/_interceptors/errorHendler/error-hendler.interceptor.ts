@@ -10,7 +10,6 @@ import { environment } from '../../environment.prod';
 export function errorHendlerInterceptor(request: HttpRequest<any>, next: HttpHandlerFn) {
 
   const toastr = inject(ToastrService);
-  console.log(request);
   //TODO: togliere console log serve per debug
   return next(request).pipe(
     catchError((err: HttpErrorResponse) => {
