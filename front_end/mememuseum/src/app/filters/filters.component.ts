@@ -42,7 +42,7 @@ export class Filters {
     if (this.filtersForm.value.username) filter.username = this.filtersForm.value.username as string;
     if (this.tags) filter.nametags = this.tagsToSend;
 
-    if (sort_element) {
+    if (sort_element && sort_element !== "niente") {
       if (sort_element === "ASC" || sort_element === "DESC") {
         filter.orderbydate = `${sort_element}`
       } else {
