@@ -275,7 +275,25 @@ router.get('/', [validate(schemaMemeGet, true), queryParamsToList(['nametags', '
  *           "schema": {
  *             "type": "string"
  *           }
- *         }
+ *         },
+ *          {
+ *             "name": "orderby",
+ *             "in": "query",
+ *             "required": false,
+ *             "description": "elemento per cui vuoi ordinare: `upvote,ASC/DESC` o `downvote,ASC/DESC`",
+ *             "schema": {
+ *               "type": "string"
+ *             }
+ *           },
+ *              {
+ *             "name": "orderbydate",
+ *             "in": "query",
+ *             "required": false,
+ *             "description": "ordina per data: `ASC` o `DESC`",
+ *             "schema": {
+ *               "type": "string"
+ *             }
+ *           }
  *       ],
  *       "responses": {
  *         "200": {
@@ -310,7 +328,7 @@ router.get('/', [validate(schemaMemeGet, true), queryParamsToList(['nametags', '
  *   }
  * }
  */
-router.get('/fetchDailyMeme', [validate(schemaMemeGet, true), queryParamsToList(['nametags'])], (req, res, next) => {
+router.get('/fetchDailyMeme', [validate(schemaMemeGet, true), queryParamsToList(['nametags', 'orderby'])], (req, res, next) => {
 
     let filters = DailyMemeController.makeFilterForDailyMeme(req);
 

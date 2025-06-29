@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Output } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { FormGroup, FormControl, Validators, ReactiveFormsModule } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
 import { Meme } from '../_services/meme/meme.type';
@@ -18,6 +18,7 @@ export class Filters {
 
   tagsToSend?: string;
   tags: Array<string> = [];
+  @Input() isDaily: boolean = false;
 
   filtersForm = new FormGroup({
     username: new FormControl('', []),  // qui puoi mettere Validators se vuoi
@@ -51,12 +52,21 @@ export class Filters {
 
     }
 
-    this.meme_service.getMeme(filter).subscribe({
-      next: (val: Meme[]) => {
-        this.filter_service.updateFilteredResource(val);
-        this.filter_service.updateFilter(filter);
-      }
-    })
+    this.filter_service.updateFilter(filter);
+    if (!this.isDaily) {
+
+      this.meme_service.getMeme(filter).subscribe({
+        next: (val: Meme[]) => {
+          this.filter_service.updateFilteredResource(val);
+        }
+      });
+    } else {
+      this.meme_service.getMemeDailyMeme(filter).subscribe({
+        next: (val: Meme[]) => {
+          this.filter_service.updateFilteredResource(val);
+        }
+      });
+    }
 
 
   }

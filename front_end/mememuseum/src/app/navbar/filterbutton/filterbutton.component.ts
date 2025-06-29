@@ -1,5 +1,6 @@
 import { Component, Input } from '@angular/core';
 import { Filters } from '../../filters/filters.component';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'filterbutton',
@@ -9,8 +10,10 @@ import { Filters } from '../../filters/filters.component';
 })
 export class Filterbutton {
 
-  isClose = false;
+  isClose = true;
   @Input() idfilter = "filter";
+
+  constructor(private router: Router) { }
 
   onClose() {
     if (this.isClose) {
@@ -21,6 +24,10 @@ export class Filterbutton {
       this.isClose = true;
     }
 
+  }
+
+  get isDaily() {
+    return this.router.url === '/home' ? true : false
   }
 
 }

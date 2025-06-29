@@ -1,10 +1,13 @@
 <next-page [service]="memeService" (resource)="onNewMemes($event)" [page]=2 [filter]=this.filter></next-page>
 <div class="grid grid-cols-1 lg:grid-cols-[16rem_1fr] gap-0 min-h-screen">
     <div class="hidden lg:block h-full pt-35 pl-5 pr-2 z-10">
-        <filters [isDaily]=true></filters>
+        <filters></filters>
     </div>
 
-    <div class="pt-26 px-2 flex flex-col items-center">
+    <div class="pt-35 px-2 flex flex-col items-center">
+        <h1 class="text-2xl font-bold text-center text-text leading-snug mb-4 mr-3">
+            Cerca quello che vuoi nella più grande libreria di meme!
+        </h1>
         @for(meme of memes; track meme){
         <div class="bg-bg flex flex-col justify-center items-center mb-4 w-full max-w-3xl">
             <user-post [meme]=meme></user-post>

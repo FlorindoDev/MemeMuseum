@@ -45,6 +45,11 @@ export class MemeService implements PagedResources<Meme, Filter> {
     return this.http.get<Meme[]>(`${this.url}${url}`, this.httpOptions);
   }
 
+  getMemeDailyMeme(filter: Filter = {}): Observable<Meme[]> {
+    let url = this.createFilterGetMemes(filter, "/memes/fetchDailyMeme");
+    return this.http.get<Meme[]>(`${this.url}${url}`, this.httpOptions);
+  }
+
   getMemeFromId(idmeme: number): Observable<Meme> {
     let url = `/memes/${idmeme}`;
     return this.http.get<Meme>(`${this.url}${url}`, this.httpOptions);

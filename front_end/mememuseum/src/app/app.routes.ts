@@ -3,6 +3,7 @@ import { Homepage } from './homepage/homepage.component';
 import { authGuard } from './_guards/auth/auth.guard';
 import { UpLoadMeme } from './up-load-meme/up-load-meme.component';
 import { MemePage } from './meme-page/meme-page';
+import { Search } from './search/search.component';
 
 export const routes: Routes = [
 
@@ -20,6 +21,11 @@ export const routes: Routes = [
         path: "home",
         title: "Home Page",
         component: Homepage
+    },
+    {
+        path: "search",
+        title: "Search Page",
+        component: Search
     },
     {
         path: "upload",

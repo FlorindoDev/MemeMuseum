@@ -1,6 +1,7 @@
 import { Component, EventEmitter, Input, Output, HostListener } from '@angular/core';
 import { PagedResources } from '../_services/interfaces/PagedResources.interfaces';
 import { FilterService } from '../_services/filter/filter.service';
+import { filter } from 'rxjs';
 
 @Component({
   selector: 'next-page',
@@ -26,6 +27,7 @@ export class NextPage<C, T extends object> {
   loadNext() {
     this.service.getNextPage(this.page++, this.filter).subscribe({
       next: (val) => {
+        console.log(filter);
         this.resource.emit(val);
       }
     });

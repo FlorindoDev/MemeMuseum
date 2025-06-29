@@ -9,12 +9,12 @@ import { Filters } from '../filters/filters.component';
 import { FilterService } from '../_services/filter/filter.service';
 
 @Component({
-  selector: 'app-homepage',
+  selector: 'app-search',
   imports: [Userpost, LoadingScreen, NextPage, Filters],
-  templateUrl: './homepage.component.html',
-  styleUrl: './homepage.component.scss'
+  templateUrl: './search.component.html',
+  styleUrl: './search.component.scss'
 })
-export class Homepage {
+export class Search {
 
   memes: Meme[] = [];
   filter: Filter = {};
@@ -30,9 +30,18 @@ export class Homepage {
     this.fetchMeme();
   }
 
+  onSearch(event: Meme[]) {
+    this.memes = [];
+    this.memes = event;
+  }
+
+  onFilter(event: Filter) {
+    this.filter = event;
+  }
+
   fetchMeme() {
 
-    this.memeService.getMemeDailyMeme().subscribe({
+    this.memeService.getMeme().subscribe({
       next: (data) => {
         this.memes = data;
       },
@@ -49,5 +58,4 @@ export class Homepage {
 
 
   }
-
 }
