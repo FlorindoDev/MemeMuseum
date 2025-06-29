@@ -5,6 +5,7 @@ import { Meme } from '../_services/meme/meme.type';
 import { MemeService } from '../_services/meme/meme.service';
 import { Filter } from '../_services/meme/filter.type';
 import { FilterService } from '../_services/filter/filter.service';
+import { DailymemeService } from '../_services/dailymeme/dailymeme.service';
 
 @Component({
   selector: 'filters',
@@ -14,7 +15,12 @@ import { FilterService } from '../_services/filter/filter.service';
 })
 export class Filters {
 
-  constructor(private toastr: ToastrService, private meme_service: MemeService, private filter_service: FilterService<Meme, Filter>) { }
+  constructor(
+    private toastr: ToastrService,
+    private meme_service: MemeService,
+    private filter_service: FilterService<Meme, Filter>,
+    private dailymeme: DailymemeService
+  ) { }
 
   tagsToSend?: string;
   tags: Array<string> = [];
@@ -61,7 +67,7 @@ export class Filters {
         }
       });
     } else {
-      this.meme_service.getMemeDailyMeme(filter).subscribe({
+      this.dailymeme.getMemeDailyMeme(filter).subscribe({
         next: (val: Meme[]) => {
           this.filter_service.updateFilteredResource(val);
         }

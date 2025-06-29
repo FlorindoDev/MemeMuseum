@@ -7,6 +7,8 @@ import { NextPage } from '../next-page/next-page.component';
 import { Filter } from '../_services/meme/filter.type';
 import { Filters } from '../filters/filters.component';
 import { FilterService } from '../_services/filter/filter.service';
+import { DailymemeService } from '../_services/dailymeme/dailymeme.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-homepage',
@@ -19,9 +21,12 @@ export class Homepage {
   memes: Meme[] = [];
   filter: Filter = {};
 
-  constructor(public memeService: MemeService, private filter_service: FilterService<Meme, Filter>) {
-
-  }
+  constructor(
+    public memeService: MemeService,
+    private filter_service: FilterService<Meme, Filter>,
+    private dailymeme: DailymemeService,
+    private router: Router
+  ) { }
 
   ngOnInit() {
     this.filter_service.filteredResource$.subscribe((memes: Meme[]) => {
@@ -32,7 +37,7 @@ export class Homepage {
 
   fetchMeme() {
 
-    this.memeService.getMemeDailyMeme().subscribe({
+    this.dailymeme.getMemeDailyMeme().subscribe({
       next: (data) => {
         this.memes = data;
       },
@@ -46,8 +51,10 @@ export class Homepage {
         this.memes.push(val);
       });
     }
+  }
 
-
+  get isDaily() {
+    return this.router.url === '/home' ? this.dailymeme : this.memeService
   }
 
 }

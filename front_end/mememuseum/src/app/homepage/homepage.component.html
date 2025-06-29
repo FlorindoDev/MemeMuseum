@@ -1,4 +1,4 @@
-<next-page [service]="memeService" (resource)="onNewMemes($event)" [page]=2 [filter]=this.filter></next-page>
+<next-page [service]="isDaily" (resource)="onNewMemes($event)" [page]=2 [filter]=this.filter></next-page>
 <div class="grid grid-cols-1 lg:grid-cols-[16rem_1fr] gap-0 min-h-screen">
     <div class="hidden lg:block h-full pt-35 pl-5 pr-2 z-10">
         <filters [isDaily]=true></filters>
