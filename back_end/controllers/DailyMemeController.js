@@ -9,7 +9,6 @@ export class DailyMemeController {
     static makeFilterForDailyMeme(req) {
 
         let query = { pages: req.checked.query.page, size: req.checked.query.pagesize, iduser: req.query.iduser };
-        console.log(req.orderby);
         let filters = MemesController.createFilterForGetMeme(query, req.nametags, req.query.username, req.orderby, req.query.orderbydate);
 
         let range_date = {
@@ -52,8 +51,18 @@ export class DailyMemeController {
 
     static getPoint(votes, createdAt) {
 
-        let ore_dalla_publicazione = (Date.now() - Date.parse(createdAt)) / 1000 / 60 / 60
-        return (votes.upvote * 10 - votes.downvote * 10) - ore_dalla_publicazione;
+        let upvote = votes.upvote;
+        let downvote = votes.downvote;
+        const ore_dalla_pubblicazione = (Date.now() - createdAt) / 1000 / 60 / 60;
+
+        const netVotes = votes.upvote - votes.downvote;
+        const sign = netVotes > 0 ? 1 : netVotes < 0 ? -1 : 0;  // se netvotes è negativo rimmara negativo anche dopo al log
+        const order = sign * Math.log10(Math.max(Math.abs(netVotes), 1)); // con log10 normalizzo , abs è valore assolutto
+        const score = order - ore_dalla_pubblicazione / 45000; // man mano che ore aumentano order perde sempre di più 
+
+        //console.log({ upvote, downvote, netVotes, ore_dalla_pubblicazione, order, score });
+        //console.log(score);
+        return score;
     }
 
     static async getVotes(memes) {
