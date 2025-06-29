@@ -54,7 +54,7 @@ export class DailyMemeController {
 
         let ore_dalla_publicazione = (Date.now() - Date.parse(createdAt)) / 1000 / 60 / 60
 
-        return (votes.upvote) - (votes.downvote * 1.5) - (ore_dalla_publicazione * 1.5);
+        return (votes.upvote) - (votes.downvote * 2.5) - (ore_dalla_publicazione * 0.5);
     }
 
     static async getVotes(memes) {
