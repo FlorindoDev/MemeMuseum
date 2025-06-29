@@ -1,6 +1,6 @@
 import { Component, EventEmitter, Input, Output, HostListener } from '@angular/core';
 import { PagedResources } from '../_services/interfaces/PagedResources.interfaces';
-import { filter } from 'rxjs';
+import { FilterService } from '../_services/filter/filter.service';
 
 @Component({
   selector: 'next-page',
@@ -15,6 +15,13 @@ export class NextPage<C, T extends object> {
   @Input() page: number = 1;
   @Input() filter?: T;
 
+  constructor(private filter_service: FilterService<C, T>) { }
+
+  ngOnInit() {
+    this.filter_service.filter$.subscribe((val: T) => {
+      this.filter = val;
+    });
+  }
 
   loadNext() {
     this.service.getNextPage(this.page++, this.filter).subscribe({

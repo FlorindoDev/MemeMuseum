@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { Filters } from '../../filters/filters.component';
 
 @Component({
@@ -9,14 +9,15 @@ import { Filters } from '../../filters/filters.component';
 })
 export class Filterbutton {
 
-  isClose = true;
+  isClose = false;
+  @Input() idfilter = "filter";
 
   onClose() {
     if (this.isClose) {
-      document.getElementById("filter")?.classList.remove("hidden");
+      document.getElementById(this.idfilter)?.classList.remove("hidden");
       this.isClose = false;
     } else {
-      document.getElementById("filter")?.classList.add("hidden");
+      document.getElementById(this.idfilter)?.classList.add("hidden");
       this.isClose = true;
     }
 

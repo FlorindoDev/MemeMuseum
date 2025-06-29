@@ -4,6 +4,7 @@ import { ToastrService } from 'ngx-toastr';
 import { Meme } from '../_services/meme/meme.type';
 import { MemeService } from '../_services/meme/meme.service';
 import { Filter } from '../_services/meme/filter.type';
+import { FilterService } from '../_services/filter/filter.service';
 
 @Component({
   selector: 'filters',
@@ -13,12 +14,10 @@ import { Filter } from '../_services/meme/filter.type';
 })
 export class Filters {
 
-  constructor(private toastr: ToastrService, private meme_service: MemeService) { }
+  constructor(private toastr: ToastrService, private meme_service: MemeService, private filter_service: FilterService<Meme, Filter>) { }
 
   tagsToSend?: string;
   tags: Array<string> = [];
-  @Output() filterd_meme = new EventEmitter<Meme[]>();
-  @Output() filter = new EventEmitter<Filter>();
 
   filtersForm = new FormGroup({
     username: new FormControl('', []),  // qui puoi mettere Validators se vuoi
@@ -54,8 +53,8 @@ export class Filters {
 
     this.meme_service.getMeme(filter).subscribe({
       next: (val: Meme[]) => {
-        this.filterd_meme.emit(val);
-        this.filter.emit(filter);
+        this.filter_service.updateFilteredResource(val);
+        this.filter_service.updateFilter(filter);
       }
     })
 

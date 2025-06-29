@@ -1,7 +1,7 @@
 <next-page [service]="memeService" (resource)="onNewMemes($event)" [page]=2 [filter]=this.filter></next-page>
 <div class="grid grid-cols-1 lg:grid-cols-[16rem_1fr] gap-0 min-h-screen">
     <div class="hidden lg:block h-full pt-35 pl-5 pr-2 z-10">
-        <filters (filterd_meme)=onSearch($event) (filter)=onFilter($event)></filters>
+        <filters></filters>
     </div>
 
     <div class="pt-26 px-2 flex flex-col items-center">

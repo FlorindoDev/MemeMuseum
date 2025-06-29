@@ -12,6 +12,7 @@ import { comment } from '../_services/comment/comment.type';
 import { NextPage } from '../next-page/next-page.component';
 import { AuthService } from '../_services/auth/auth.service';
 import { Filter } from '../_services/comment/filter.type';
+import { FilterService } from '../_services/filter/filter.service';
 
 
 @Component({
@@ -35,7 +36,8 @@ export class MemePage {
     private router: Router,
     protected comment_service: CommentService,
     private auth_service: AuthService,
-    private toastr: ToastrService
+    private toastr: ToastrService,
+    private filter_service: FilterService<comment, Filter>
   ) { }
 
   commentForm = new FormGroup({
@@ -44,7 +46,10 @@ export class MemePage {
 
   ngOnInit() {
     this.memeId = this.route.snapshot.paramMap.get('id');
-    if (this.memeId !== null) this.filter = { idmeme: Number(this.memeId), orderby: "upvote,DESC" }
+    if (this.memeId !== null) {
+      this.filter = { idmeme: Number(this.memeId), orderby: "upvote,DESC" }
+      this.filter_service.updateFilter(this.filter);
+    }
     this.fetchMeme();
   }
 
