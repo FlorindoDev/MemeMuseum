@@ -67,6 +67,10 @@ export class Navbar {
     this.isProfileMenuActive.update(value => !value);
   }
 
+  isFiltered() {
+    return (window.location.pathname === "/search" || window.location.pathname === "/home");
+  }
+
   openLogin() {
     let element = document.getElementById("login");
     element?.classList.remove("hidden");

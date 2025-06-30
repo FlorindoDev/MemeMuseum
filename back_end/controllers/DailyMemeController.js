@@ -26,6 +26,11 @@ export class DailyMemeController {
         return filters;
     }
 
+    insert(element, array = []) {
+        array.push(element);
+        return array;
+    }
+
     static insertInOreder(element, nameOfDiscriminator, array = []) {
 
         if (array.length === 0) {
@@ -51,8 +56,6 @@ export class DailyMemeController {
 
     static getPoint(votes, createdAt) {
 
-        let upvote = votes.upvote;
-        let downvote = votes.downvote;
         const ore_dalla_pubblicazione = (Date.now() - createdAt) / 1000 / 60 / 60;
 
         const netVotes = votes.upvote - votes.downvote;
@@ -60,8 +63,6 @@ export class DailyMemeController {
         const order = sign * Math.log10(Math.max(Math.abs(netVotes), 1)); // con log10 normalizzo , abs è valore assolutto
         const score = order + ore_dalla_pubblicazione / 45000; // man mano che ore aumentano order perde sempre di più 
 
-        console.log({ upvote, downvote, netVotes, ore_dalla_pubblicazione, order, score });
-        console.log(score);
         return score;
     }
 
@@ -92,6 +93,9 @@ export class DailyMemeController {
 
 
         memes = await MemesController.getAllMemes(filter);
+
+        if (filter.ordered) return memes;
+
         let results = await this.getVotes(memes);
 
         for (let index = 0; index < results.length; index++) {

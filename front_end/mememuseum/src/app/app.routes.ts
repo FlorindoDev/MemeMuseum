@@ -4,6 +4,7 @@ import { authGuard } from './_guards/auth/auth.guard';
 import { UpLoadMeme } from './up-load-meme/up-load-meme.component';
 import { MemePage } from './meme-page/meme-page';
 import { Search } from './search/search.component';
+import { Profile } from './profile/profile.component';
 
 export const routes: Routes = [
 
@@ -26,6 +27,11 @@ export const routes: Routes = [
         path: "search",
         title: "Search Page",
         component: Search
+    },
+    {
+        path: "users/:id",
+        title: "Profile Page",
+        component: Profile
     },
     {
         path: "upload",

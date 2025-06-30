@@ -25,7 +25,10 @@
                     <a routerLink="/upload" routerLinkActive="active"
                         class="text-text text-xl mr-5 pr-3 pl-3 pt-1 pb-1  hover:font-bold hover:border-none hover:bg-secondary hover:pr-3 hover:pl-3 hover:pt-1 hover:pb-1 hover:rounded-xl">Carica</a>
                     }
+                    @if(isFiltered()){
                     <filterbutton idfilter="filter-navbar"></filterbutton>
+                    }
+
                     <app-darkmode class="pb-1"></app-darkmode>
 
 
@@ -57,7 +60,7 @@
                     <div role="menu"
                         class="mt-4 mr-3 absolute end-0 top-12 z-auto w-56 divide-y divide-gray-300 overflow-hidden rounded border border-gray-300 bg-bgcontrast shadow-sm dark:divide-gray-700 dark:border-gray-600 ">
                         <div>
-                            <a routerLink=""
+                            <a routerLink="users/1"
                                 class="block px-3 py-2 text-sm font-medium text-gray-700 transition-colors hover:bg-gray-50 hover:text-gray-900 dark:text-gray-200 dark:hover:bg-gray-700 dark:hover:text-white"
                                 role="menuitem">
                                 Profilo
@@ -101,7 +104,9 @@
                     <div
                         class="flex justify-between items-center mt-5 pt-3 pb-2 border-black dark:border-white border-t-2">
                         <div class="flex flex-row gap-3">
+                            @if(isFiltered()){
                             <filterbutton idfilter="filter-menu" class="pt-1"></filterbutton>
+                            }
                             <app-darkmode></app-darkmode>
                         </div>
 
@@ -133,7 +138,7 @@
                                 <div role="menu"
                                     class="mt-4 mr-3 absolute end-0 top-12 z-auto w-56 divide-y divide-gray-300 overflow-hidden rounded border border-gray-300 bg-bgcontrast shadow-sm dark:divide-gray-700 dark:border-gray-600 ">
                                     <div>
-                                        <a routerLink=""
+                                        <a routerLink="users/1"
                                             class="block px-3 py-2 text-sm font-medium text-gray-700 transition-colors hover:bg-gray-50 hover:text-gray-900 dark:text-gray-200 dark:hover:bg-gray-700 dark:hover:text-white"
                                             role="menuitem">
                                             Profilo

@@ -331,6 +331,7 @@ router.get('/', [validate(schemaMemeGet, true), queryParamsToList(['nametags', '
 router.get('/fetchDailyMeme', [validate(schemaMemeGet, true), queryParamsToList(['nametags', 'orderby'])], (req, res, next) => {
 
     let filters = DailyMemeController.makeFilterForDailyMeme(req);
+    filters.ordered = (req.orderby !== undefined || req.query.orderbydate !== undefined)
 
     DailyMemeController.dailyMeme(filters).then((result) => {
 
