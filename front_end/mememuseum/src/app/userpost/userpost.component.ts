@@ -57,9 +57,9 @@ export class Userpost {
   }
 
   ngOnInit() {
-    this.fatchUser();
-    this.fatchNumComments();
-    this.fatchTags();
+    this.fetchUser();
+    this.fetchNumComments();
+    this.fetchTags();
   }
 
   getTime() {
@@ -73,7 +73,7 @@ export class Userpost {
   }
 
 
-  fatchUser() {
+  fetchUser() {
     this.userservice.getUserFromId(this.meme.UserIdUser as number).subscribe({
       next: (value) => {
         if (value.profilePic === null) value.profilePic = environment.noProfilePic;
@@ -82,7 +82,7 @@ export class Userpost {
     })
   }
 
-  fatchTags() {
+  fetchTags() {
     this.meme_service.getTags({ idmeme: this.meme.idMeme }).subscribe({
       next: (val) => {
         this.tags = val;
@@ -90,7 +90,7 @@ export class Userpost {
     })
   }
 
-  fatchNumComments() {
+  fetchNumComments() {
     this.comment_service.getNumComments({ idmeme: this.meme.idMeme }).subscribe({
       next: (response) => {
         if (response.status === 204) {

@@ -1,13 +1,13 @@
 <div class="bg-bg text-text min-h-screen flex flex-col items-center pt-32 py-10 px-4">
     <!-- Immagine profilo -->
     <div class="w-32 h-32 rounded-full overflow-hidden border-4 border-primary mb-4">
-        <img src="https://i.pravatar.cc/300" alt="Avatar Utente" class="w-full h-full object-cover" />
+        <img [src]="this.user.profilePic" alt="Avatar Utente" class="w-full h-full object-cover" />
     </div>
 
     <!-- Nome ed Email -->
     <div class="text-center mb-8">
-        <h1 class="text-2xl font-bold text-accent">Mario Rossi</h1>
-        <p class="text-sm text-gray-400">mario.rossiexample.com</p>
+        <h1 class="text-2xl font-bold text-accent">{{this.user.nickName}}</h1>
+        <p class="text-sm text-gray-400">{{this.user.email}}</p>
     </div>
 
     <hr class="border-gray-800 dark:border-white/50 w-80">
@@ -18,21 +18,18 @@
 
     <!-- Griglia Post -->
     <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 w-full max-w-6xl">
-        <!-- Post singolo -->
-        <div
-            class="bg-gray-400 rounded-2xl overflow-hidden shadow-lg hover:shadow-xl transition-shadow h-60 animate-pulse">
-            <img (load)="removePulse($event)" src="https://picsum.photos/200?random=1" alt="Post 1"
-                class="w-full h-60 object-cover" />
+        @for(meme of this.memes; track meme){
+
+        <div class="bg-gray-400 rounded-2xl overflow-hidden shadow-lg hover:shadow-xl transition-shadow h-60 animate-pulse"
+            (click)="toUserPost($event)">
+            <img (load)="removePulse($event)" [src]=meme.image alt="Post 1" class="w-full h-60 object-cover"
+                [id]=meme.idMeme />
 
         </div>
 
-        <!-- Clona questo blocco per più post -->
-        <div
-            class="bg-gray-400 rounded-2xl overflow-hidden shadow-lg hover:shadow-xl transition-shadow h-60 animate-pulse">
-            <img (load)="removePulse($event)" src="https://picsum.photos/700?random=2" alt="Post 1"
-                class="w-full h-60 object-cover" />
 
-        </div>
+        }
+
 
 
         <!-- ...altri post -->
