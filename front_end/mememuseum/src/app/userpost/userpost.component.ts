@@ -1,5 +1,5 @@
 import { Component, Input } from '@angular/core';
-import { Router } from '@angular/router';
+import { RouterLink, Router } from '@angular/router';
 import { Meme } from '../_services/meme/meme.type';
 import { CommonModule } from '@angular/common';
 import { numvote } from '../_services/vote/numvote.type';
@@ -15,7 +15,7 @@ import { MemeService } from '../_services/meme/meme.service';
 
 @Component({
   selector: 'user-post',
-  imports: [CommonModule, VoteBar],
+  imports: [CommonModule, VoteBar, RouterLink],
   templateUrl: './userpost.component.html',
   styleUrl: './userpost.component.scss'
 })
@@ -44,6 +44,11 @@ export class Userpost {
       .then(() => {
         this.toastrservice.success("link salvato con successo negli appunti", "Salvato con successo")
       })
+  }
+
+  goToUser(event: Event) {
+    event.stopPropagation();
+    this.route.navigate([`users/${this.user.idUser}`]);
   }
 
   toUserPost(event: Event) {

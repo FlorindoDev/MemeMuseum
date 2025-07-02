@@ -12,9 +12,8 @@
             class="dark:bg-[#272729] bg-[#d9dadc] placeholder-gray-500 rounded-md px-4 py-3 focus:outline-none focus:ring-2 focus:ring-accent w-full" />
     </div>
 
-    <label for="tagsInput" class="text-sm text-text hover:text-white cursor-pointer">Tags</label>
-    <input id="tagsInput" (keyup)="onEnter($event)" type="text" placeholder="Nome tag" formControlName="tags"
-        name="tagInput"
+    <label class="text-sm text-text hover:text-white cursor-pointer">Tags</label>
+    <input (keyup)="onEnter($event)" type="text" placeholder="Nome tag" formControlName="tags" name="tagInput"
         class="mb-2 dark:bg-[#272729] bg-[#d9dadc] placeholder-gray-500 rounded-md px-4 py-3 focus:outline-none focus:ring-2 focus:ring-accent" />
 
     @if(filtersForm.controls.tags.errors){
@@ -46,8 +45,8 @@
 
 
     <div class="space-y-1">
-        <label for="sort-vote" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Ordina per</label>
-        <select id="sort-vote" formControlName="sort_vote"
+        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">Ordina per</label>
+        <select formControlName="sort_vote"
             class="dark:bg-[#272729] bg-[#d9dadc] text-gray-800 dark:text-gray-100 placeholder-gray-500 rounded-md px-4 py-3 focus:outline-none focus:ring-2 focus:ring-accent w-full">
             <option value="niente">niente</option>
             <option value="DESC">più recente</option>

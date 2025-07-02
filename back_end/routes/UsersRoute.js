@@ -318,7 +318,7 @@ router.post('/:id/upload-profile-pic', [enforceAuthentication, validate(idUserRe
     UsersController.updateProfilePic(req.params.id, req.profilepicUrl).then(() => {
 
         res.status(200);
-        res.send();
+        res.send({ url: req.profilepicUrl });
         return;
 
     }).catch((err) => {

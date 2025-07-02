@@ -25,7 +25,7 @@ export class Navbar {
   nickname = signal<string | null>(null);
 
   constructor(
-    private authservice: AuthService,
+    protected authservice: AuthService,
     private UserService: UserService,
     private router: Router,
     private toastr: ToastrService
@@ -95,6 +95,12 @@ export class Navbar {
 
 
 
+  }
+
+  reload() {
+    setTimeout(() => {
+      window.location.reload();
+    }, 10);
   }
 
   goHome() {

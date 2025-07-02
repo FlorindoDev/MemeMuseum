@@ -49,9 +49,10 @@
                             <div class="w-10 h-10 rounded-full bg-gray-400 animate-pulse"></div>
                             <div class="w-30 h-8 rounded-full bg-gray-400 animate-pulse"></div>
                         </div>
+
                         <img (load)="stopLoading($event)"
-                            class="w-10 rounded-full hidden md:flex md:items-center hidden" [src]="this.profilePic()"
-                            onload=" this.nextElementSibling?.classList.remove('hidden')">
+                            class="w-10 h-10 object-cover rounded-full hidden md:flex md:items-center"
+                            [src]="this.profilePic()" onload=" this.nextElementSibling?.classList.remove('hidden')">
 
                         <p class="px-2 text-text hidden text-xl">{{nickname()}}</p>
 
@@ -60,7 +61,7 @@
                     <div role="menu"
                         class="mt-4 mr-3 absolute end-0 top-12 z-auto w-56 divide-y divide-gray-300 overflow-hidden rounded border border-gray-300 bg-bgcontrast shadow-sm dark:divide-gray-700 dark:border-gray-600 ">
                         <div>
-                            <a routerLink="users/1"
+                            <a (click)="reload()" routerLink="users/{{this.authservice.getidUser()}}"
                                 class="block px-3 py-2 text-sm font-medium text-gray-700 transition-colors hover:bg-gray-50 hover:text-gray-900 dark:text-gray-200 dark:hover:bg-gray-700 dark:hover:text-white"
                                 role="menuitem">
                                 Profilo
@@ -127,7 +128,7 @@
                                         <div class="w-30 h-8 rounded-full bg-gray-400 animate-pulse"></div>
                                     </div>
                                     <img (load)="stopLoading($event)"
-                                        class="w-10 rounded-full hidden md:flex md:items-center hidden"
+                                        class="w-10 h-10 object-cover rounded-full hidden md:flex md:items-center hidden"
                                         [src]="this.profilePic()"
                                         onload=" this.nextElementSibling?.classList.remove('hidden')">
 
@@ -138,7 +139,7 @@
                                 <div role="menu"
                                     class="mt-4 mr-3 absolute end-0 top-12 z-auto w-56 divide-y divide-gray-300 overflow-hidden rounded border border-gray-300 bg-bgcontrast shadow-sm dark:divide-gray-700 dark:border-gray-600 ">
                                     <div>
-                                        <a routerLink="users/1"
+                                        <a (click)="reload()" routerLink="users/{{this.authservice.getidUser()}}"
                                             class="block px-3 py-2 text-sm font-medium text-gray-700 transition-colors hover:bg-gray-50 hover:text-gray-900 dark:text-gray-200 dark:hover:bg-gray-700 dark:hover:text-white"
                                             role="menuitem">
                                             Profilo

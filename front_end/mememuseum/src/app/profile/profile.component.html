@@ -1,10 +1,26 @@
+@if(this.user !== null){
 <div class="bg-bg text-text min-h-screen flex flex-col items-center pt-32 py-10 px-4">
-    <!-- Immagine profilo -->
-    <div class="w-32 h-32 rounded-full overflow-hidden border-4 border-primary mb-4">
+    <div id="drag-profilepic" class=" mb-4 hidden">
+        <drag-and-drop (loadedfile)="upload($event)" [speak]=this.speak></drag-and-drop>
+    </div>
+    <div id="profile-img"
+        class="relative group w-32 h-32 rounded-full overflow-hidden border-4 border-primary mb-4 bg-gray-700">
         <img [src]="this.user.profilePic" alt="Avatar Utente" class="w-full h-full object-cover" />
+        @if(this.checkUsers(this.idUser)){
+
+        <div (click)="onClickUpload($event)"
+            class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex justify-center items-center">
+            <svg xmlns="http://www.w3.org/2000/svg" class="w-8 h-8 text-white" fill="none" viewBox="0 0 24 24"
+                stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    d="M11 5h2m2 0h.01M12 11v6m6-6a9 9 0 11-12 0 9 9 0 0112 0z" />
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    d="M15.232 5.232l3.536 3.536M9 13l6.586-6.586a2 2 0 112.828 2.828L11.828 15.828a4 4 0 01-1.414.94l-3.415 1.138 1.138-3.415a4 4 0 01.94-1.414z" />
+            </svg>
+        </div>
+        }
     </div>
 
-    <!-- Nome ed Email -->
     <div class="text-center mb-8">
         <h1 class="text-2xl font-bold text-accent">{{this.user.nickName}}</h1>
         <p class="text-sm text-gray-400">{{this.user.email}}</p>
@@ -16,22 +32,18 @@
         <h1 class="text-2xl font-bold text-accent">Posts</h1>
     </div>
 
-    <!-- Griglia Post -->
     <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 w-full max-w-6xl">
         @for(meme of this.memes; track meme){
-
         <div class="bg-gray-400 rounded-2xl overflow-hidden shadow-lg hover:shadow-xl transition-shadow h-60 animate-pulse"
             (click)="toUserPost($event)">
             <img (load)="removePulse($event)" [src]=meme.image alt="Post 1" class="w-full h-60 object-cover"
                 [id]=meme.idMeme />
-
         </div>
-
-
         }
-
-
-
-        <!-- ...altri post -->
     </div>
 </div>
+}@else{
+<div class="inset-0 fixed w-full h-full flex justify-center items-center">
+    <loading-screen></loading-screen>
+</div>
+}

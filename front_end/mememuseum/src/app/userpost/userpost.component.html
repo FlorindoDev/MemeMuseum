@@ -9,9 +9,11 @@
             <div class="w-40 h-5 rounded-full bg-gray-400 animate-pulse skeleton"></div>
         </div>
 
-        <img (load)="stopLoading($event);" onload="this.nextElementSibling?.classList.remove('hidden')"
-            class="w-9 rounded-full hidden" [src]="this.user.profilePic">
-        <p class="text-text hidden">{{this.user.nickName}}</p>
+        <img (click)="goToUser($event)" (load)="stopLoading($event);"
+            onload="this.nextElementSibling?.classList.remove('hidden')"
+            class="w-9 h-9 object-cover rounded-full hidden" [src]="this.user.profilePic">
+        <p (click)="goToUser($event)" class="text-text hidden">{{this.user.nickName}}</p>
+
         <div class="w-1.5 h-1.5 bg-gray-400/80 rounded-full mt-0.5"></div>
         <p class="text-text"> {{this.getTime()}} </p>
     </div>

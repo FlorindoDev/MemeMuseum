@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Output } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { ToastrService } from 'ngx-toastr';
 
 @Component({
@@ -16,8 +16,19 @@ export class DragAndDrop {
   isDrop = false;
   fileConsentiti = ["jpg", "png", "gif", "jpeg"];
   @Output() loadedfile = new EventEmitter<File>()
+  @Input() speak: { w: string, h: string, rounded: string, text: boolean } = { w: "w-150", h: "h-64", rounded: "rounded-lg", text: true }
 
   constructor(private toastr: ToastrService) { }
+
+  ngOnInit() {
+    setTimeout(() => {
+      let element = document.getElementById("drag-area");
+      element?.classList.add(this.speak.w);
+      element?.classList.add(this.speak.h);
+      element?.classList.add(this.speak.rounded);
+    }, 20);
+
+  }
 
   onDragOver(event: DragEvent) {
     event.preventDefault();

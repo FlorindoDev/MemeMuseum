@@ -11,6 +11,10 @@ export class UserService {
 
   url = environment.apiBaseUrl;
 
+  httpOptionsMidia = {
+    headers: new HttpHeaders()
+  };
+
   httpOptions = {
     headers: new HttpHeaders({
       'Content-Type': 'application/json'
@@ -33,15 +37,30 @@ export class UserService {
     localStorage.removeItem("user");
   }
 
+  uploadprofilePic(iduser: number, image: File) {
+
+    let url = `/users/${iduser}/upload-profile-pic`;
+    const formData = new FormData();
+    formData.append('image', image);
+
+    return this.http.post<{ url: string }>(`${this.url}${url}`, formData, this.httpOptionsMidia);
+  }
+
   getProfilePic(): string | null {
-
-
-    const profile = localStorage.getItem("user");
-    if (profile) {
-      return (JSON.parse(profile) as User).profilePic;
+    const user = localStorage.getItem("user");
+    if (user) {
+      return (JSON.parse(user) as User).profilePic;
     }
-
     return null;
+  }
+
+  updateProfilePic(url: string) {
+    const user = localStorage.getItem("user");
+    if (user) {
+      let user_toupdate = (JSON.parse(user) as User);
+      user_toupdate.profilePic = url;
+      this.saveUser(user_toupdate);
+    }
 
   }
 
@@ -56,6 +75,8 @@ export class UserService {
     return null;
 
   }
+
+
 
 
 }
