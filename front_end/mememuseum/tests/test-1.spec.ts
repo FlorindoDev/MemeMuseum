@@ -1,5 +1,6 @@
 import { test, expect } from '@playwright/test';
 
+
 async function login(page) {
   await page.getByRole('button', { name: 'Sign in' }).click();
   await page.getByRole('textbox', { name: 'Email' }).click();
@@ -21,12 +22,11 @@ async function upLoadMeme(page) {
   await page.getByRole('textbox', { name: 'Inserisci descrizione del meme' }).fill('una descrizione');
   await page.getByRole('button', { name: 'Crea Meme' }).click();
   await expect(page.locator('div').filter({ hasText: 'Successo caricamento tags!' }).nth(2)).toBeVisible();
-  await page.locator('div').filter({ hasText: 'Successo caricamento Meme!' }).nth(2).click();
+  await expect(page.locator('div').filter({ hasText: 'Successo caricamento Meme!' }).nth(1)).toBeVisible();
+
 }
 
-
-test('signup', async ({ page }) => {
-  await page.goto('http://localhost:4200/home');
+export async function signup(page) {
   await page.getByRole('button', { name: 'Sign up' }).click();
   await page.getByRole('textbox', { name: 'nome utente', exact: true }).click();
   await page.getByRole('textbox', { name: 'nome utente', exact: true }).fill('prova');
@@ -35,10 +35,19 @@ test('signup', async ({ page }) => {
   await page.getByRole('textbox', { name: 'Password' }).click();
   await page.getByRole('textbox', { name: 'Password' }).fill('provaprova');
   await page.locator('#form-signup').getByRole('button', { name: 'Sign up' }).click();
-  await expect(page.getByLabel('Registrazione Completata!')).toBeVisible();
-});
+  await expect(page.getByText('Registrazione Completata!')).toBeVisible();
+}
+
+/*
+test('signup', async ({ page }) => {
+
+  await page.goto('http://localhost:4200/home');
+  await signup(page);
+});*/
+
 
 test('login', async ({ page }) => {
+
   await page.goto('http://localhost:4200/home');
   await login(page);
 });
