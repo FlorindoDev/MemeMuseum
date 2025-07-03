@@ -1,5 +1,5 @@
 import { Component, Input } from '@angular/core';
-import { RouterLink, Router } from '@angular/router';
+import { Router } from '@angular/router';
 import { Meme } from '../_services/meme/meme.type';
 import { CommonModule } from '@angular/common';
 import { numvote } from '../_services/vote/numvote.type';
@@ -15,7 +15,7 @@ import { MemeService } from '../_services/meme/meme.service';
 
 @Component({
   selector: 'user-post',
-  imports: [CommonModule, VoteBar, RouterLink],
+  imports: [CommonModule, VoteBar],
   templateUrl: './userpost.component.html',
   styleUrl: './userpost.component.scss'
 })
