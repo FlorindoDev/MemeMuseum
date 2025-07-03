@@ -54,7 +54,7 @@
                             class="w-10 h-10 object-cover rounded-full hidden md:flex md:items-center"
                             [src]="this.profilePic()" onload=" this.nextElementSibling?.classList.remove('hidden')">
 
-                        <p class="px-2 text-text hidden text-xl">{{nickname()}}</p>
+                        <p id="nickName" class="px-2 text-text hidden text-xl">{{nickname()}}</p>
 
                     </div>
                     @if(isProfileMenuActive()){

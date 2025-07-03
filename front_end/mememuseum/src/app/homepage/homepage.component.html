@@ -7,7 +7,7 @@
     <div class="pt-26 px-2 flex flex-col items-center">
         @for(meme of memes; track meme){
         <div class="bg-bg flex flex-col justify-center items-center mb-4 w-full max-w-3xl">
-            <user-post [meme]=meme></user-post>
+            <user-post [id]=meme.idMeme [meme]=meme></user-post>
         </div>
         }@empty {
         <div class="inset-0 fixed w-full h-full flex justify-center items-center">

@@ -28,7 +28,7 @@
             [filter]=this.filter></next-page>
         @for(comment of comments; track comment){
         <div class="m-5">
-            <comment [comment]=comment></comment>
+            <comment [id]=comment.idComment [comment]=comment></comment>
         </div>
         }@empty{
         <div class="w-full pt-10"></div>
