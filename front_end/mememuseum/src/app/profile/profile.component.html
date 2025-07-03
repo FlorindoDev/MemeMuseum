@@ -34,7 +34,7 @@
 
     <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 w-full max-w-6xl">
         @for(meme of this.memes; track meme){
-        <div class="bg-gray-400 rounded-2xl overflow-hidden shadow-lg hover:shadow-xl transition-shadow h-60 animate-pulse"
+        <div class="bg-gray-400 rounded-2xl overflow-hidden shadow-lg hover:shadow-xl transition-shadow h-60 animate-pulse select-none"
             (click)="toUserPost($event)">
             <img (load)="removePulse($event)" [src]=meme.image alt="Post 1" class="w-full h-60 object-cover"
                 [id]=meme.idMeme />
@@ -42,6 +42,8 @@
         }
     </div>
 </div>
+<next-page (resource)="onNewMemes($event)" [page]=2 [service]=this.meme_service [numPreLoad]=2></next-page>
+
 }@else{
 <div class="inset-0 fixed w-full h-full flex justify-center items-center">
     <loading-screen></loading-screen>

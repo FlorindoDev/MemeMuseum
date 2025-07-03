@@ -15,6 +15,7 @@ export class NextPage<C, T extends object> {
   @Output() resource: EventEmitter<C[]> = new EventEmitter<C[]>();
   @Input() page: number = 1;
   @Input() filter?: T;
+  @Input() numPreLoad = 0;
 
   constructor(private filter_service: FilterService<C, T>) { }
 
@@ -22,6 +23,7 @@ export class NextPage<C, T extends object> {
     this.filter_service.filter$.subscribe((val: T) => {
       this.filter = val;
     });
+    for (let i = 0; i < this.numPreLoad; i++) this.loadNext();
   }
 
   loadNext() {

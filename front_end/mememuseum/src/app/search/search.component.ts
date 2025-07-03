@@ -24,6 +24,7 @@ export class Search {
   }
 
   ngOnInit() {
+    this.filter_service.updateFilter({});
     this.filter_service.filteredResource$.subscribe((memes: Meme[]) => {
       this.memes = memes;
     });

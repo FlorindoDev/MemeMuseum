@@ -9,10 +9,13 @@ import { environment } from '../environment.prod';
 import { LoadingScreen } from '../loading-screen/loading-screen.component';
 import { DragAndDrop } from '../drag-and-drop/drag-and-drop.component';
 import { ToastrService } from 'ngx-toastr';
+import { NextPage } from '../next-page/next-page.component';
+import { FilterService } from '../_services/filter/filter.service';
+import { Filter } from '../_services/meme/filter.type';
 
 @Component({
   selector: 'app-profile',
-  imports: [LoadingScreen, DragAndDrop],
+  imports: [LoadingScreen, DragAndDrop, NextPage],
   templateUrl: './profile.component.html',
   styleUrl: './profile.component.scss'
 })
@@ -28,8 +31,9 @@ export class Profile {
     private route: ActivatedRoute,
     private auth_service: AuthService,
     private user_service: UserService,
-    private meme_service: MemeService,
-    private toaster: ToastrService
+    protected meme_service: MemeService,
+    private toaster: ToastrService,
+    private filtered_service: FilterService<Meme, Filter>
   ) { }
 
   onClickUpload(event: Event) {
@@ -105,9 +109,18 @@ export class Profile {
     })
   }
 
+  onNewMemes(new_memes: Meme[]) {
+    if (new_memes != null) {
+      new_memes.map((val) => {
+        this.memes.push(val);
+      });
+    }
+  }
+
   ngOnInit() {
     let idUser = this.route.snapshot.paramMap.get('id') as string;
     if (idUser && !isNaN(Number(idUser))) {
+      this.filtered_service.updateFilter({ iduser: idUser });
       this.idUser = idUser;
       if (!this.checkUsers(idUser)) this.fetchUser(idUser);
       else this.loadLoggedUser(idUser);
