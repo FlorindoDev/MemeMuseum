@@ -4,7 +4,7 @@
         <filters [isDaily]=true></filters>
     </div>
 
-    <div class="pt-26 px-2 flex flex-col items-center">
+    <div id="scroll-view" class="pt-26 px-2 flex flex-col items-center">
         @for(meme of memes; track meme){
         <div class="bg-bg flex flex-col justify-center items-center mb-4 w-full max-w-3xl">
             <user-post [id]=meme.idMeme [meme]=meme></user-post>

@@ -46,11 +46,14 @@ export class MemePage {
 
   ngOnInit() {
     this.memeId = this.route.snapshot.paramMap.get('id');
-    if (this.memeId !== null) {
+    if (this.memeId !== null && !isNaN(Number(this.memeId))) {
       this.filter = { idmeme: Number(this.memeId), orderby: "upvote,DESC" }
       this.filter_service.updateFilter(this.filter);
+      this.fetchMeme();
+    } else {
+      this.memeNotExsists();
     }
-    this.fetchMeme();
+
   }
 
   addRedRing(element: HTMLElement, error: unknown | boolean): void {
@@ -117,16 +120,19 @@ export class MemePage {
 
   }
 
+  memeNotExsists() {
+    this.toastr_service.warning("Tra poco sarai reindirizzato alla home", "Meme non esiste!!");
+    setTimeout(() => {
+      this.router.navigate(["/"]);
+    }, 5000);
+  }
 
   fetchMeme() {
     this.meme_service.getMemeFromId(Number(this.memeId)).subscribe({
       next: (val) => {
         this.meme = val;
         if (val === null) {
-          this.toastr_service.warning("Tra poco sarai reindirizzato alla home", "Meme non esiste!!");
-          setTimeout(() => {
-            this.router.navigate(["/"]);
-          }, 5000);
+          this.memeNotExsists();
         } else {
           this.fetchComments();
         }
