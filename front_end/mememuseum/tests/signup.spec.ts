@@ -12,6 +12,7 @@ async function signup(page) {
     await expect(page.locator('#toast-container div.toast-success').getByRole('alert', { name: 'Hai fatto la registrazione con successo' })).toBeVisible();
 }
 
+
 async function signupError(page) {
     await page.getByRole('button', { name: 'Sign up' }).click();
     await page.getByRole('textbox', { name: 'nome utente', exact: true }).click();
