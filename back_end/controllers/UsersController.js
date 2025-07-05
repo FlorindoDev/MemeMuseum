@@ -3,6 +3,14 @@ import { UserNotFoundError, FailToUpdateUser } from "../utils/error/index.js";
 
 export class UsersController {
 
+    static async deleteUser(iduser) {
+        let result = await User.findByPk(iduser);
+
+        result = result.destroy();
+
+        return result;
+
+    }
 
     static async getAllUsers(pageSize, page, emptyCheck = true) {
         let result = await User.findAll({

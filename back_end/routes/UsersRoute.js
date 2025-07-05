@@ -254,6 +254,69 @@ router.put('/:id', enforceAuthentication, validate(schemaUserPut), isOwnProfile,
     });
 });
 
+/**
+ * @swagger
+ * {
+ *   "/users/{id}": {
+ *     "delete": {
+ *       "tags": ["Users"],
+ *       "summary": "Cancella un utente tramite ID",
+ *       "description": "",
+ *       "operationId": "deleteUserById",
+ *       "security": [
+ *          {
+ *              "bearerAuth": []
+ *          }
+ *        ],
+ *       "parameters": [
+ *         {
+ *           "name": "id",
+ *           "in": "path",
+ *           "description": "ID dell'utente da recuperare",
+ *           "required": true,
+ *           "schema": {
+ *             "type": "string"
+ *           }
+ *         }
+ *       ],
+ *       "produces": ["application/json"],
+ *       "responses": {
+ *         "200": {
+ *           "description": "Lista di utenti trovati",
+ *          },
+ *         "404": {
+ *           "description": "Utente non trovato",
+ *           "schema": {
+ *             "$ref": "#/components/schemas/Error"
+ *           },
+ *           "examples": {
+ *             "application/json": {
+ *               "code": 404,
+ *               "message": "non ci sono utenti"
+ *             }
+ *           }
+ *         },
+ *         "500": {
+ *           "description": "Errore del server",
+ *           "schema": {
+ *             "$ref": "#/components/schemas/Error"
+ *           }
+ *         }
+ *       }
+ *     }
+ *   }
+ * }
+ */
+router.delete('/:id', enforceAuthentication, isOwnProfile, (req, res, next) => {
+    UsersController.deleteUser(req.idUser).then(() => {
+        res.status(200)
+        res.send();
+    }).catch(err => {
+        next(err);
+    });
+
+});
+
 
 //TODO: se qulcuno  carica una foto fare in modo che la vecchi si cancelli
 /**
