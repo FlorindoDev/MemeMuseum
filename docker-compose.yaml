@@ -6,6 +6,7 @@ services:
     container_name: meme_server_web
     ports:
       - "443:443"
+      - "80:80"
     networks:
       - meme-museum
     tty: true
