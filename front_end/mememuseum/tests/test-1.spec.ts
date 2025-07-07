@@ -1,6 +1,8 @@
 import { test, expect, chromium } from '@playwright/test';
 import jwt from 'jsonwebtoken';
 
+const HOST = "http://localhost"
+
 async function login(page, info) {
   await page.getByRole('button', { name: 'Sign in' }).click();
   await page.getByRole('textbox', { name: 'Email' }).click();
@@ -48,7 +50,7 @@ function takeinfo(testInfo) {
 test.beforeEach(async ({ page }, testInfo) => {
 
   let num_account = Math.floor(Math.random() * 1000) + 100;
-  await page.goto('http://localhost:4200/home');
+  await page.goto(`${HOST}/home`);
 
   const config = {
     num_account: num_account,
@@ -91,13 +93,13 @@ test.afterEach(async ({ page }, testInfo) => {
 });
 
 test('login', async ({ page }, testInfo) => {
-  await page.goto('http://localhost:4200/home');
+  await page.goto(`${HOST}/home`);
   let config = takeinfo(testInfo);
   await login(page, config);
 });
 
 test('uploadmeme', async ({ page }, testInfo) => {
-  await page.goto('http://localhost:4200/home');
+  await page.goto(`${HOST}/home`);
 
   let config = takeinfo(testInfo);
   //Login
@@ -108,7 +110,7 @@ test('uploadmeme', async ({ page }, testInfo) => {
 });
 
 test('commento', async ({ page }, testInfo) => {
-  await page.goto('http://localhost:4200/home');
+  await page.goto(`${HOST}/home`);
   let config = takeinfo(testInfo);
   //Login
   await login(page, config);
@@ -126,7 +128,7 @@ test('commento', async ({ page }, testInfo) => {
 });
 
 test('ricerca per nome', async ({ page }, testInfo) => {
-  await page.goto('http://localhost:4200/home');
+  await page.goto(`${HOST}/home`);
   let config = takeinfo(testInfo);
   //Login
   await login(page, config);
@@ -141,7 +143,7 @@ test('ricerca per nome', async ({ page }, testInfo) => {
 });
 
 test('ricerca per tag', async ({ page }, testInfo) => {
-  await page.goto('http://localhost:4200/home');
+  await page.goto(`${HOST}/home`);
   let config = takeinfo(testInfo);
   //Login
   await login(page, config);
@@ -158,17 +160,17 @@ test('ricerca per tag', async ({ page }, testInfo) => {
 });
 
 test('meme non esiste', async ({ page }) => {
-  await page.goto('http://localhost:4200/memes/232323');
+  await page.goto(`${HOST}/memes/232323`);
   await expect(page.locator('#toast-container div.toast-warning').getByRole('alert', { name: 'Tra poco sarai reindirizzato alla home' })).toBeVisible();
 });
 
 test('utente non esiste', async ({ page }) => {
-  await page.goto('http://localhost:4200/users/232323');
+  await page.goto(`${HOST}/users/232323`);
   await expect(page.locator('#toast-container div.toast-warning').getByRole('alert', { name: 'Tra poco sarai reindirizzato alla home' })).toBeVisible();
 });
 
 test('caricamento immagine profilo', async ({ page }, testInfo) => {
-  await page.goto('http://localhost:4200/home');
+  await page.goto(`${HOST}/home`);
   let config = takeinfo(testInfo);
   //Login
   await login(page, config);

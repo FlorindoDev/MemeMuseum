@@ -1,6 +1,8 @@
 import { test, expect } from '@playwright/test';
 import jwt from 'jsonwebtoken';
 
+const HOST = "http://localhost"
+
 async function signup(page, info) {
     await page.getByRole('button', { name: 'Sign up' }).click();
     await page.getByRole('textbox', { name: 'nome utente', exact: true }).click();
@@ -36,7 +38,7 @@ function takeinfo(testInfo) {
 test.beforeEach(async ({ page }, testInfo) => {
 
     let num_account = Math.floor(Math.random() * 1000);
-    await page.goto('http://localhost:4200/home');
+    await page.goto(`${HOST}/home`);
 
     const config = {
         num_account: num_account,
@@ -77,13 +79,13 @@ test.afterEach(async ({ page }, testInfo) => {
 
 test('signup', async ({ page }, testInfo) => {
     let config = takeinfo(testInfo);
-    await page.goto('http://localhost:4200/home');
+    await page.goto(`${HOST}/home`);
     await signup(page, config);
 });
 
 test('fallimeto signup', async ({ page }, testInfo) => {
     let config = takeinfo(testInfo);
-    await page.goto('http://localhost:4200/home');
+    await page.goto(`${HOST}/home`);
     await signup(page, config);
     await signupError(page, config);
 });
