@@ -46,7 +46,7 @@ docker compose up -d --build
 
 Questo comando:
 - Avvia il backend Node.js (porta 3000)
-- Avvia il frontend Angular (porta 4200)
+- Avvia il frontend Angular (porta 80)
 - Avvia il database PostgreSQL (porta 5432)
 
 ---
