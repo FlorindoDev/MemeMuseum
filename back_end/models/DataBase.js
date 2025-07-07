@@ -27,7 +27,7 @@ export const {
     Tag
 } = database.models;
 
-//TODO aggiungere i delete on canscade del caso
+
 
 // Associazioni User
 User.Memes = User.hasMany(Meme, { onDelete: 'CASCADE' });

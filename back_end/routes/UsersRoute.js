@@ -318,7 +318,6 @@ router.delete('/:id', enforceAuthentication, isOwnProfile, (req, res, next) => {
 });
 
 
-//TODO: se qulcuno  carica una foto fare in modo che la vecchi si cancelli
 /**
  * @swagger
  * {

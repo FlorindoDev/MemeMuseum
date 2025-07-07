@@ -79,7 +79,6 @@ export class MemePage {
   handleComment() {
 
     if (!this.auth_service.isAuthenticated()) {
-      //TODO: Fare che quando clicco si apre il login
       this.toastr.error('Non sei autetificato', 'Necessario Login!')
       return;
     }

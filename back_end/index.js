@@ -12,9 +12,6 @@ import { router as CommentRoute } from "./routes/CommentRoute.js";
 import { AppErrorHttp } from "./utils/AppError.js";
 
 
-//TODO: RICORDA DI DARE AL PROF .env gia fatto e passare il json per google storage
-
-
 const app = express();
 const PORT = 3000;
 

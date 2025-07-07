@@ -90,13 +90,11 @@ export function createModel(database) {
             type: DataTypes.STRING,
             allowNull: false,
             set(value) {
-                //TODO: Implementare il salt per previnire i Raimbow attack
                 let hash = createHash("sha256");
                 this.setDataValue('password', hash.update(value).digest("hex"));
             }
         }
-    }, { // Other model options go here
-        //the actual table name is inferred from the model name (pluralized) by default
+    }, {
     });
 }
 

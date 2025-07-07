@@ -3,7 +3,6 @@ import { AuthService } from '../../_services/auth/auth.service';
 import { inject } from '@angular/core';
 import { ToastrService } from 'ngx-toastr';
 
-//TODO aggiustare redirect al login quello presente non va bene
 
 export const authGuard: CanActivateFn = (route, state) => {
   const authService = inject(AuthService);

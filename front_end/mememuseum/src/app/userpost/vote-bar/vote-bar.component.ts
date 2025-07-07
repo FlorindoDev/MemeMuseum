@@ -81,7 +81,6 @@ export class VoteBar {
     event.stopPropagation(); //evita che quando clicco apre la pagina del meme
 
     if (!this.auth_service.isAuthenticated()) {
-      //TODO: Fare che quando clicco si apre il login
       this.toastr.error('Non sei autetificato', 'Necessario Login!');
       return;
     }
