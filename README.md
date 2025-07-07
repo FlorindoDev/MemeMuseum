@@ -25,11 +25,16 @@ DB_CONNECTION_URI = "postgres://db:db@meme_db:5432/meme_database"
 DIALECT = "postgres"
 TOKEN_SECRET = "V3RY_S3CR37_T0K3N"
 END_POINT_ALLOWED = "orgin allowed"
+PORT=3000
+PATH_KEY_PEM="path/to/key.pem"
+PATH_CERT_PEM="path/to/cert.pem"
 
 # Google Cloud Storage (per upload immagini)
 GOOGLE_APPLICATION_CREDENTIALS="path/to/credentials.json"
 BUCKET_NAME="name_bucket"
 ```
+Un altro env è environment.prod.ts in `frontend/mememuseum/src/app/environment.prod.ts` Qui ci saranno varie variabili
+tra qui `apiBaseUrl`(host delle `API`)
 
 **Nota:**  
 - Sostituisci i valori con quelli reali del tuo ambiente.

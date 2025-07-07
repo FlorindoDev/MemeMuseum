@@ -5,7 +5,7 @@ services:
     build: ./front_end/mememuseum
     container_name: meme_server_web
     ports:
-      - "80:80"
+      - "443:443"
     networks:
       - meme-museum
     tty: true

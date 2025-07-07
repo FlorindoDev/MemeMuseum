@@ -4,6 +4,8 @@ import cors from "cors";
 import swaggerUI from "swagger-ui-express";
 import swaggerJSDoc from "swagger-jsdoc";
 import { database } from "./models/DataBase.js";
+import https from "https";
+import fs from 'fs';
 import { router as routeAuth } from "./routes/AuthRoute.js"
 import { router as UsersRoute } from "./routes/UsersRoute.js"
 import { router as MemesRoute } from "./routes/MemesRoute.js"
@@ -13,7 +15,7 @@ import { AppErrorHttp } from "./utils/AppError.js";
 
 
 const app = express();
-const PORT = 3000;
+const PORT = process.env.PORT;
 
 
 // logger
@@ -79,5 +81,15 @@ app.use((err, req, res, next) => {
 
 });
 
+if (PORT == 443) {
+  const sslOptions = {
+    key: fs.readFileSync(process.env.PATH_KEY_PEM),
+    cert: fs.readFileSync(process.env.PATH_CERT_PEM),
+  };
 
-app.listen(PORT);
+  https.createServer(sslOptions, app).listen(PORT, () => {
+
+  });
+} else {
+  app.listen(PORT);
+}
