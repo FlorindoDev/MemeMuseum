@@ -14,7 +14,7 @@
 
     <label class="text-sm text-text hover:text-white cursor-pointer">Tags</label>
     <input (keyup)="onEnter($event)" type="text" placeholder="Nome tag" formControlName="tags" name="tagInput"
-        class="mb-2 dark:bg-[#272729] bg-[#d9dadc] placeholder-gray-500 rounded-md px-4 py-3 focus:outline-none focus:ring-2 focus:ring-accent" />
+        class="mb-2 dark:bg-[#272729] bg-[#d9dadc] placeholder-gray-500 rounded-md px-4 py-3 focus:outline-none focus:ring-2 focus:ring-accent w-full" />
 
     @if(filtersForm.controls.tags.errors){
     @if(filtersForm.controls.tags.errors['minlength']){
