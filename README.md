@@ -33,7 +33,7 @@ PATH_CERT_PEM="path/to/cert.pem"
 GOOGLE_APPLICATION_CREDENTIALS="path/to/credentials.json"
 BUCKET_NAME="name_bucket"
 ```
-Un altro file di ambiente è environment.prod.ts, che si trova in `frontend/mememuseum/src/app/environment.prod.ts`
+Un altro file di ambiente è `environment.prod.ts`, che si trova in `frontend/mememuseum/src/app/environment.prod.ts`
 In questo file ci saranno diverse variabili, tra cui `apiBaseUrl`, che rappresenta l'host delle API.
 
 **Nota:**  
