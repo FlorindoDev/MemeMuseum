@@ -53,7 +53,7 @@ Questo comando:
 
 ## 4. Accesso all’App
 
-- **Frontend:** [http://localhost:4200](http://localhost:4200)
+- **Frontend:** [http://localhost](http://localhost)
 - **Backend API:** [http://localhost:3000](http://localhost:3000)
 - **Swagger API Docs:** [http://localhost:3000/api-docs](http://localhost:3000/api-docs)
 
