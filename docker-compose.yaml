@@ -47,7 +47,7 @@ services:
     environment:
       POSTGRES_USER: db     
       POSTGRES_PASSWORD: db  
-      POSTGRES_DB: meme_database             # contiene POSTGRES_USER, POSTGRES_PASSWORD, POSTGRES_DB
+      POSTGRES_DB: meme_database             
     volumes:
       - postgres_data:/var/lib/postgresql/data
     ports:

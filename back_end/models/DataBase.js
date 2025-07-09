@@ -5,6 +5,7 @@ import { createModel as createCommentVoteModel } from "./CommentVote.js";
 import { createModel as createMemeVoteModel } from "./MemeVote.js";
 import { createModel as createMemeModel } from "./Meme.js";
 import { createModel as createTagModel } from "./Tag.js";
+import { init } from "./init_data.js";
 import 'dotenv/config.js';
 
 export const database = new Sequelize(process.env.DB_CONNECTION_URI, {
@@ -61,7 +62,14 @@ Tag.belongsToMany(Meme, { through: 'MemeTag' });
 
 database.sync({ /*alter: true*/ }).then(() => {
     console.log("Database synced correctly");
+    if (process.env.INIT_DATA == "true") {
+        init().catch(() => {
+            console.log("[!] dati gia inseriti");
+        });
+    }
 }).catch(err => {
     console.log("Error with database synchronization: " + err.message);
 });
+
+
 
