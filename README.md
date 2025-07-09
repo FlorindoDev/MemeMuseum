@@ -28,6 +28,7 @@ END_POINT_ALLOWED = "orgin allowed"
 PORT=3000
 PATH_KEY_PEM="path/to/key.pem"
 PATH_CERT_PEM="path/to/cert.pem"
+INIT_DATA="false"
 
 # Google Cloud Storage (per upload immagini)
 GOOGLE_APPLICATION_CREDENTIALS="path/to/credentials.json"
